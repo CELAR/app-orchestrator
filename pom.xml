@@ -7,6 +7,11 @@
   <name>CELAR Application Orchestrator</name>
   <description>CELAR Application Orchestrator</description>
   <packaging>war</packaging>
+  
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  
   <build>
   <plugins>
    <plugin>
@@ -17,6 +22,16 @@
      <target>1.6</target>
     </configuration>
    </plugin>
+   <plugin>
+		<groupId>org.apache.tomcat.maven</groupId>
+		<artifactId>tomcat7-maven-plugin</artifactId>
+		<version>2.1</version>
+		<configuration>
+			<url>http://83.212.117.112/manager/text/</url>
+			<server>celar-orchestrator</server>
+		</configuration>
+	</plugin>
+   
   </plugins>
  </build>
   <dependencies>
