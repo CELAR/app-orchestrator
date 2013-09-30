@@ -77,7 +77,7 @@ border-left:1px solid black;
 <tr>
 <td>8</td>
 <td><a href="deployment/deploy/?info">Deploy an application</a></td>
-<td>DUMMY</td>
+<td>PENDING</td>
 <td>/orchestrator/deployment/deploy/</td>
 </tr>
 <tr>
@@ -95,7 +95,7 @@ border-left:1px solid black;
 <tr>
 <td>11</td>
 <td><a href="deployment/resize/?info">Perform a resizing action</a></td>
-<td>DUMMY</td>
+<td>PENDING</td>
 <td>/orchestrator/deployment/resize/</td>
 </tr>
 <tr>
