@@ -41,14 +41,19 @@ public class Command {
 	public void execute(String script){
 		this.script=script;
 		this.proc = this.initProcess();
+	}
+	
+	public void waitFor(){
+		if(this.proc==null)
+			return;
 		try {
 			this.exitCode=this.proc.waitFor();
 		} catch (InterruptedException e) {
 			this.exitCode=-1;
 			e.printStackTrace();
 		}
+
 	}
-	
 	/**
 	 * Returns the script name.
 	 * @return
@@ -91,6 +96,15 @@ public class Command {
 		return this.exitCode;
 	}
 	
+	public String getOutputsAsJSONString(){
+		String buffer="";
+		buffer+="{";
+		buffer+="\t\"stdout\": \""+this.getStdout()+"\",";
+		buffer+="\t\"stderr\": \""+this.getStderr()+"\"";
+		buffer+="}";
+		return buffer;
+	}
+	
 	private Process initProcess(){
 		try {
 			ProcessBuilder builder = new ProcessBuilder(Arrays.asList(this.script.split("\\s")));
@@ -121,6 +135,7 @@ public class Command {
 	public static void main(String[] args) throws IOException {
 		Command com = new Command();
 		com.execute(args[0]);
+		com.waitFor();
 		System.out.println("STDOUT");
 		System.out.println(com.getStdout());
 		System.out.println("STDERR");
