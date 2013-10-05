@@ -63,6 +63,10 @@
     <servlet-class>gr.ntua.cslab.services.deployment.Resize</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>resizestatus</servlet-name>
+    <servlet-class>gr.ntua.cslab.services.deployment.ResizeStatus</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>getconf</servlet-name>
     <servlet-class>gr.ntua.cslab.services.deployment.GetConf</servlet-class>
   </servlet>
@@ -118,6 +122,10 @@
   <servlet-mapping>
     <servlet-name>resize</servlet-name>
     <url-pattern>/deployment/resize/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>resizestatus</servlet-name>
+    <url-pattern>/deployment/resizestatus/*</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>getconf</servlet-name>

@@ -100,12 +100,18 @@ border-left:1px solid black;
 </tr>
 <tr>
 <td>12</td>
+<td><a href="deployment/resizestatus/?info">Status of a resizing action</a></td>
+<td>FUNCTIONAL</td>
+<td>/orchestrator/deployment/resizestatus/</td>
+</tr>
+<tr>
+<td>13</td>
 <td><a href="deployment/getconf/?info">Get configuration</a></td>
 <td>DUMMY</td>
 <td>/orchestrator/deployment/getconf/</td>
 </tr>
 <tr>
-<td>13</td>
+<td>14</td>
 <td><a href="action/gethistory/?info">Get action history</a></td>
 <td>DUMMY</td>
 <td>/orchestrator/action/gethistory/</td>

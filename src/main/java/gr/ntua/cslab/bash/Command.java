@@ -52,8 +52,8 @@ public class Command {
 			this.exitCode=-1;
 			e.printStackTrace();
 		}
-
 	}
+	
 	/**
 	 * Returns the script name.
 	 * @return

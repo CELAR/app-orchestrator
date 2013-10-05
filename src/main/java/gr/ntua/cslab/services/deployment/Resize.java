@@ -3,8 +3,11 @@ package gr.ntua.cslab.services.deployment;
 import gr.ntua.cslab.bash.Command;
 import gr.ntua.cslab.descriptor.HTMLDescription;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -42,7 +45,8 @@ public class Resize extends HttpServlet {
         		+ "<li>action (either addvm or removevm)</li>"
         		+ "<li>multiplicity (1,2,..etc._</li>"
         		+ "</ul>"
-        		+ "Default multiplicity is 1.");
+        		+ "Default multiplicity is 1.<br/>"
+        		+ "<span style='color:red;font-weight:bold'>multiplicity is not running in parallel!!</span>");
         this.desc.addParameter("deploymentid", "Integer");
         this.desc.addParameter("action", "JSON string describing the actions");
         this.desc.setExample("http://83.212.117.112/celar-orchestrator/deployment/resize/?action=addvm<br/>"
@@ -64,19 +68,19 @@ public class Resize extends HttpServlet {
 		if(request.getParameter("multiplicity")!=null){
 			multi = new Integer(request.getParameter("multiplicity"));
 		}
+		PrintWriter out = new PrintWriter(response.getOutputStream());
 		List<Command> procs = new LinkedList<Command>();
 		for(int i=0;i<multi;i++){
+			Command com = null;
 			if(action.equals("addvm"))
-				procs.add(new Command("addNode.sh"));
+				com = new Command("addNode.sh");
 			else if(action.equals("removevm"))
-				procs.add(new Command("removeNode.sh"));
+				com = new Command("removeNode.sh");
+			else if (action.equals("cleanup"))
+				com = new Command("cleanup.sh");
+			com.waitFor();
+			procs.add(com);
 		}
-		System.out.println("[DEBUG]Commands are executed from resizing call");
-		for(Command c:procs){
-			c.waitFor();
-		}
-		System.out.println("[DEBUG]Commands are finished");
-		PrintWriter out = new PrintWriter(response.getOutputStream());
 		out.println("{");
 		int i=1;
 		for(Command c:procs){
@@ -87,8 +91,6 @@ public class Resize extends HttpServlet {
 		out.println("}");
 		out.flush();
 		out.close();
-		System.out.println("[DEBUG]Output was written");
-		
 	}
 
 	/**
