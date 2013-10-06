@@ -3,11 +3,8 @@ package gr.ntua.cslab.services.deployment;
 import gr.ntua.cslab.bash.Command;
 import gr.ntua.cslab.descriptor.HTMLDescription;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
