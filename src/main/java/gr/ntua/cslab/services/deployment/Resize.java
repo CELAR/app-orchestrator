@@ -42,8 +42,8 @@ public class Resize extends HttpServlet {
         		+ "<ul>"
         		+ "<del><li>Deployment Id</li>"
         		+ "<li>Resizing action -JSON String describing the actions to be applied- </li></del>"
-        		+ "<li>action (either addvm or removevm)</li>"
-        		+ "<li>multiplicity (1,2,..etc._</li>"
+        		+ "<li>action (addvm, removevm, cleanup)</li>"
+        		+ "<li>multiplicity (1,2,..etc.) --does not run in parallel--</li>"
         		+ "</ul>"
         		+ "Default multiplicity is 1.<br/>"
         		+ "<span style='color:red;font-weight:bold'>multiplicity is not running in parallel!!</span>");
@@ -51,8 +51,7 @@ public class Resize extends HttpServlet {
         this.desc.addParameter("action", "JSON string describing the actions");
         this.desc.setExample("http://83.212.117.112/celar-orchestrator/deployment/resize/?action=addvm<br/>"
         		+ "http://83.212.117.112/celar-orchestrator/deployment/resize/?action=removevm<br/>"
-        		+ "http://83.212.117.112/celar-orchestrator/deployment/resize/?action=addvm&multiplicity=2<br/>"
-        		+ "http://83.212.117.112/celar-orchestrator/deployment/resize/?action=removevm&multiplicity=2");
+        		+ "http://83.212.117.112/celar-orchestrator/deployment/resize/?action=cleanup<br/>");
     }
 
 	/**
