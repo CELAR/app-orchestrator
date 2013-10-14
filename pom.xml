@@ -8,6 +8,12 @@
   <description>CELAR Application Orchestrator</description>
   <packaging>war</packaging>
   
+  <parent>
+    <groupId>eu.celar</groupId>
+    <artifactId>distribution</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
