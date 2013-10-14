@@ -1,11 +1,13 @@
 #!/bin/bash 
 
-LOG_OUTPUT="/tmp/REMOVEVM`date +"%Y%m%d%H%M%S"`.log"
+LOG_OUTPUT="/tmp/orchestrator/removevm.log"
 
 function remove {
-	ssh $1 '/local/apache-cassandra-1.2.6/bin/nodetool decommission' > $LOG_OUTPUT
+	echo "`date`: removing started ($1) ">> $LOG_OUTPUT
+	ssh $1 '/local/apache-cassandra-1.2.6/bin/nodetool decommission' >> $LOG_OUTPUT
 	ssh $1 'rm -rf /local/cassandra/data/data/usertable/data' >> $LOG_OUTPUT
 	ssh $1 'pgrep -f cassandra | xargs kill' >> $LOG_OUTPUT
+	echo "`date`: removing done ($1) ">> $LOG_OUTPUT
 }
 
 seednode="83.212.116.239"
@@ -15,8 +17,9 @@ if [ "$removeNode" == "$seednode" ]
 then
    removeNode=`echo $currentNodes | awk '{ print $2 }' `
 fi
-echo $removeNode
+[ "$removeNode" == "" ] && echo "no nodes left" >&2 && exit 0
 
+echo $removeNode
 remove $removeNode &
 
 #/opt/apache-cassandra-1.2.6/bin/nodetool -host $seednode status

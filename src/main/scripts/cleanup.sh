@@ -1,11 +1,12 @@
 #!/bin/bash
 
-LOG_OUTPUT="/tmp/CLEANUP`date +"%Y%m%d%H%M%S"`.log"
+LOG_OUTPUT="/tmp/orchestrator/cleanup.log"
 
-TMP_FILE="/tmp/cleanup_process.tmp"
+TMP_FILE="/tmp/cleanup_lock.tmp"
 
 function cleanup {
 	touch $TMP_FILE
+	echo "`date`: cleanup started">> $LOG_OUTPUT
 	seednode="83.212.116.239"
 	currentNodes=`/opt/apache-cassandra-1.2.6/bin/nodetool -host $seednode status | awk '$1=="UN" { print $2 }'`
 	for node in `echo $currentNodes`
@@ -13,6 +14,7 @@ function cleanup {
 	   echo "Cleaning $node" >> $LOG_OUTPUT
 	   ssh $node '/local/apache-cassandra-1.2.6/bin/nodetool cleanup'  >> $LOG_OUTPUT
 	done
+	echo "`date`: cleanup done">> $LOG_OUTPUT
 	rm $TMP_FILE
 }
 

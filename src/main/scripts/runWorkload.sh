@@ -28,17 +28,19 @@ function run_workload {
 }
 
 function kill_workload {
-	for i in $nodes; do
-		ssh $i "pkill java";
-		echo "Workload from $i killed";
+	for y in $nodes; do
+		for i in `ssh  $y "ps aux | grep Client" | awk '{print $2}'`; do ssh $y "kill -9 $i" 2>/dev/null; done
+		echo "Workload from $y killed";
 	done
 	echo "Killed all"
 }
 
 function workload_status {
+	let x=3
 	for i in $nodes; do
-		[ "`ssh $i "jps | grep -i client"`" = "" ] && echo "Not running (node $i)";
+		[ "`ssh $i "jps | grep -i client"`" = "" ] && echo "Not running (node $i)" && let x=x-1;
 	done
+	[ $x -eq 3 ] && echo "Everyting works";
 }
 
 LOGFILE="/tmp/WORKLOAD_LOGS.txt"
@@ -47,6 +49,7 @@ case $1 in
 		echo "Killing workload";
 		kill_workload	;
 		echo "`date`: killed workload" >> $LOGFILE
+		pkill runWorkload.sh; 
 		;;
 	status)
 		echo "`date`: took workload status command" >> $LOGFILE;
