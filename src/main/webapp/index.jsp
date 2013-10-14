@@ -76,42 +76,24 @@ border-left:1px solid black;
 </tr>
 <tr>
 <td>8</td>
-<td><a href="deployment/deploy/?info">Deploy an application</a></td>
-<td>FUNCTIONAL</td>
-<td>/orchestrator/deployment/deploy/</td>
-</tr>
-<tr>
-<td>9</td>
-<td><a href="deployment/smartdeploy/?info">(Smart) deploy an application</a></td>
-<td>DUMMY</td>
-<td>/orchestrator/deployment/smartdeploy/</td>
-</tr>
-<tr>
-<td>10</td>
-<td><a href="deployment/shutdown/?info">Shut down an application</a></td>
-<td>DUMMY</td>
-<td>/orchestrator/deployment/shutdown/</td>
-</tr>
-<tr>
-<td>11</td>
 <td><a href="deployment/resize/?info">Perform a resizing action</a></td>
 <td>FUNCTIONAL</td>
 <td>/orchestrator/deployment/resize/</td>
 </tr>
 <tr>
-<td>12</td>
+<td>9</td>
 <td><a href="deployment/resizestatus/?info">Status of a resizing action</a></td>
 <td>FUNCTIONAL</td>
 <td>/orchestrator/deployment/resizestatus/</td>
 </tr>
 <tr>
-<td>13</td>
+<td>10</td>
 <td><a href="deployment/getconf/?info">Get configuration</a></td>
 <td>DUMMY</td>
 <td>/orchestrator/deployment/getconf/</td>
 </tr>
 <tr>
-<td>14</td>
+<td>11</td>
 <td><a href="action/gethistory/?info">Get action history</a></td>
 <td>DUMMY</td>
 <td>/orchestrator/action/gethistory/</td>

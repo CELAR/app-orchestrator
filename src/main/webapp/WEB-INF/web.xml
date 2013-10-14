@@ -10,11 +10,6 @@
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
   <servlet>
-  
-    <servlet-name>dummy</servlet-name>
-    <servlet-class>gr.ntua.cslab.services.DummyWebService</servlet-class>
-  </servlet>
-  <servlet>
     <servlet-name>providedresources</servlet-name>
     <servlet-class>gr.ntua.cslab.services.iaas.ProvidedResources</servlet-class>
   </servlet>
@@ -71,10 +66,6 @@
     <servlet-class>gr.ntua.cslab.services.deployment.GetConf</servlet-class>
   </servlet>
   
-  <servlet-mapping>
-    <servlet-name>dummy</servlet-name>
-    <url-pattern>/dummy</url-pattern>
-  </servlet-mapping>
   <servlet-mapping>
     <servlet-name>providedresources</servlet-name>
     <url-pattern>/iaas/resources/*</url-pattern>
