@@ -1,6 +1,6 @@
 #!/bin/bash
 # file used to automatically deploy the resizing scripts and the 
-# orchestrator war..
+# orchestrator war.
 
 source /etc/profile
 
