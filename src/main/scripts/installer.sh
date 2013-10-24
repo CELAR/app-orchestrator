@@ -5,7 +5,7 @@
 [ -z "$CATALINA_BASE"] && echo "No CATALINA_BASE found, exiting.." && exit 1;
 
 function deploy_war {
-	WAR=find . -name "*.war";
+	WAR=$(find . -name "*.war");
 	cp $WAR $CATALINA_BASE/webapps/;
 } 
 
