@@ -16,7 +16,6 @@
 				<include>refresh.sh</include>
 				<include>runWorkload.sh</include>
 				<include>cleanup.sh</include>
-				<include>.sh</include>
 			</includes>
 		</fileSet>
 		<fileSet>
