@@ -7,7 +7,8 @@ TMP_FILE="/tmp/cleanup_lock.tmp"
 function cleanup {
 	touch $TMP_FILE
 	echo "`date`: cleanup started">> $LOG_OUTPUT
-	seednode="83.212.116.239"
+	#seednode="83.212.116.239"
+	seednode="`getNodes.sh seednode`"
 	currentNodes=`/opt/apache-cassandra-1.2.6/bin/nodetool -host $seednode status | awk '$1=="UN" { print $2 }'`
 	for node in `echo $currentNodes`
 	do
