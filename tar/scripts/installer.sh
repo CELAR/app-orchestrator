@@ -2,7 +2,7 @@
 # file used to automatically deploy the resizing scripts and the 
 # orchestrator war.
 
-[ -z "$CATALINA_BASE"] && echo "No CATALINA_BASE found, exiting.." && exit 1;
+[ -z "$CATALINA_BASE" ] && echo "No CATALINA_BASE found, exiting.." && exit 1;
 
 function deploy_war {
 	WAR=$(find . -name "*.war");
