@@ -65,6 +65,10 @@
     <servlet-name>getconf</servlet-name>
     <servlet-class>gr.ntua.cslab.services.deployment.GetConf</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>initsybl</servlet-name>
+    <servlet-class>gr.ntua.cslab.services.utils.ProvideDescriptionAndTopology</servlet-class>
+  </servlet>
   
   <servlet-mapping>
     <servlet-name>providedresources</servlet-name>
@@ -121,5 +125,9 @@
   <servlet-mapping>
     <servlet-name>getconf</servlet-name>
     <url-pattern>/deployment/getconf/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>initsybl</servlet-name>
+    <url-pattern>/utils/initsybl/*</url-pattern>
   </servlet-mapping>
 </web-app>
