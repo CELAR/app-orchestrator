@@ -2,8 +2,10 @@ package gr.ntua.cslab.utils;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -98,23 +100,41 @@ public class ApplicationXMLs {
 	}
 	
 	public String getApplicationDescriptionXML(){
-		String appDescriptionXML = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
-				+ "<CloudService id=\"CloudService\">"
-				+ 	"<SYBLDirective Constraints=\"Co1: CONSTRAINT cost &lt; 1.5 $;\" Strategies=\"St1:STRATEGY CASE fulfilled(Co2): minimize(cost);\"/>"
-				+ 	"<ServiceTopology id=\"MainTopology\">"
-				+ 			"<Relationship>"
-				+ 				"<Master>YCSBClient</Master>"
-				+ 				"<Slave>CassandraNode</Slave>"
-				+ 			"</Relationship>"
-				+ 		"<ServiceUnit id=\"YCSBClient\" >"
-				+ 			"<SYBLDirective Strategies=\"St2:STRATEGY CASE throughput &lt; 1000 AND latency &lt; 500 : scalein(CassandraNode);\" Constraints=\"Co2:CONSTRAINT latency &lt; 1000 ms ;\"/>"
-				+		 "</ServiceUnit>"
-				+ 		"<ServiceUnit id=\"CassandraNode\" >"
-				+ 			"<SYBLDirective Constraints=\"Co3:CONSTRAINT cpuUsage &gt; 35 % AND cpuUsage &lt; 75 %\" />"
-				+ 		"</ServiceUnit>"
-				+ "	</ServiceTopology>"
-				+ "</CloudService>";
-		
+		String appDescriptionXML = null;
+		try {
+			
+			FileReader reader = new FileReader("/opt/policy.xml");
+			char[] buffer = new char[1024];
+			StringBuffer sBuffer = new StringBuffer();
+			while(reader.ready()){
+				int len = reader.read(buffer);
+				sBuffer.append(buffer,0,len);
+			}
+			reader.close();
+			appDescriptionXML = sBuffer.toString();
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+//		String appDescriptionXML = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
+//				+ "<CloudService id=\"CloudService\">"
+//				+ 	"<SYBLDirective Constraints=\"Co1: CONSTRAINT cost &lt; 1.5 $;\" Strategies=\"St1:STRATEGY CASE fulfilled(Co2): minimize(cost);\"/>"
+//				+ 	"<ServiceTopology id=\"MainTopology\">"
+//				+ 			"<Relationship>"
+//				+ 				"<Master>YCSBClient</Master>"
+//				+ 				"<Slave>CassandraNode</Slave>"
+//				+ 			"</Relationship>"
+//				+ 		"<ServiceUnit id=\"YCSBClient\" >"
+//				+ 			"<SYBLDirective Strategies=\"St2:STRATEGY CASE throughput &lt; 1000 AND latency &lt; 500 : scalein(CassandraNode);\" Constraints=\"Co2:CONSTRAINT latency &lt; 1000 ms ;\"/>"
+//				+		 "</ServiceUnit>"
+//				+ 		"<ServiceUnit id=\"CassandraNode\" >"
+//				+ 			"<SYBLDirective Constraints=\"Co3:CONSTRAINT cpuUsage &gt; 35 % AND cpuUsage &lt; 75 %\" />"
+//				+ 		"</ServiceUnit>"
+//				+ "	</ServiceTopology>"
+//				+ "</CloudService>";
+//		
 		return appDescriptionXML;
 	}
 	

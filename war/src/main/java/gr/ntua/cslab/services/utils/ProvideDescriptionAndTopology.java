@@ -1,5 +1,6 @@
 package gr.ntua.cslab.services.utils;
 
+import gr.ntua.cslab.bash.Command;
 import gr.ntua.cslab.utils.ApplicationXMLs;
 import gr.ntua.cslab.utils.HostsReader;
 import gr.ntua.cslab.utils.RSYBLClient;
@@ -37,12 +38,20 @@ public class ProvideDescriptionAndTopology extends HttpServlet {
 		HostsReader reader = new HostsReader();
 		topology.setYcsb(reader.getIPs("ycsb"));
 		List<String> cassandra = new LinkedList<String>();
-		cassandra.addAll(reader.getIPs("cassandra"));
-		cassandra.add(0, reader.getIPs("seed").get(0));
+//		cassandra.addAll(reader.getIPs("cassandra"));
+//		cassandra.add(0, reader.getIPs("seed").get(0));
+		
+		Command command = new Command("/usr/local/bin/activeNodes.sh");
+		command.waitFor();
+		for(String s : command.getStdout().split("\n")){
+			cassandra.add(s);
+		}
+		
 		topology.setCassandra(cassandra);
 		topology.generateXML();
 		String deploymentXML = topology.getXML();
 		String appDescXML = topology.getApplicationDescriptionXML();
+		System.out.println(appDescXML);
 		RSYBLClient.sendXML(RSYBLClient.APP_DEPLOYMENT_URL,  deploymentXML);
 		RSYBLClient.sendXML(RSYBLClient.APP_DESCRIPTION_URL, appDescXML);		
 	}
