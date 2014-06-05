@@ -6,7 +6,7 @@
 	</formats>
 	<fileSets>
 		<fileSet>
-			<directory>${basedir}/scripts/</directory>
+			<directory>${project.build.directory}/scripts/</directory>
 			<outputDirectory>/scripts</outputDirectory>
 			<includes>
 				<include>addNode.sh</include>
@@ -19,7 +19,7 @@
 			</includes>
 		</fileSet>
 		<fileSet>
-			<directory>${basedir}/scripts/</directory>
+			<directory>${project.build.directory}/scripts/</directory>
 			<outputDirectory>/</outputDirectory>
 			<includes>
 				<include>installer.sh</include>
@@ -27,7 +27,7 @@
 		</fileSet>
 
 		<fileSet>
-			<directory>${basedir}/target/</directory>
+			<directory>${project.build.directory}</directory>
 			<outputDirectory></outputDirectory>
 			<includes>
 				<include>*.war</include>
