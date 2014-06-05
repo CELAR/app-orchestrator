@@ -18,5 +18,11 @@
   <modules>
     <module>war</module>
     <module>tar</module>
+    <module>rpm</module>
   </modules>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
 </project>
