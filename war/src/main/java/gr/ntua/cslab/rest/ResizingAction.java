@@ -8,6 +8,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -33,8 +34,8 @@ public class ResizingAction {
     }
     
     @GET
-    @Path("{id}/")
-    public Response getResizingActionStatus(){
+    @Path("status")
+    public Response getResizingActionStatus(@QueryParam("action_id") String actionId){
        return Response.status(200).build();
     }
 }
