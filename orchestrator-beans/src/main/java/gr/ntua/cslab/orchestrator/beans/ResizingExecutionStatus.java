@@ -19,6 +19,6 @@ package gr.ntua.cslab.orchestrator.beans;
  * An enum of the possible status of an executed resizing action.
  * @author Giannis Giannakopoulos
  */
-public enum ResizingStatusExecutionStatus {
-    
+public enum ResizingExecutionStatus {
+    ONGOING, FAILED, SUCCESS
 }

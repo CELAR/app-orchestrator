@@ -16,6 +16,8 @@
 
 package gr.ntua.cslab.orchestrator.beans;
 
+import java.util.LinkedList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -33,15 +35,18 @@ public class ResizingAction {
     private String name;
     private ResizingActionType type;
     private int moduleId;
+    private List<String> applicablePatameters;
 
     public ResizingAction() {
+        this.applicablePatameters = new LinkedList<>();
     }
 
-    public ResizingAction(int id, String name, ResizingActionType type, int moduleId) {
+    public ResizingAction(int id, String name, ResizingActionType type, int moduleId, List parameters) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.moduleId = moduleId;
+        this.applicablePatameters = parameters;
     }
 
     public int getId() {
@@ -74,5 +79,13 @@ public class ResizingAction {
 
     public void setModuleId(int moduleId) {
         this.moduleId = moduleId;
+    }
+
+    public List<String> getApplicablePatameters() {
+        return applicablePatameters;
+    }
+
+    public void setApplicablePatameters(List<String> applicablePatameters) {
+        this.applicablePatameters = applicablePatameters;
     }
 }

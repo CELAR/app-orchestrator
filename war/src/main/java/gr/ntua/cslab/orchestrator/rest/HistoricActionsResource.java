@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gr.ntua.cslab.rest;
+package gr.ntua.cslab.orchestrator.rest;
 
-import gr.ntua.cslab.cache.ResizingActionsCache;
+import gr.ntua.cslab.orchestrator.cache.ResizingActionsCache;
 import gr.ntua.cslab.orchestrator.beans.ExecutedResizingAction;
 import java.util.List;
 import javax.ws.rs.GET;

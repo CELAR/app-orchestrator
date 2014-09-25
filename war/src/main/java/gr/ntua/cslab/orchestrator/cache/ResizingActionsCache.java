@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gr.ntua.cslab.cache;
+package gr.ntua.cslab.orchestrator.cache;
 
 import gr.ntua.cslab.orchestrator.beans.ExecutedResizingAction;
 import gr.ntua.cslab.orchestrator.beans.ResizingAction;
@@ -26,9 +26,13 @@ import java.util.List;
  */
 public class ResizingActionsCache {
     
-    private static final List<ResizingAction> availabeResizingActions = new LinkedList<>();
-    private static final List<ExecutedResizingAction> executedResizingActions = new LinkedList<>();
+    private static List<ResizingAction> availabeResizingActions;
+    private static List<ExecutedResizingAction> executedResizingActions;
     
+    public static void allocate() {
+        availabeResizingActions = new LinkedList<>();
+        executedResizingActions = new LinkedList<>();
+    }
     
     /**
      * Returns a list of the available resizing actions.
@@ -61,5 +65,30 @@ public class ResizingActionsCache {
     public static void addAvailableResizingAction(ResizingAction action){
         availabeResizingActions.add(action);
     };
+    
+    /**
+     * Searches for the available resizing action according to the specified ID.
+     * @param id
+     * @return 
+     */
+    public static ResizingAction getResizingActionById(int id) {
+        for(ResizingAction a : ResizingActionsCache.availabeResizingActions)
+            if(a.getId() == id )
+                return a;
+        return null;
+    }
+    
+    
+    public static ExecutedResizingAction getExecutedResizingActionByUniqueId(String uniq) {
+        for(ExecutedResizingAction a : ResizingActionsCache.executedResizingActions) {
+            System.out.println("A unique ID:\t"+a.getUniqueId());
+            System.out.println("uniq " + uniq);
+            if(a.getUniqueId().equals(uniq)){
+                return a;
+            }
+        }
+        
+        return null;
+    }
     
 }

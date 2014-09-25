@@ -26,19 +26,22 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "resizingAction")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ExecutedResizingAction {
-    private String uniqueId;
+    
     private ResizingAction resizingAction;
+    private String uniqueId;
     private Long timestamp;
-    private ResizingStatusExecutionStatus executionStatus;
+    private ResizingExecutionStatus executionStatus;
+    private Parameters parameters;
 
     public ExecutedResizingAction() {
     }
     
-    public ExecutedResizingAction(String uniqueId, ResizingAction resizingAction, Long timestamp, ResizingStatusExecutionStatus status) {
+    public ExecutedResizingAction(String uniqueId, ResizingAction resizingAction, Long timestamp, ResizingExecutionStatus status, Parameters parameters) {
         this.uniqueId = uniqueId;
         this.resizingAction = resizingAction;
         this.timestamp = timestamp;
         this.executionStatus = status;
+        this.parameters = parameters;
     }
 
     public String getUniqueId() {
@@ -65,11 +68,19 @@ public class ExecutedResizingAction {
         this.timestamp = timestamp;
     }
 
-    public ResizingStatusExecutionStatus getExecutionStatus() {
+    public ResizingExecutionStatus getExecutionStatus() {
         return executionStatus;
     }
 
-    public void setExecutionStatus(ResizingStatusExecutionStatus executionStatus) {
+    public void setExecutionStatus(ResizingExecutionStatus executionStatus) {
         this.executionStatus = executionStatus;
+    }
+
+    public Parameters getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(Parameters parameters) {
+        this.parameters = parameters;
     }
 }
