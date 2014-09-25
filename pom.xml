@@ -19,6 +19,7 @@
     <module>war</module>
     <module>tar</module>
     <module>rpm</module>
+    <module>orchestrator-client</module>
   </modules>
 
   <properties>
