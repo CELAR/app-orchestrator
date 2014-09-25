@@ -15,8 +15,8 @@
  */
 package gr.ntua.cslab.rest;
 
-import gr.ntua.cslab.beans.ExecutedResizingAction;
 import gr.ntua.cslab.cache.ResizingActionsCache;
+import gr.ntua.cslab.orchestrator.beans.ExecutedResizingAction;
 import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gr.ntua.cslab.beans;
+package gr.ntua.cslab.orchestrator.beans;
 
 /**
- * Enum holding the resizing action types
+ * An enum of the possible status of an executed resizing action.
  * @author Giannis Giannakopoulos
  */
-public enum ResizingActionType { 
-    SCALE_IN, SCALE_OUT, SCALE_UP, SCALE_DOWN 
+public enum ResizingStatusExecutionStatus {
+    
 }

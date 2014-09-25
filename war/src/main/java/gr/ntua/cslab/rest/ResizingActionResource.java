@@ -1,7 +1,7 @@
 
 package gr.ntua.cslab.rest;
 
-import gr.ntua.cslab.beans.ResizingAction;
+import gr.ntua.cslab.orchestrator.beans.ResizingAction;
 import java.util.LinkedList;
 import java.util.List;
 import javax.ws.rs.GET;
