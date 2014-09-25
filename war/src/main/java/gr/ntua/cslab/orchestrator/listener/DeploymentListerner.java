@@ -39,15 +39,17 @@ public class DeploymentListerner implements ServletContextListener{
      */
     @Override
     public void contextInitialized(ServletContextEvent sce) {
+        
+        // this is where the resizing action should be provided.
+        // please remove those hardcoded stuf whenever you are ready :)
         LinkedList<String> params = new LinkedList<>();
         params.add("multiplicity");
         params.add("something else");
         ResizingActionsCache.allocate();
-        ResizingActionsCache.addAvailableResizingAction(new ResizingAction(1, "add cassandra node", ResizingActionType.SCALE_OUT, 1, params));
-        ResizingActionsCache.addAvailableResizingAction(new ResizingAction(2, "remove cassandra node", ResizingActionType.SCALE_IN, 1, params));
-        ResizingActionsCache.addAvailableResizingAction(new ResizingAction(3, "increase RAM to web server", ResizingActionType.SCALE_UP, 2, new LinkedList()));
-        ResizingActionsCache.addAvailableResizingAction(new ResizingAction(3, "decrease RAM from web server", ResizingActionType.SCALE_DOWN, 2, new LinkedList()));
-        System.out.println("Available resizing actions:\t"+ResizingActionsCache.getAvailalbeResizingActions());
+        ResizingActionsCache.addAvailableResizingAction(new ResizingAction(1, "add cassandra node", ResizingActionType.SCALE_OUT, 1, "name1", params));
+        ResizingActionsCache.addAvailableResizingAction(new ResizingAction(2, "remove cassandra node", ResizingActionType.SCALE_IN, 1, "name1=2", params));
+        ResizingActionsCache.addAvailableResizingAction(new ResizingAction(3, "increase RAM to web server", ResizingActionType.SCALE_UP, 2, "name3", new LinkedList()));
+        ResizingActionsCache.addAvailableResizingAction(new ResizingAction(3, "decrease RAM from web server", ResizingActionType.SCALE_DOWN, 2, "name4-", new LinkedList()));
     }
 
     /**
@@ -56,7 +58,6 @@ public class DeploymentListerner implements ServletContextListener{
      */
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        System.out.println("paparia mantoles alla auti ti fora katastrefomai");
     }
     
 }

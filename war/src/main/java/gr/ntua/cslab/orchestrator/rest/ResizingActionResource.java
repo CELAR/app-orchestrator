@@ -16,18 +16,15 @@
 package gr.ntua.cslab.orchestrator.rest;
 
 import gr.ntua.cslab.orchestrator.beans.ExecutedResizingAction;
-import gr.ntua.cslab.orchestrator.beans.Parameter;
 import gr.ntua.cslab.orchestrator.beans.Parameters;
-import gr.ntua.cslab.orchestrator.beans.ResizingAction;
+import gr.ntua.cslab.orchestrator.beans.ResizingActionList;
 import gr.ntua.cslab.orchestrator.beans.ResizingExecutionStatus;
 import gr.ntua.cslab.orchestrator.cache.ResizingActionsCache;
-import java.util.List;
 import java.util.UUID;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
@@ -41,13 +38,12 @@ import javax.ws.rs.core.Response;
 public class ResizingActionResource {
     
     @GET
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public List<ResizingAction> listResizingActions(){
-       return ResizingActionsCache.getAvailalbeResizingActions();
+    public ResizingActionList listResizingActions(){
+       return new ResizingActionList(ResizingActionsCache.getAvailalbeResizingActions());
     }
     
     @POST
-    @Consumes(MediaType.APPLICATION_XML)
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public ExecutedResizingAction executeResizingAction(@QueryParam("action_id") int actionId, Parameters params){
         ExecutedResizingAction exec = new ExecutedResizingAction();
         exec.setExecutionStatus(ResizingExecutionStatus.ONGOING);
