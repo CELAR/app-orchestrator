@@ -15,22 +15,24 @@
  */
 package gr.ntua.cslab.rest;
 
+import gr.ntua.cslab.beans.ExecutedResizingAction;
+import gr.ntua.cslab.cache.ResizingActionsCache;
+import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 /**
  * History resource contains details on the applied resizing actions.
  * @author Giannis Giannakopoulos
  */
 @Path("/history/")
-public class History {
+public class HistoricActionsResource {
     
     @GET
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response getResizingActions() {
-        return Response.ok().build();
+    public List<ExecutedResizingAction> getResizingActions() {
+        return ResizingActionsCache.getExecutedResizingActions();
     }
 }

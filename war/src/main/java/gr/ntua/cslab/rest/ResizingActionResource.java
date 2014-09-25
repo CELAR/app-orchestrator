@@ -1,7 +1,7 @@
 
 package gr.ntua.cslab.rest;
 
-import gr.ntua.cslab.rest.beans.ResizingActionDetail;
+import gr.ntua.cslab.beans.ResizingAction;
 import java.util.LinkedList;
 import java.util.List;
 import javax.ws.rs.GET;
@@ -17,14 +17,12 @@ import javax.ws.rs.core.Response;
  * @author Giannis Giannakopoulos
  */
 @Path("/resizing/")
-public class ResizingAction {
+public class ResizingActionResource {
     
     @GET
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public List<ResizingActionDetail> listResizingActions(){
-       List<ResizingActionDetail> ret = new LinkedList<>();
-       ret.add(new ResizingActionDetail(1, "add VM"));
-       ret.add(new ResizingActionDetail(2, "remove VM"));
+    public List<ResizingAction> listResizingActions(){
+       List<ResizingAction> ret = new LinkedList<>();
        return ret;
     }
     
@@ -34,7 +32,7 @@ public class ResizingAction {
     }
     
     @GET
-    @Path("status")
+    @Path("status/")
     public Response getResizingActionStatus(@QueryParam("action_id") String actionId){
        return Response.status(200).build();
     }
