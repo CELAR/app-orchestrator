@@ -16,7 +16,6 @@
 
 package gr.ntua.cslab.orchestrator.beans;
 
-import java.util.LinkedList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -28,27 +27,23 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Parameters {
+public class ExecutedResizingActionList {
+   
+    private List<ExecutedResizingAction> executedResizingActions;
 
-    private List<Parameter> parameters;
-
-    public Parameters() {
-        this.parameters = new LinkedList();
+    public ExecutedResizingActionList() {
     }
 
-    public Parameters(List parameters) {
-        this.parameters = parameters;
+    public ExecutedResizingActionList(List<ExecutedResizingAction> executedResizingActions) {
+        this.executedResizingActions = executedResizingActions;
     }
 
-    public List getParameters() {
-        return parameters;
+    public List<ExecutedResizingAction> getExecutedResizingActions() {
+        return executedResizingActions;
     }
 
-    public void setParameters(List parameters) {
-        this.parameters = parameters;
+    public void setExecutedResizingActions(List<ExecutedResizingAction> executedResizingActions) {
+        this.executedResizingActions = executedResizingActions;
     }
-
-    public void addParameter(Parameter p) {
-        this.parameters.add(p);
-    }
+    
 }

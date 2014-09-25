@@ -35,18 +35,20 @@ public class ResizingAction {
     private String name;
     private ResizingActionType type;
     private int moduleId;
+    private String moduleName;
     private List<String> applicablePatameters;
 
     public ResizingAction() {
         this.applicablePatameters = new LinkedList<>();
     }
 
-    public ResizingAction(int id, String name, ResizingActionType type, int moduleId, List parameters) {
+    public ResizingAction(int id, String name, ResizingActionType type, int moduleId, String moduleName, List<String> applicablePatameters) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.moduleId = moduleId;
-        this.applicablePatameters = parameters;
+        this.moduleName = moduleName;
+        this.applicablePatameters = applicablePatameters;
     }
 
     public int getId() {
@@ -88,4 +90,14 @@ public class ResizingAction {
     public void setApplicablePatameters(List<String> applicablePatameters) {
         this.applicablePatameters = applicablePatameters;
     }
+
+    public String getModuleName() {
+        return moduleName;
+    }
+
+    public void setModuleName(String moduleName) {
+        this.moduleName = moduleName;
+    }
+    
+    
 }
