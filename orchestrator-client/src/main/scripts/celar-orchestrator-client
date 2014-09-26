@@ -1,0 +1,8 @@
+#!/bin/bash
+
+CLIENT_HOME="/home/giannis/Projects/celar/app-orchestrator/orchestrator-client/"
+JAR_FILE_LOCATION="${CLIENT_HOME}target/orchestrator-client-0.1.jar"
+CLASSPATH="${CLIENT_HOME}target/lib/*"
+MAIN_CLASS="gr.ntua.cslab.orchestrator.client.cli.CLIClient"
+
+java -cp "${CLASSPATH}:${JAR_FILE_LOCATION}" ${MAIN_CLASS} $@

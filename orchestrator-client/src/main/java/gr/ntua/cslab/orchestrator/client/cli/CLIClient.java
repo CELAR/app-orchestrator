@@ -15,6 +15,14 @@
  */
 package gr.ntua.cslab.orchestrator.client.cli;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+
 /**
  * CLI client 
  * 
@@ -22,5 +30,28 @@ package gr.ntua.cslab.orchestrator.client.cli;
  * @author Giannis Giannakopoulos
  */
 public class CLIClient {
+    
+    public static void main(String[] args) throws ParseException {
+        Options options = new Options();
+        Option help = new Option("h", "help", false, "Help message");
+        Option host = new Option("H", "host", true, "The host where CELAR Orchestrator runs");
+        
+        
+        options.addOption(help);
+        options.addOption(host);
+        
+        CommandLineParser parser = new GnuParser();
+        CommandLine cmd = parser.parse(options, args);
+        
+        if(cmd.hasOption("H")) {
+            System.out.println("Received host");
+        }
+        
+        if(cmd.hasOption("h")) {
+            HelpFormatter formatter = new HelpFormatter();
+            formatter.printHelp("celar-orchestrator-client", options);
+            System.exit(0);
+        }
+    }
     
 }

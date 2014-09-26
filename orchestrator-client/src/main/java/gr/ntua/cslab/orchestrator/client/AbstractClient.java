@@ -88,7 +88,7 @@ public class AbstractClient {
         
         
         int responseCode = con.getResponseCode();
-        System.out.println("Response code:\t"+responseCode);
+//        System.out.println("Response code:\t"+responseCode);
         StringBuilder builder = new StringBuilder();
         
         try (InputStream in = con.getInputStream()) {
