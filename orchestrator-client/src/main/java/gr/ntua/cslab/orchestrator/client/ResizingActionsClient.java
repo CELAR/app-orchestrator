@@ -59,7 +59,6 @@ public class ResizingActionsClient extends AbstractClient {
         JAXB.marshal(parameters, writer);
         String paramsMarshalled=writer.toString();
         String output = this.issueRequest("POST", "resizing/?action_id="+actionId, paramsMarshalled);
-        System.out.println(output);
         ExecutedResizingAction action = JAXB.unmarshal(new StringReader(output), ExecutedResizingAction.class);
         return action;
     }
