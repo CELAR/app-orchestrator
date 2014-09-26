@@ -15,11 +15,20 @@
  */
 package gr.ntua.cslab.orchestrator.client.cli;
 
+import gr.ntua.cslab.orchestrator.beans.ExecutedResizingAction;
+import gr.ntua.cslab.orchestrator.beans.ExecutedResizingActionList;
+import gr.ntua.cslab.orchestrator.client.HistoryClient;
+import gr.ntua.cslab.orchestrator.client.ResizingActionsClient;
+import gr.ntua.cslab.orchestrator.client.cli.formatter.CLIPrettyFormatter;
+import gr.ntua.cslab.orchestrator.client.conf.ClientConfiguration;
+import java.io.IOException;
+import java.util.LinkedList;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
@@ -31,27 +40,82 @@ import org.apache.commons.cli.ParseException;
  */
 public class CLIClient {
     
-    public static void main(String[] args) throws ParseException {
+    public static void main(String[] args) throws ParseException, IOException {
         Options options = new Options();
+        
         Option help = new Option("h", "help", false, "Help message");
+        Option version = new Option("v", "version", false, "Version of the specified client");
         Option host = new Option("H", "host", true, "The host where CELAR Orchestrator runs");
+        Option port = new Option("P", "port", true, "Port where the CELAR Orchestrator listens to");        
         
         
         options.addOption(help);
+        options.addOption(version);
         options.addOption(host);
+        options.addOption(port);
+        
+        
+        OptionGroup availableActions = new OptionGroup();
+        
+        Option listAvailableResizingActions = new Option("la", "list-available", false, "Lists the available resizing actions");
+        Option listExecutedResizingActions = new Option("le", "list-executed", false, "Lists all the executed resizing actions");
+        Option execute = new Option("e", "execute", true, "Execute a new resizing action");
+        Option getStatus = new Option("s", "get-status", true, "Get the status of a resizing action");
+
+        
+        availableActions.addOption(listAvailableResizingActions);
+        availableActions.addOption(listExecutedResizingActions);
+        availableActions.addOption(getStatus);
+        availableActions.addOption(execute);
+        
+        options.addOptionGroup(availableActions);
         
         CommandLineParser parser = new GnuParser();
         CommandLine cmd = parser.parse(options, args);
-        
-        if(cmd.hasOption("H")) {
-            System.out.println("Received host");
-        }
         
         if(cmd.hasOption("h")) {
             HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp("celar-orchestrator-client", options);
             System.exit(0);
         }
+        
+        ClientConfiguration config = null;
+        
+        if(cmd.hasOption("P") && cmd.hasOption("H")) {
+            config = new ClientConfiguration(cmd.getOptionValue("H"), new Integer(cmd.getOptionValue("P")));
+        } else {
+            System.err.println("Please provide valid host and port to connect");
+            System.exit(1);
+        }
+        
+        if(cmd.hasOption("list-available")) {
+            ResizingActionsClient client = new ResizingActionsClient();
+            client.setConfiguration(config);
+            System.out.println(CLIPrettyFormatter.format(client.listResizingActions()));
+        } else if(cmd.hasOption("list-executed")) {
+            HistoryClient client = new  HistoryClient();
+            client.setConfiguration(config);
+            
+            ExecutedResizingActionList list = client.getExecutedActions();
+            if(list == null || list.getExecutedResizingActions() == null) {
+                System.out.println("No recorded actions");
+            } else {
+                System.out.println(CLIPrettyFormatter.format(list));
+            }
+            
+        } else if(cmd.hasOption("execute")) {
+            ResizingActionsClient client  = new ResizingActionsClient();
+            client.setConfiguration(config);
+            client.executeResizingAction(new Integer(cmd.getOptionValue("e")), null);
+            
+        } else if(cmd.hasOption("get-status")) {
+            ResizingActionsClient client = new ResizingActionsClient();
+            client.setConfiguration(config);
+            ExecutedResizingActionList dummy = new ExecutedResizingActionList();
+            dummy.setExecutedResizingActions(new LinkedList<ExecutedResizingAction>());
+            dummy.getExecutedResizingActions().add(client.getActionStatus(cmd.getOptionValue("get-status")));
+            System.out.println(CLIPrettyFormatter.format(dummy));
+        } 
     }
     
 }
