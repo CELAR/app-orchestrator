@@ -22,6 +22,7 @@ import java.util.List;
 
 /**
  * This class is used as a cache for the available and the executed resizing actions.
+ * All the provided methods are synchronized.
  * @author Giannis Giannakopoulos
  */
 public class ResizingActionsCache {
@@ -29,7 +30,7 @@ public class ResizingActionsCache {
     private static List<ResizingAction> availabeResizingActions;
     private static List<ExecutedResizingAction> executedResizingActions;
     
-    public static void allocate() {
+    public static synchronized void allocate() {
         availabeResizingActions = new LinkedList<>();
         executedResizingActions = new LinkedList<>();
     }
@@ -38,7 +39,7 @@ public class ResizingActionsCache {
      * Returns a list of the available resizing actions.
      * @return 
      */
-    public static List<ResizingAction> getAvailalbeResizingActions(){
+    public static synchronized List<ResizingAction> getAvailalbeResizingActions(){
         return ResizingActionsCache.availabeResizingActions;
     };
     
@@ -46,7 +47,7 @@ public class ResizingActionsCache {
      * Returns a list of all the executed resizing actions.
      * @return 
      */
-    public static List<ExecutedResizingAction> getExecutedResizingActions(){
+    public static synchronized List<ExecutedResizingAction> getExecutedResizingActions(){
         return ResizingActionsCache.executedResizingActions;
     };
     
@@ -54,7 +55,7 @@ public class ResizingActionsCache {
      * Adds a newly executed resizing action  
      * @param action
      */
-    public static void addExecutedResizingAction(ExecutedResizingAction action){
+    public static synchronized void addExecutedResizingAction(ExecutedResizingAction action){
         executedResizingActions.add(action);
     };
     
@@ -62,7 +63,7 @@ public class ResizingActionsCache {
      * Adds a new available resizing action: only used by the platform internally.
      * @param action
      */
-    public static void addAvailableResizingAction(ResizingAction action){
+    public static synchronized void addAvailableResizingAction(ResizingAction action){
         availabeResizingActions.add(action);
     };
     
@@ -71,18 +72,20 @@ public class ResizingActionsCache {
      * @param id
      * @return 
      */
-    public static ResizingAction getResizingActionById(int id) {
+    public static synchronized ResizingAction getResizingActionById(int id) {
         for(ResizingAction a : ResizingActionsCache.availabeResizingActions)
             if(a.getId() == id )
                 return a;
         return null;
     }
     
-    
-    public static ExecutedResizingAction getExecutedResizingActionByUniqueId(String uniq) {
+    /**
+     * Returns a specific executed resizing action by its unique UUID.
+     * @param uniq
+     * @return 
+     */
+    public static synchronized  ExecutedResizingAction getExecutedResizingActionByUniqueId(String uniq) {
         for(ExecutedResizingAction a : ResizingActionsCache.executedResizingActions) {
-            System.out.println("A unique ID:\t"+a.getUniqueId());
-            System.out.println("uniq " + uniq);
             if(a.getUniqueId().equals(uniq)){
                 return a;
             }
