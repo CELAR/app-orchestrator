@@ -16,6 +16,7 @@
 package gr.ntua.cslab.orchestrator.client;
 
 import gr.ntua.cslab.orchestrator.client.conf.ClientConfiguration;
+import java.io.IOException;
 
 /**
  *
@@ -23,6 +24,24 @@ import gr.ntua.cslab.orchestrator.client.conf.ClientConfiguration;
  */
 public class AbstractClient {
     
-    protected ClientConfiguration configuration;
+    private ClientConfiguration configuration;
+
+    public ClientConfiguration getConfiguration() {
+        return configuration;
+    }
+
+    public void setConfiguration(ClientConfiguration configuration) {
+        this.configuration = configuration;
+    }
+    
+    protected void issueRequest() {
+        
+    }
+    
+    
+    public static void main(String[] args) throws IOException {
+        
+    }
+    
     
 }

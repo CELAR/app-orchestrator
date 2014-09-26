@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gr.ntua.cslab.orchestrator.client.cli;
+package gr.ntua.cslab.orchestrator.client;
 
 /**
  *
  * @author Giannis Giannakopoulos
  */
-public class CLIClient {
+public class ResizingActionsClient extends AbstractClient {
     
 }
