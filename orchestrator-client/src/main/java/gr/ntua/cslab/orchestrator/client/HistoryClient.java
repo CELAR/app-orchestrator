@@ -13,39 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gr.ntua.cslab.orchestrator.client.conf;
+package gr.ntua.cslab.orchestrator.client;
+
+import gr.ntua.cslab.orchestrator.beans.ExecutedResizingActionList;
+import java.io.IOException;
+import java.io.StringReader;
+import javax.xml.bind.JAXB;
 
 /**
- * Configuration class for the CELAR Orchestrator client.
+ * History client fetches all the historic resizing actions.
  * @author Giannis Giannakopoulos
  */
-public class ClientConfiguration {
-    private String host;
-    private int port;
+public class HistoryClient extends AbstractClient {
 
-    public ClientConfiguration() {
+    public HistoryClient() {
+        super();
     }
     
-    public ClientConfiguration(String host, int port) {
-        this.host = host;
-        this.port = port;
+    public ExecutedResizingActionList getExecutedActions() throws IOException {
+        String outcome = this.issueRequest("GET", "history/", null);
+        ExecutedResizingActionList result = JAXB.unmarshal(new StringReader(outcome), ExecutedResizingActionList.class);
+        return result;
     }
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
-    }
-    
-    
 }

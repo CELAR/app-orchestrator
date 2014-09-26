@@ -16,7 +16,9 @@
 package gr.ntua.cslab.orchestrator.client.cli;
 
 /**
- *
+ * CLI client 
+ * 
+ * TODO
  * @author Giannis Giannakopoulos
  */
 public class CLIClient {
