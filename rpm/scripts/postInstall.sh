@@ -47,7 +47,7 @@ configure_server;
 
 create_service
 
-/bin/rm $CELAR_ORCHESTRATOR_HOME/lib/slf4j-jdk14-1.4.2.jar
+/bin/rm -f $CELAR_ORCHESTRATOR_HOME/lib/slf4j-jdk14-1.4.2.jar
 
 service celar-orchestrator start;
 
