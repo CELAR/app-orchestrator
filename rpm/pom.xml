@@ -14,6 +14,7 @@
     </parent>
 
     <build>
+        <scriptSourceDirectory>${basedir}/scripts/</scriptSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -21,30 +22,84 @@
                 <version>2.8</version>
                 <executions>
                     <execution>
-                        <id>copy</id>
-                        <phase>package</phase>
                         <goals>
                             <goal>copy</goal>
                         </goals>
+                        <id>copy-jar</id>
                         <configuration>
+                            <outputDirectory>${project.build.directory}/</outputDirectory>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>gr.ntua.cslab</groupId>
-                                    <artifactId>celar-orchestrator-war</artifactId>
+                                    <artifactId>celar-orchestrator-daemon</artifactId>
+                                    <type>jar</type>
                                     <version>${project.version}</version>
-                                    <type>war</type>
-                                    <overWrite>false</overWrite>
-                                    <outputDirectory>${project.build.directory}</outputDirectory>
-                                    <destFileName>celar-orchestrator.war</destFileName>
+                                    <destFileName>celar-orchestrator.jar</destFileName>
                                 </artifactItem>
                             </artifactItems>
-                            <outputDirectory>${project.build.directory}/wars</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>true</overWriteSnapshots>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <id>copy-dependencies</id>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib/</outputDirectory>
+                            <excludeArtifactIds>celar-orchestrator-daemon</excludeArtifactIds>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>gr.ntua.cslab</groupId>
+                                    <artifactId>celar-orchestrator-daemon</artifactId>
+                                    <type>jar</type>
+                                    <version>${project.version}</version>
+                                    <destFileName>celar-orchestrator.jar</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+
+                </executions>
+            </plugin>
+                
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <id>copy-resources</id>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/conf/</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>../orchestrator-daemon/src/main/resources</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <id>copy-scripts</id>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/scripts/</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>../orchestrator-daemon/src/main/scripts</directory>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+            
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>rpm-maven-plugin</artifactId>
@@ -59,10 +114,9 @@
                 <configuration>
                     <group>Application</group>
                     <packager>ggian@cslab.ece.ntua.gr</packager>
-		    <release>${BUILD_NUMBER}.${package.os}</release>
+                    <release>${BUILD_NUMBER}.${package.os}</release>
                     <requires>
                         <require>java-1.7.0-openjdk</require>
-                        <require>tomcat6</require>
                     </requires>
                     <mappings>
                         <mapping>
@@ -71,7 +125,38 @@
                             <groupname>root</groupname>
                             <sources>
                                 <source>
-                                    <location>target/celar-orchestrator.war</location>
+                                    <location>target/celar-orchestrator.jar</location>
+                                </source>
+                            </sources>
+                        </mapping>
+                        <mapping>
+                            <directory>${celar.install.dir}/celar-orchestrator/lib/</directory>
+                            <username>root</username>
+                            <groupname>root</groupname>
+                            <sources>
+                                <source>
+                                    <location>target/lib/</location>
+                                </source>
+                            </sources>
+                        </mapping>
+                        <mapping>
+                            <directory>${celar.install.dir}/celar-orchestrator/conf/</directory>
+                            <username>root</username>
+                            <groupname>root</groupname>
+                            <sources>
+                                <source>
+                                    <location>target/conf/</location>
+                                </source>
+                            </sources>
+                        </mapping>
+                        <mapping>
+                            <directory>${celar.install.dir}/celar-orchestrator/bin/</directory>
+                            <username>root</username>
+                            <groupname>root</groupname>
+                            <filemode>744</filemode>
+                            <sources>
+                                <source>
+                                    <location>target/scripts/celar-orchestrator</location>
                                 </source>
                             </sources>
                         </mapping>
@@ -84,6 +169,14 @@
                     </preremoveScriptlet>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>celar-orchestrator-daemon</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>
