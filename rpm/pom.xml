@@ -46,51 +46,27 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.6</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <id>copy-resources</id>
-                        <phase>package</phase>
-                    </execution>
-                </executions>
-                <configuration>
-                    <outputDirectory>${project.build.directory}/scripts/</outputDirectory>
-                    <overwrite>true</overwrite>
-                    <resources>
-                        <resource>
-                            <directory>../war/src/main/scripts/</directory>
-                            <includes>
-                                <include>**/*.sh</include>
-                            </includes>
-                        </resource>
-                    </resources>
-                </configuration>
-            </plugin>
-            
-            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>rpm-maven-plugin</artifactId>
-                <version>2.1-alpha-4</version>
                 <executions>
                     <execution>
                         <id>generate-rpm</id>
                         <goals>
-                            <goal>rpm</goal>
+                            <goal>attached-rpm</goal>
                         </goals>
                     </execution>
                 </executions>
                 <configuration>
                     <group>Application</group>
-                    <packager>ggian@cslab</packager>
+                    <packager>ggian@cslab.ece.ntua.gr</packager>
+		    <release>${BUILD_NUMBER}.${package.os}</release>
+                    <requires>
+                        <require>java-1.7.0-openjdk</require>
+                        <require>tomcat6</require>
+                    </requires>
                     <mappings>
                         <mapping>
-                            <directory>/opt/celar/celar-orchestrator/</directory>
-                            <filemode>440</filemode>
+                            <directory>${celar.install.dir}/celar-orchestrator/</directory>
                             <username>root</username>
                             <groupname>root</groupname>
                             <sources>
@@ -99,42 +75,15 @@
                                 </source>
                             </sources>
                         </mapping>
-                        <mapping>
-                            <directory>/opt/celar/celar-orchestrator/scripts/</directory>
-                            <filemode>440</filemode>
-                            <username>root</username>
-                            <groupname>root</groupname>
-                            <sources>
-                                <source>
-                                    <location>target/scripts/</location>
-                                </source>
-                            </sources>
-                        </mapping>
                     </mappings>
-
-
-
-                    <preinstallScriptlet>
-                        <scriptFile>src/main/scripts/rpm/preInstall.sh</scriptFile>
-                    </preinstallScriptlet>
                     <postinstallScriptlet>
-                        <scriptFile>src/main/scripts/rpm/postInstall.sh</scriptFile>
-                        <fileEncoding>utf-8</fileEncoding>
+                        <scriptFile>scripts/postInstall.sh</scriptFile>
                     </postinstallScriptlet>
                     <preremoveScriptlet>
-                        <scriptFile>src/main/scripts/rpm/preRemove.sh</scriptFile>
-                        <fileEncoding>utf-8</fileEncoding>
+                        <scriptFile>scripts/preRemove.sh</scriptFile>
                     </preremoveScriptlet>
-                    <postremoveScriptlet>
-                        <scriptFile>src/main/scripts/rpm/postRemove.sh</scriptFile>
-                        <fileEncoding>utf-8</fileEncoding>
-                    </postremoveScriptlet>
-
                 </configuration>
             </plugin>
-
-            
-            
         </plugins>
     </build>
 </project>

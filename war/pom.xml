@@ -28,23 +28,6 @@
                     <target>1.7</target>
                 </configuration>
             </plugin>
-<!--            <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>2.1</version>
-                <configuration>
-                </configuration>
-            </plugin>-->
-<!--            <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>2.2</version>
-                <configuration>
-                    <url>http://localhost:8080/manager/text</url>
-                    <username>tempuser</username>
-                    <password>tempuser</password>
-                </configuration>
-            </plugin>-->
         </plugins>
     </build>
     <dependencies>
