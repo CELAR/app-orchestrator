@@ -16,11 +16,11 @@
 	</parent>
 
   <modules>
+    <module>orchestrator-client</module>
+    <module>orchestrator-beans</module>
     <module>war</module>
     <module>tar</module>
     <module>rpm</module>
-    <module>orchestrator-client</module>
-    <module>orchestrator-beans</module>
   </modules>
 
   <properties>
