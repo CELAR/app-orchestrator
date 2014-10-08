@@ -18,8 +18,7 @@
   <modules>
     <module>orchestrator-client</module>
     <module>orchestrator-beans</module>
-    <module>war</module>
-    <module>tar</module>
+    <module>orchestrator-daemon</module>
     <module>rpm</module>
   </modules>
 
