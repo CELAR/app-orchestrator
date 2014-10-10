@@ -33,4 +33,6 @@ public class ServerStaticComponents {
      */
     public static Server server;
     
+    public static String toscaFile = "/tmp/csar/tosca.csar";
+    
 }

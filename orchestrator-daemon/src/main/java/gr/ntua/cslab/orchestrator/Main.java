@@ -19,14 +19,20 @@ import com.sun.jersey.spi.container.servlet.ServletContainer;
 import gr.ntua.cslab.orchestrator.cache.ResizingActionsCache;
 import gr.ntua.cslab.orchestrator.shared.ServerStaticComponents;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.HttpConfiguration;
+import org.eclipse.jetty.server.HttpConnection;
 import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.SecureRequestCustomizer;
 import org.eclipse.jetty.server.Server;
@@ -36,6 +42,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
+import tools.CSARParser;
 
 /**
  * Executor class, used as an endpoint to the jar package from the outside
@@ -152,8 +159,37 @@ public class Main {
     
     // method used to fetch the TOSCA from the CELAR Server
     // and setup the available resizing actions
-    private static void configureOrchestrator() {
-        // stub method
+    private static void configureOrchestrator() throws MalformedURLException, IOException, Exception {
+        fetchTosca(ServerStaticComponents.toscaFile);
+        
+        CSARParser parser = new CSARParser(ServerStaticComponents.toscaFile);
+//        parser.getModuleComponents(null)
+    }
+    
+    private static void fetchTosca(String outputPath) throws MalformedURLException, IOException {
+        String celarServerHost = ServerStaticComponents.properties.getProperty("celar.server.host");
+        String celarServerPort = ServerStaticComponents.properties.getProperty("celar.server.port");
+        String deploymentId = ServerStaticComponents.properties.getProperty("slipstream.deployment.id");
+        
+        URL url = new URL("http://"+celarServerHost+":"+
+                celarServerPort+"/deployment/"+
+                deploymentId+"/tosca/");
+        
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+        con.setRequestProperty("Content-type", "application/octet-stream");
+        InputStream in = con.getInputStream();
+        
+        FileOutputStream file = new FileOutputStream(outputPath);
+        byte[] buffer = new  byte[1024];
+        int count;
+        while((count = in.read(buffer))!=-1){
+            file.write(buffer, 0, count);
+        }
+        
+        file.flush();
+        file.close();
+        in.close();
     }
     
     public static void main(String[] args) throws Exception {

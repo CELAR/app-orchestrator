@@ -36,6 +36,7 @@ SS_SERVER_IP=$(grep serviceurl $SLIPSTREAM_CONTEXT  |  tr '/' '\t' | awk '{print
 /bin/sed -i "s/# slipstream.deployment.id = /slipstream.deployment.id = $DEPLOYMENT_ID/" $CONF_FILE
 /bin/sed -i "s/# slipstream.server.host = /slipstream.server.host = $SS_SERVER_IP/" $CONF_FILE
 /bin/sed -i "s/# celar.server.host = /celar.server.host = $SS_SERVER_IP/" $CONF_FILE
+/bin/sed -i "s/# celar.server.port = /celar.server.port = 8080/" $CONF_FILE
 }
 
 create_service(){
