@@ -15,11 +15,16 @@
  */
 package gr.ntua.cslab.orchestrator.rest;
 
+import com.sixsq.slipstream.exceptions.ValidationException;
+import gr.ntua.cslab.celar.slipstreamClient.SlipStreamSSService;
 import gr.ntua.cslab.orchestrator.beans.ExecutedResizingAction;
 import gr.ntua.cslab.orchestrator.beans.Parameters;
+import gr.ntua.cslab.orchestrator.beans.ResizingAction;
 import gr.ntua.cslab.orchestrator.beans.ResizingActionList;
+import gr.ntua.cslab.orchestrator.beans.ResizingActionType;
 import gr.ntua.cslab.orchestrator.beans.ResizingExecutionStatus;
 import gr.ntua.cslab.orchestrator.cache.ResizingActionsCache;
+import gr.ntua.cslab.orchestrator.shared.ServerStaticComponents;
 import java.util.UUID;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -44,7 +49,26 @@ public class ResizingActionResource {
     
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public ExecutedResizingAction executeResizingAction(@QueryParam("action_id") int actionId, Parameters params){
+    public ExecutedResizingAction executeResizingAction(@QueryParam("action_id") int actionId, Parameters params) throws ValidationException, Exception{
+        
+        ResizingAction a = ResizingActionsCache.getResizingActionById(actionId);
+        
+        String 
+                slipstreamUser = ServerStaticComponents.properties.getProperty("slipstream.username"),
+                slipstreamPassword = ServerStaticComponents.properties.getProperty("slipstream.password"),
+                slipstreamUrl = "https://"+ServerStaticComponents.properties.getProperty("slipstream.server.host"),
+                slipstreamDeploymentId = ServerStaticComponents.properties.getProperty("slipstream.deployment.id");
+        
+        SlipStreamSSService service = new SlipStreamSSService(slipstreamUser, slipstreamPassword, slipstreamUrl);
+        if(a.getType() == ResizingActionType.SCALE_OUT) {
+            service.addVM(slipstreamDeploymentId, a.getModuleName(),1);
+        } else if (a.getType() ==  ResizingActionType.SCALE_IN) {
+//            service.removeVM(slipstreamDeploymentId, a.getModuleName(), "1");
+//            FIXME: how decides who is out?
+        }
+        
+        
+        
         ExecutedResizingAction exec = new ExecutedResizingAction();
         exec.setExecutionStatus(ResizingExecutionStatus.ONGOING);
         exec.setResizingAction(ResizingActionsCache.getResizingActionById(actionId));

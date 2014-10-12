@@ -220,8 +220,11 @@ public class Main {
         Logger.getLogger(Main.class.getName()).info("Resizing actions configured");
     }
     
-    
+    // initialize the Decision Module providing the TOSCA file
+    // and the 
     private static void initDecisionModule() {
+        // extract tosca and send tosca file to the DM
+            
         Logger.getLogger(Main.class.getName()).info("Decision Module initialization not implemented!");
     }
     // orchestrator bootstrapping processes 

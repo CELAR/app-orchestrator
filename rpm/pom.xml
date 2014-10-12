@@ -117,6 +117,7 @@
                     <release>${BUILD_NUMBER}.${package.os}</release>
                     <requires>
                         <require>java-1.7.0-openjdk</require>
+                        <require>unzip</require>
                     </requires>
                     <mappings>
                         <mapping>

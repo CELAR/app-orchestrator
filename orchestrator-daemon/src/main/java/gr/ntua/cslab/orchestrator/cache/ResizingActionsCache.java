@@ -84,7 +84,7 @@ public class ResizingActionsCache {
      * @param uniq
      * @return 
      */
-    public static synchronized  ExecutedResizingAction getExecutedResizingActionByUniqueId(String uniq) {
+    public static ExecutedResizingAction getExecutedResizingActionByUniqueId(String uniq) {
         for(ExecutedResizingAction a : ResizingActionsCache.executedResizingActions) {
             if(a.getUniqueId().equals(uniq)){
                 return a;
