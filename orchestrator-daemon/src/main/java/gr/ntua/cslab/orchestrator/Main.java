@@ -237,6 +237,7 @@ public class Main {
         creatDirs();
         addShutdownHook();
         configureServer();
+        configureOrchestrator();
 
         ServerStaticComponents.server.start();
         Logger.getLogger(Main.class.getName()).info("Server is started");
