@@ -22,6 +22,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.logging.Logger;
 
 /**
  * Abstract client class used as a base class for each client.
@@ -88,14 +89,14 @@ public class AbstractClient {
         
         
         int responseCode = con.getResponseCode();
-//        System.out.println("Response code:\t"+responseCode);
+        Logger.getLogger("Orchestrator client").info("Response code of request is "+responseCode);
         StringBuilder builder = new StringBuilder();
         
         try (InputStream in = con.getInputStream()) {
             byte[] buffer = new byte[1024];
-            while(in.available()>0) {
-                int read = in.read(buffer);
-                builder.append(new String(buffer,0,read));
+            int count;
+            while((count = in.read(buffer))!=-1) {
+                builder.append(new String(buffer,0,count));
             }
         }
         return builder.toString();
