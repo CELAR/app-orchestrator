@@ -16,6 +16,8 @@
 package gr.ntua.cslab.orchestrator;
 
 import com.sun.jersey.spi.container.servlet.ServletContainer;
+import gr.ntua.cslab.orchestrator.beans.ResizingAction;
+import gr.ntua.cslab.orchestrator.beans.ResizingActionType;
 import gr.ntua.cslab.orchestrator.cache.ResizingActionsCache;
 import gr.ntua.cslab.orchestrator.shared.ServerStaticComponents;
 import java.io.File;
@@ -26,6 +28,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -157,15 +161,7 @@ public class Main {
         }
     }
     
-    // method used to fetch the TOSCA from the CELAR Server
-    // and setup the available resizing actions
-    private static void configureOrchestrator() throws MalformedURLException, IOException, Exception {
-        fetchTosca(ServerStaticComponents.toscaFile);
-        
-        CSARParser parser = new CSARParser(ServerStaticComponents.toscaFile);
-//        parser.getModuleComponents(null)
-    }
-    
+    // fetch tosca from the CELAR Server
     private static void fetchTosca(String outputPath) throws MalformedURLException, IOException {
         String celarServerHost = ServerStaticComponents.properties.getProperty("celar.server.host");
         String celarServerPort = ServerStaticComponents.properties.getProperty("celar.server.port");
@@ -186,10 +182,53 @@ public class Main {
         while((count = in.read(buffer))!=-1){
             file.write(buffer, 0, count);
         }
-        
         file.flush();
         file.close();
         in.close();
+        
+        Logger.getLogger(Main.class.getName()).info("CSAR Archive successfully received");
+    }
+    
+    // sets the resizing actions, according to the userProvided tosca
+    private static void setResizingActions(String toscaFilePath) throws Exception {
+        CSARParser parser = new CSARParser(toscaFilePath);
+        List<String> modules = parser.getModules();
+        int i=1;
+        List<String> params = new ArrayList<>();
+        params.add("multiplicity");
+        for (String s : modules) {
+            ResizingAction action = new ResizingAction();
+            action.setId(i++);
+            action.setModuleId(-1);
+            action.setModuleName(s);
+            action.setName("Add vm on "+s);
+            action.setType(ResizingActionType.SCALE_OUT);
+            action.setApplicablePatameters(params);
+            
+            ResizingActionsCache.addAvailableResizingAction(action);
+            
+            action = new ResizingAction();
+            action.setId(i++);
+            action.setModuleId(-1);
+            action.setModuleName(s);
+            action.setName("Remove vm from "+s);
+            action.setType(ResizingActionType.SCALE_IN);
+            action.setApplicablePatameters(params);
+            
+            ResizingActionsCache.addAvailableResizingAction(action);
+        }
+        Logger.getLogger(Main.class.getName()).info("Resizing actions configured");
+    }
+    
+    
+    private static void initDecisionModule() {
+        Logger.getLogger(Main.class.getName()).info("Decision Module initialization not implemented!");
+    }
+    // orchestrator bootstrapping processes 
+    private static void configureOrchestrator() throws MalformedURLException, IOException, Exception {
+        fetchTosca(ServerStaticComponents.toscaFile);
+        setResizingActions(ServerStaticComponents.toscaFile);
+        initDecisionModule();
     }
     
     public static void main(String[] args) throws Exception {
