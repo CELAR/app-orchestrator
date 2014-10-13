@@ -15,7 +15,6 @@
  */
 package gr.ntua.cslab.orchestrator;
 
-import at.ac.tuwien.dsg.csdg.inputProcessing.multiLevelModel.deploymentDescription.Artifact;
 import at.ac.tuwien.dsg.csdg.inputProcessing.multiLevelModel.deploymentDescription.AssociatedVM;
 import at.ac.tuwien.dsg.csdg.inputProcessing.multiLevelModel.deploymentDescription.DeploymentDescription;
 import at.ac.tuwien.dsg.csdg.inputProcessing.multiLevelModel.deploymentDescription.DeploymentUnit;
@@ -234,6 +233,8 @@ public class Main {
     // and the 
     private static void initDecisionModule() throws Exception {
         String deploymentId = ServerStaticComponents.properties.getProperty("slipstream.deployment.id");
+        // wait until the deployment reach a "READY" state
+        ServerStaticComponents.service.waitForReadyState(deploymentId);
         
         // extract tosca from CSAR and send it to the DM
         CSARParser parser = new CSARParser(ServerStaticComponents.toscaFile);
@@ -291,6 +292,7 @@ public class Main {
     }
     // orchestrator bootstrapping processes 
     private static void configureOrchestrator() throws MalformedURLException, IOException, Exception {
+        // initialize the SlipStreamService client
         ServerStaticComponents.service = new SlipStreamSSService(
                 ServerStaticComponents.properties.getProperty("slipstream.username"), 
                 ServerStaticComponents.properties.getProperty("slipstream.password"), 
