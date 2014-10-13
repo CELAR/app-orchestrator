@@ -289,6 +289,8 @@ public class Main {
         String deploymentDescriptionXML = new String();
         JAXB.marshal(description, deploymentDescriptionXML);
         client.setApplicationDeployment(deploymentId, deploymentDescriptionXML);
+        Logger.getLogger(Main.class.getName()).info("Application deployment XML submitted");
+
     }
     // orchestrator bootstrapping processes 
     private static void configureOrchestrator() throws MalformedURLException, IOException, Exception {
