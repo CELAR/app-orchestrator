@@ -18,6 +18,7 @@ package gr.ntua.cslab.orchestrator.rest;
 import com.sixsq.slipstream.exceptions.ValidationException;
 import gr.ntua.cslab.celar.slipstreamClient.SlipStreamSSService;
 import gr.ntua.cslab.orchestrator.beans.ExecutedResizingAction;
+import gr.ntua.cslab.orchestrator.beans.Parameter;
 import gr.ntua.cslab.orchestrator.beans.Parameters;
 import gr.ntua.cslab.orchestrator.beans.ResizingAction;
 import gr.ntua.cslab.orchestrator.beans.ResizingActionList;
@@ -36,7 +37,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * Resizing action resource API.
+ * Resizing action API.
  * @author Giannis Giannakopoulos
  */
 @Path("/resizing/")
@@ -60,11 +61,17 @@ public class ResizingActionResource {
                 slipstreamDeploymentId = ServerStaticComponents.properties.getProperty("slipstream.deployment.id");
         
         SlipStreamSSService service = new SlipStreamSSService(slipstreamUser, slipstreamPassword, slipstreamUrl);
+        
+        int multiplicity = 1;
+        
+        for(Parameter  p : params.getParameters()) {
+            if(p.getKey().equals("multiplicity")) 
+                multiplicity = new Integer(p.getValue());
+        }
         if(a.getType() == ResizingActionType.SCALE_OUT) {
-            service.addVM(slipstreamDeploymentId, a.getModuleName(),1);
+            service.addVM(slipstreamDeploymentId, a.getModuleName(),multiplicity);
         } else if (a.getType() ==  ResizingActionType.SCALE_IN) {
-//            service.removeVM(slipstreamDeploymentId, a.getModuleName(), "1");
-//            FIXME: how decides who is out?
+            service.removeVM(slipstreamDeploymentId, a.getModuleName(), multiplicity);
         }
         
         
