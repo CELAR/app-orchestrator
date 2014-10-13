@@ -23,7 +23,6 @@ import gr.ntua.cslab.orchestrator.beans.Parameters;
 import gr.ntua.cslab.orchestrator.beans.ResizingAction;
 import gr.ntua.cslab.orchestrator.beans.ResizingActionList;
 import gr.ntua.cslab.orchestrator.beans.ResizingActionType;
-import gr.ntua.cslab.orchestrator.beans.ResizingExecutionStatus;
 import gr.ntua.cslab.orchestrator.cache.ResizingActionsCache;
 import gr.ntua.cslab.orchestrator.shared.ServerStaticComponents;
 import java.util.UUID;
@@ -42,7 +41,20 @@ import javax.ws.rs.core.Response;
  */
 @Path("/resizing/")
 public class ResizingActionResource {
+    private final static String 
+                slipstreamUser = ServerStaticComponents.properties.getProperty("slipstream.username"),
+                slipstreamPassword = ServerStaticComponents.properties.getProperty("slipstream.password"),
+                slipstreamUrl = "https://"+ServerStaticComponents.properties.getProperty("slipstream.server.host"),
+                slipstreamDeploymentId = ServerStaticComponents.properties.getProperty("slipstream.deployment.id");
     
+    private static SlipStreamSSService service;
+
+    public ResizingActionResource() throws ValidationException {
+         service = new SlipStreamSSService(slipstreamUser, slipstreamPassword, slipstreamUrl);
+    }
+    
+    
+
     @GET
     public ResizingActionList listResizingActions(){
        return new ResizingActionList(ResizingActionsCache.getAvailalbeResizingActions());
@@ -53,14 +65,6 @@ public class ResizingActionResource {
     public ExecutedResizingAction executeResizingAction(@QueryParam("action_id") int actionId, Parameters params) throws ValidationException, Exception{
         
         ResizingAction a = ResizingActionsCache.getResizingActionById(actionId);
-        
-        String 
-                slipstreamUser = ServerStaticComponents.properties.getProperty("slipstream.username"),
-                slipstreamPassword = ServerStaticComponents.properties.getProperty("slipstream.password"),
-                slipstreamUrl = "https://"+ServerStaticComponents.properties.getProperty("slipstream.server.host"),
-                slipstreamDeploymentId = ServerStaticComponents.properties.getProperty("slipstream.deployment.id");
-        
-        SlipStreamSSService service = new SlipStreamSSService(slipstreamUser, slipstreamPassword, slipstreamUrl);
         
         int multiplicity = 1;
         
@@ -77,7 +81,7 @@ public class ResizingActionResource {
         
         
         ExecutedResizingAction exec = new ExecutedResizingAction();
-        exec.setExecutionStatus(ResizingExecutionStatus.ONGOING);
+        exec.setExecutionStatus(service.getDeploymentState(slipstreamDeploymentId));
         exec.setResizingAction(ResizingActionsCache.getResizingActionById(actionId));
         exec.setUniqueId(UUID.randomUUID().toString());
         exec.setParameters(params);
@@ -89,8 +93,9 @@ public class ResizingActionResource {
     
     @GET
     @Path("status/")
-    public ExecutedResizingAction getResizingActionStatus(@QueryParam("unique_id") String actionId){
+    public ExecutedResizingAction getResizingActionStatus(@QueryParam("unique_id") String actionId) throws Exception{
         ExecutedResizingAction a = ResizingActionsCache.getExecutedResizingActionByUniqueId(actionId);
+        a.setExecutionStatus(service.getDeploymentState(slipstreamDeploymentId));
         if(a!=null)
             return a;
         else
