@@ -41,7 +41,7 @@ SS_SERVER_IP=$(grep serviceurl $SLIPSTREAM_CONTEXT  |  tr '/' '\t' | awk '{print
 
 create_service(){
         /bin/ln -sv $CELAR_ORCHESTRATOR_HOME/bin/celar-orchestrator /etc/init.d/
-	chkconfig --add celar-orchestrator
+	/sbin/chkconfig --add celar-orchestrator
 }
 
 create_keystore;
