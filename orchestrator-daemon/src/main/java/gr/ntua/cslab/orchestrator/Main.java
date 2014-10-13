@@ -15,7 +15,14 @@
  */
 package gr.ntua.cslab.orchestrator;
 
+import at.ac.tuwien.dsg.csdg.inputProcessing.multiLevelModel.deploymentDescription.Artifact;
+import at.ac.tuwien.dsg.csdg.inputProcessing.multiLevelModel.deploymentDescription.AssociatedVM;
+import at.ac.tuwien.dsg.csdg.inputProcessing.multiLevelModel.deploymentDescription.DeploymentDescription;
+import at.ac.tuwien.dsg.csdg.inputProcessing.multiLevelModel.deploymentDescription.DeploymentUnit;
+import at.ac.tuwien.dsg.csdg.inputProcessing.multiLevelModel.deploymentDescription.ElasticityCapability;
+import at.ac.tuwien.dsg.rSybl.client.SYBLControlClient;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
+import gr.ntua.cslab.celar.slipstreamClient.SlipStreamSSService;
 import gr.ntua.cslab.orchestrator.beans.ResizingAction;
 import gr.ntua.cslab.orchestrator.beans.ResizingActionType;
 import gr.ntua.cslab.orchestrator.cache.ResizingActionsCache;
@@ -27,16 +34,19 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.bind.JAXB;
 import org.apache.log4j.PropertyConfigurator;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.HttpConfiguration;
-import org.eclipse.jetty.server.HttpConnection;
 import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.SecureRequestCustomizer;
 import org.eclipse.jetty.server.Server;
@@ -222,13 +232,70 @@ public class Main {
     
     // initialize the Decision Module providing the TOSCA file
     // and the 
-    private static void initDecisionModule() {
-        // extract tosca and send tosca file to the DM
+    private static void initDecisionModule() throws Exception {
+        String deploymentId = ServerStaticComponents.properties.getProperty("slipstream.deployment.id");
+        
+        // extract tosca from CSAR and send it to the DM
+        CSARParser parser = new CSARParser(ServerStaticComponents.toscaFile);
+        String toscaContent = parser.getToscaContents();
+        String rSyblHost = ServerStaticComponents.properties.getProperty("rsybl.host"),
+                rSyblPort = ServerStaticComponents.properties.getProperty("rsybl.port");
+        String rSyblURL = "http://"+rSyblHost+":"+rSyblPort+"/rSYBL/restWS";
+        SYBLControlClient client = new SYBLControlClient(rSyblURL);
+        client.setApplicationDescription(deploymentId, toscaContent);
+        Logger.getLogger(Main.class.getName()).info("TOSCA file sent to the Decision Module");
+
+        // provide IPs of the deployed VMs
+        HashMap<String, String> ipAddresses = ServerStaticComponents.service.getDeploymentIPs(deploymentId);
+        
+        
+        DeploymentDescription description = new DeploymentDescription();
+        description.setAccessIP("localhost");
+        description.setCloudServiceID(parser.getAppName());
+        List<DeploymentUnit> deploymentUnits = new LinkedList<>();
+        for(String s : parser.getModules()) {       //repeat for each module
+            DeploymentUnit unit = new DeploymentUnit();     // new deployment unit
+            unit.setServiceUnitID(s);           
+            List<AssociatedVM> vms = new LinkedList<>();
+            for(Map.Entry<String, String> kv : ipAddresses.entrySet()) {
+                if(kv.getKey().startsWith(s)) { //this VM belongs to the 
+                    AssociatedVM vm = new AssociatedVM();
+                    vm.setIp(kv.getValue());
+                    vm.setUuid(UUID.randomUUID().toString());
+                    vms.add(vm);
+                }
+            }
+            unit.setAssociatedVMs(vms);
             
-        Logger.getLogger(Main.class.getName()).info("Decision Module initialization not implemented!");
+            List<ElasticityCapability> capabilities = new LinkedList<>();
+            ElasticityCapability scaleOut = new ElasticityCapability();
+            scaleOut.setPrimitiveOperations("scaleout");
+            scaleOut.setName("scaleOut");
+            
+            ElasticityCapability scaleIn = new ElasticityCapability();
+            scaleIn.setPrimitiveOperations("scalein");
+            scaleIn.setName("scaleIn");
+            
+            capabilities.add(scaleOut);
+            capabilities.add(scaleIn);
+            
+            unit.setElasticityCapabilities(capabilities);
+            
+            deploymentUnits.add(unit);
+        }
+        description.setDeployments(deploymentUnits);
+        
+        String deploymentDescriptionXML = new String();
+        JAXB.marshal(description, deploymentDescriptionXML);
+        client.setApplicationDeployment(deploymentId, deploymentDescriptionXML);
     }
     // orchestrator bootstrapping processes 
     private static void configureOrchestrator() throws MalformedURLException, IOException, Exception {
+        ServerStaticComponents.service = new SlipStreamSSService(
+                ServerStaticComponents.properties.getProperty("slipstream.username"), 
+                ServerStaticComponents.properties.getProperty("slipstream.password"), 
+            "https://"+ServerStaticComponents.properties.getProperty("slipstream.server.host"));
+        
         fetchTosca(ServerStaticComponents.toscaFile);
         setResizingActions(ServerStaticComponents.toscaFile);
         initDecisionModule();

@@ -15,6 +15,7 @@
  */
 package gr.ntua.cslab.orchestrator.shared;
 
+import gr.ntua.cslab.celar.slipstreamClient.SlipStreamSSService;
 import java.util.Properties;
 import org.eclipse.jetty.server.Server;
 
@@ -32,7 +33,15 @@ public class ServerStaticComponents {
      * Server object.
      */
     public static Server server;
-    
+
+    /**
+     * Tosca FILE path
+     */
     public static String toscaFile = "/tmp/csar/tosca.csar";
+    
+    /**
+     * Service object is the interface to the SlipStream Server.
+     */
+    public static SlipStreamSSService service;
     
 }

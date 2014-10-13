@@ -41,16 +41,10 @@ import javax.ws.rs.core.Response;
  */
 @Path("/resizing/")
 public class ResizingActionResource {
-    private final static String 
-                slipstreamUser = ServerStaticComponents.properties.getProperty("slipstream.username"),
-                slipstreamPassword = ServerStaticComponents.properties.getProperty("slipstream.password"),
-                slipstreamUrl = "https://"+ServerStaticComponents.properties.getProperty("slipstream.server.host"),
-                slipstreamDeploymentId = ServerStaticComponents.properties.getProperty("slipstream.deployment.id");
-    
-    private static SlipStreamSSService service;
+    private final static String
+            slipstreamDeploymentId = ServerStaticComponents.properties.getProperty("slipstream.deployment.id");
 
     public ResizingActionResource() throws ValidationException {
-         service = new SlipStreamSSService(slipstreamUser, slipstreamPassword, slipstreamUrl);
     }
     
     
@@ -73,15 +67,15 @@ public class ResizingActionResource {
                 multiplicity = new Integer(p.getValue());
         }
         if(a.getType() == ResizingActionType.SCALE_OUT) {
-            service.addVM(slipstreamDeploymentId, a.getModuleName(),multiplicity);
+            ServerStaticComponents.service.addVM(slipstreamDeploymentId, a.getModuleName(),multiplicity);
         } else if (a.getType() ==  ResizingActionType.SCALE_IN) {
-            service.removeVM(slipstreamDeploymentId, a.getModuleName(), multiplicity);
+            ServerStaticComponents.service.removeVM(slipstreamDeploymentId, a.getModuleName(), multiplicity);
         }
         
         
         
         ExecutedResizingAction exec = new ExecutedResizingAction();
-        exec.setExecutionStatus(service.getDeploymentState(slipstreamDeploymentId));
+        exec.setExecutionStatus(ServerStaticComponents.service.getDeploymentState(slipstreamDeploymentId));
         exec.setResizingAction(ResizingActionsCache.getResizingActionById(actionId));
         exec.setUniqueId(UUID.randomUUID().toString());
         exec.setParameters(params);
@@ -95,7 +89,7 @@ public class ResizingActionResource {
     @Path("status/")
     public ExecutedResizingAction getResizingActionStatus(@QueryParam("unique_id") String actionId) throws Exception{
         ExecutedResizingAction a = ResizingActionsCache.getExecutedResizingActionByUniqueId(actionId);
-        a.setExecutionStatus(service.getDeploymentState(slipstreamDeploymentId));
+        a.setExecutionStatus(ServerStaticComponents.service.getDeploymentState(slipstreamDeploymentId));
         if(a!=null)
             return a;
         else
