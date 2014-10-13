@@ -40,7 +40,7 @@ public class Parameters {
         this.parameters = parameters;
     }
 
-    public List getParameters() {
+    public List<Parameter> getParameters() {
         return parameters;
     }
 

@@ -30,13 +30,13 @@ public class ExecutedResizingAction {
     private ResizingAction resizingAction;
     private String uniqueId;
     private Long timestamp;
-    private ResizingExecutionStatus executionStatus;
+    private String executionStatus;
     private Parameters parameters;
 
     public ExecutedResizingAction() {
     }
     
-    public ExecutedResizingAction(String uniqueId, ResizingAction resizingAction, Long timestamp, ResizingExecutionStatus status, Parameters parameters) {
+    public ExecutedResizingAction(String uniqueId, ResizingAction resizingAction, Long timestamp, String status, Parameters parameters) {
         this.uniqueId = uniqueId;
         this.resizingAction = resizingAction;
         this.timestamp = timestamp;
@@ -68,11 +68,11 @@ public class ExecutedResizingAction {
         this.timestamp = timestamp;
     }
 
-    public ResizingExecutionStatus getExecutionStatus() {
+    public String getExecutionStatus() {
         return executionStatus;
     }
 
-    public void setExecutionStatus(ResizingExecutionStatus executionStatus) {
+    public void setExecutionStatus(String executionStatus) {
         this.executionStatus = executionStatus;
     }
 
