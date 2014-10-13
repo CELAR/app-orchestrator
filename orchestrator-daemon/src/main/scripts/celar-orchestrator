@@ -1,4 +1,13 @@
 #!/bin/bash
+### BEGIN INIT INFO
+# Provides:         celar-orchestrator service
+# Required-Start:
+# Required-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start celar-orchestrator service daemon
+# Description:       To start-stop celar-orchestrator
+### END INIT INFO
 
 # This script is deployed at /etc/init.d/ and it is used to manage the 
 # CELAR Orchestrator.
