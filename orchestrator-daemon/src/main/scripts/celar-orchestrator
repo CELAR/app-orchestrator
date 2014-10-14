@@ -40,6 +40,7 @@ SS_SERVER_IP=$(grep serviceurl $SLIPSTREAM_CONTEXT  |  tr '/' '\t' | awk '{print
 
 
 start() {
+	[ -f $PIDFILE ] && echo "CELAR Orchestrator already running ($(cat $PIDFILE))" && exit 0
         configure_server
 	java -Dname=celar-orchestrator -cp $CLASSPATH  $MAIN_CLASS &
 	echo $! > $PIDFILE;
@@ -47,7 +48,7 @@ start() {
 
 stop() {
 	PID=$(cat $PIDFILE 2>/dev/null)
-	[ "$PID" -eq "" ] && echo "CELAR Orchestrator not running" && exit 0
+	[ "$PID" == "" ] && echo "CELAR Orchestrator not running" && exit 0
 	kill -TERM $PID
 	rm -f $PIDFILE
 }
