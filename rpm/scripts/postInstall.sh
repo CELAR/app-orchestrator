@@ -27,16 +27,11 @@ EOF
 }
 
 configure_server(){
-#/bin/sed -i 's|# server.ssl.keystore.path = |server.ssl.keystore.path = '$KEYSTORE_PATH'|' $CONF_FILE;
-#/bin/sed -i "s/# server.ssl.keystore.password = /server.ssl.keystore.password = $RANDOM_PASSWORD/" $CONF_FILE
-#/bin/sed -i "s/# server.ssl.port = 8443/server.ssl.port = 8443/" $CONF_FILE
+/bin/sed -i 's|# server.ssl.keystore.path = |server.ssl.keystore.path = '$KEYSTORE_PATH'|' $CONF_FILE;
+/bin/sed -i "s/# server.ssl.keystore.password = /server.ssl.keystore.password = $RANDOM_PASSWORD/" $CONF_FILE
+/bin/sed -i "s/# server.ssl.port = 443/server.ssl.port = 443/" $CONF_FILE
 
-DEPLOYMENT_ID=$(grep diid $SLIPSTREAM_CONTEXT | awk '{print $3}')
-SS_SERVER_IP=$(grep serviceurl $SLIPSTREAM_CONTEXT  |  tr '/' '\t' | awk '{print $4}')
-/bin/sed -i "s/# slipstream.deployment.id = /slipstream.deployment.id = $DEPLOYMENT_ID/" $CONF_FILE
-/bin/sed -i "s/# slipstream.server.host = /slipstream.server.host = $SS_SERVER_IP/" $CONF_FILE
-/bin/sed -i "s/# celar.server.host = /celar.server.host = $SS_SERVER_IP/" $CONF_FILE
-/bin/sed -i "s/# celar.server.port = /celar.server.port = 8080/" $CONF_FILE
+# The configuration takes place into the init script
 }
 
 create_service(){
