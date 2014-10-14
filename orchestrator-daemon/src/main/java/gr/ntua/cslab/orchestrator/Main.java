@@ -300,9 +300,13 @@ public class Main {
                 ServerStaticComponents.properties.getProperty("slipstream.password"), 
             "https://"+ServerStaticComponents.properties.getProperty("slipstream.server.host"));
         
-        fetchTosca(ServerStaticComponents.toscaFile);
-        setResizingActions(ServerStaticComponents.toscaFile);
-        initDecisionModule();
+        try{
+            fetchTosca(ServerStaticComponents.toscaFile);
+            setResizingActions(ServerStaticComponents.toscaFile);
+            initDecisionModule();
+        } catch (Exception e) {
+            Logger.getLogger(Main.class.toString()).log(Level.SEVERE, e.getMessage());
+        }
     }
     
     public static void main(String[] args) throws Exception {
