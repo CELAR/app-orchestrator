@@ -42,10 +42,11 @@ create_service(){
 if [ ! -f $KEYSTORE_PATH ]; then 
 	create_keystore;
 	configure_server;
-	create_service;
+	# will be started by SS Orch.
+	# create_service;
 fi
 
 /bin/rm -f $CELAR_ORCHESTRATOR_HOME/lib/slf4j-jdk14-1.4.2.jar
 
-service celar-orchestrator start;
+# service celar-orchestrator start;
 
