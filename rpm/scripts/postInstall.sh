@@ -39,9 +39,11 @@ create_service(){
 	/sbin/chkconfig --add celar-orchestrator
 }
 
-[ ! -f $KEYSTORE_PATH ] && create_keystore;
-[ ! -f $KEYSTORE_PATH ] && configure_server;
-[ ! -f $KEYSTORE_PATH ] && create_service;
+if [ ! -f $KEYSTORE_PATH ]; then 
+	create_keystore;
+	configure_server;
+	create_service;
+fi
 
 /bin/rm -f $CELAR_ORCHESTRATOR_HOME/lib/slf4j-jdk14-1.4.2.jar
 
