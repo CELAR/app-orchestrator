@@ -41,8 +41,7 @@ create_service(){
 
 [ ! -f $KEYSTORE_PATH ] && create_keystore;
 [ ! -f $KEYSTORE_PATH ] && configure_server;
-
-create_service
+[ ! -f $KEYSTORE_PATH ] && create_service;
 
 /bin/rm -f $CELAR_ORCHESTRATOR_HOME/lib/slf4j-jdk14-1.4.2.jar
 
