@@ -46,7 +46,8 @@ start() {
 }
 
 stop() {
-	PID=$(cat $PIDFILE)
+	PID=$(cat $PIDFILE 2>/dev/null)
+	[ "$PID" -eq "" ] && echo "CELAR Orchestrator not running" && exit 0
 	kill -TERM $PID
 	rm -f $PIDFILE
 }
