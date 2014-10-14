@@ -16,7 +16,7 @@
 package gr.ntua.cslab.orchestrator.rest;
 
 import com.sixsq.slipstream.exceptions.ValidationException;
-import gr.ntua.cslab.celar.slipstreamClient.SlipStreamSSService;
+import com.sixsq.slipstream.statemachine.States;
 import gr.ntua.cslab.orchestrator.beans.ExecutedResizingAction;
 import gr.ntua.cslab.orchestrator.beans.Parameter;
 import gr.ntua.cslab.orchestrator.beans.Parameters;
@@ -75,7 +75,8 @@ public class ResizingActionResource {
         
         
         ExecutedResizingAction exec = new ExecutedResizingAction();
-        exec.setExecutionStatus(ServerStaticComponents.service.getDeploymentState(deploymentId));
+        States foo =  ServerStaticComponents.service.getDeploymentState(deploymentId);
+        exec.setExecutionStatus(foo);
         exec.setResizingAction(ResizingActionsCache.getResizingActionById(actionId));
         exec.setUniqueId(UUID.randomUUID().toString());
         exec.setParameters(params);

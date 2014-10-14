@@ -15,6 +15,7 @@
  */
 package gr.ntua.cslab.orchestrator.beans;
 
+import com.sixsq.slipstream.statemachine.States;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -30,13 +31,13 @@ public class ExecutedResizingAction {
     private ResizingAction resizingAction;
     private String uniqueId;
     private Long timestamp;
-    private String executionStatus;
+    private States executionStatus;
     private Parameters parameters;
 
     public ExecutedResizingAction() {
     }
     
-    public ExecutedResizingAction(String uniqueId, ResizingAction resizingAction, Long timestamp, String status, Parameters parameters) {
+    public ExecutedResizingAction(String uniqueId, ResizingAction resizingAction, Long timestamp, States status, Parameters parameters) {
         this.uniqueId = uniqueId;
         this.resizingAction = resizingAction;
         this.timestamp = timestamp;
@@ -68,11 +69,11 @@ public class ExecutedResizingAction {
         this.timestamp = timestamp;
     }
 
-    public String getExecutionStatus() {
+    public States getExecutionStatus() {
         return executionStatus;
     }
 
-    public void setExecutionStatus(String executionStatus) {
+    public void setExecutionStatus(States executionStatus) {
         this.executionStatus = executionStatus;
     }
 

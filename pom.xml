@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>gr.ntua.cslab</groupId>
-	<artifactId>celar-orchestrator-pom</artifactId>
-	<version>0.1-SNAPSHOT</version>
-	<name>CELAR Application Orchestrator (POM)</name>
-	<description>CELAR Application Orchestrator POM</description>
-	<packaging>pom</packaging>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>gr.ntua.cslab</groupId>
+    <artifactId>celar-orchestrator-pom</artifactId>
+    <version>0.1-SNAPSHOT</version>
+    <name>CELAR Application Orchestrator (POM)</name>
+    <description>CELAR Application Orchestrator POM</description>
+    <packaging>pom</packaging>
 
-	<parent>
-		<groupId>eu.celar</groupId>
-		<artifactId>distribution</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>eu.celar</groupId>
+        <artifactId>distribution</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
 
-  <modules>
-    <module>orchestrator-client</module>
-    <module>orchestrator-beans</module>
-    <module>orchestrator-daemon</module>
-    <module>rpm</module>
-  </modules>
+    <modules>
+        <module>orchestrator-client</module>
+        <module>orchestrator-beans</module>
+        <module>orchestrator-daemon</module>
+        <module>rpm</module>
+    </modules>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
   
-      <repositories>
+    <repositories>
         <repository>
             <id>CELAR Nexus repository - SNAPSHOTS</id>
             <url>http://snf-175960.vm.okeanos.grnet.gr/nexus/content/repositories/snapshots/</url>
@@ -35,6 +35,34 @@
             <id>CELAR Nexus repository - RELEASES</id>
             <url>http://snf-175960.vm.okeanos.grnet.gr/nexus/content/repositories/releases/</url>
         </repository>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>slipstream.releases</id>
+            <name>SlipStream Releases</name>
+            <url>http://nexus.sixsq.com/content/repositories/releases</url>
+        </repository>
+        <repository>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>slipstream.snapshots</id>
+            <name>SlipStream Snapshots</name>
+            <url>http://nexus.sixsq.com/content/repositories/snapshots</url>
+        </repository>
     </repositories>
-
+    <dependencies>
+        <dependency>
+            <groupId>com.sixsq.slipstream</groupId>
+            <artifactId>SlipStreamPersistence</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+    </dependencies>
 </project>
