@@ -39,9 +39,8 @@ create_service(){
 	/sbin/chkconfig --add celar-orchestrator
 }
 
-create_keystore;
-
-configure_server;
+[ ! -f $KEYSTORE_PATH ] && create_keystore;
+[ ! -f $KEYSTORE_PATH ] && configure_server;
 
 create_service
 
