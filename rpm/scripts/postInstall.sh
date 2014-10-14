@@ -36,7 +36,8 @@ configure_server(){
 
 create_service(){
         /bin/ln -sv $CELAR_ORCHESTRATOR_HOME/bin/celar-orchestrator /etc/init.d/
-	/sbin/chkconfig --add celar-orchestrator
+        # will be started by SS Orch.
+	#/sbin/chkconfig --add celar-orchestrator
 }
 
 if [ ! -f $KEYSTORE_PATH ]; then 
@@ -47,5 +48,5 @@ fi
 
 /bin/rm -f $CELAR_ORCHESTRATOR_HOME/lib/slf4j-jdk14-1.4.2.jar
 
-service celar-orchestrator start;
+# service celar-orchestrator start;
 
