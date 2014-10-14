@@ -24,7 +24,19 @@ CLASSPATH=$CLASSPATH:$(echo $LIB_DIR/*.jar | tr ' ' ':')
 CLASSPATH=$CLASSPATH:$CELAR_ORCHESTRATOR_HOME/celar-orchestrator.jar
 PIDFILE=/tmp/celar-orchestrator.pid
 
+configure_server(){
+CONF_FILE=$CONF_DIR/orchestrator.properties
+
+DEPLOYMENT_ID=$(grep diid $SLIPSTREAM_CONTEXT | awk '{print $3}')
+SS_SERVER_IP=$(grep serviceurl $SLIPSTREAM_CONTEXT  |  tr '/' '\t' | awk '{print $4}')
+/bin/sed -i "s/.*slipstream.deployment.id.*/slipstream.deployment.id = $DEPLOYMENT_ID/g" $CONF_FILE
+/bin/sed -i "s/.*slipstream.server.host.*/slipstream.server.host = $SS_SERVER_IP/g" $CONF_FILE
+/bin/sed -i "s/.*celar.server.host.*/celar.server.host = $SS_SERVER_IP/" $CONF_FILE
+}
+
+
 start() {
+        configure_server
 	java -Dname=celar-orchestrator -cp $CLASSPATH  $MAIN_CLASS &
 	echo $! > $PIDFILE;
 }
