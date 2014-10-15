@@ -329,7 +329,7 @@ public class Main {
             setResizingActions(ServerStaticComponents.toscaFile);
             initDecisionModule();
         } catch (Exception e) {
-            Logger.getLogger(Main.class.toString()).log(Level.SEVERE, e.getMessage());
+            Logger.getLogger(Main.class.getCanonicalName()).log(Level.SEVERE, e.getMessage());
         }
     }
     

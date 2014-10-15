@@ -47,6 +47,7 @@
                         <configuration>
                             <outputDirectory>${project.build.directory}/lib/</outputDirectory>
                             <excludeArtifactIds>celar-orchestrator-daemon</excludeArtifactIds>
+                            <excludeArtifactIds>slf4j-jdk14</excludeArtifactIds>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>gr.ntua.cslab</groupId>
