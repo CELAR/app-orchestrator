@@ -20,7 +20,9 @@ import at.ac.tuwien.dsg.csdg.inputProcessing.multiLevelModel.deploymentDescripti
 import at.ac.tuwien.dsg.csdg.inputProcessing.multiLevelModel.deploymentDescription.DeploymentUnit;
 import at.ac.tuwien.dsg.csdg.inputProcessing.multiLevelModel.deploymentDescription.ElasticityCapability;
 import at.ac.tuwien.dsg.rSybl.client.SYBLControlClient;
+import com.sixsq.slipstream.exceptions.ValidationException;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
+import gr.ntua.cslab.celar.server.beans.SlipStreamCredentials;
 import gr.ntua.cslab.celar.slipstreamClient.SlipStreamSSService;
 import gr.ntua.cslab.orchestrator.beans.ResizingAction;
 import gr.ntua.cslab.orchestrator.beans.ResizingActionType;
@@ -30,6 +32,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -292,14 +295,35 @@ public class Main {
         Logger.getLogger(Main.class.getName()).info("Application deployment XML submitted");
 
     }
+    
+    private static void initializeSSclient() throws ValidationException, MalformedURLException, IOException {
+        // initialize the SlipStreamService client
+        String  username = ServerStaticComponents.properties.getProperty("slipstream.username"),
+                password = "",
+                hostname = "https://"+ServerStaticComponents.properties.getProperty("slipstream.server.host"),
+                celarServerHost = ServerStaticComponents.properties.getProperty("celar.server.host"),
+                celarServerPort = ServerStaticComponents.properties.getProperty("celar.server.port");
+        // fetch password from CELAR Server
+        URL url = new URL("http://"+celarServerHost+":"+celarServerPort+"/user/credentials/?user="+username);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+        
+        InputStream in = con.getInputStream();
+        int count;
+        byte[] buffer = new byte[1024];
+        StringBuilder strBuilder = new StringBuilder();
+        
+        while((count=in.read(buffer))!=-1) {
+            strBuilder.append(new String(buffer, 0, count));
+        }
+        String content =  strBuilder.toString();
+        SlipStreamCredentials credentials = JAXB.unmarshal(new StringReader(content), SlipStreamCredentials.class);
+        password = credentials.getPassword();
+        ServerStaticComponents.service = new SlipStreamSSService(username, password, hostname);
+    }
     // orchestrator bootstrapping processes 
     private static void configureOrchestrator() throws MalformedURLException, IOException, Exception {
-        // initialize the SlipStreamService client
-        ServerStaticComponents.service = new SlipStreamSSService(
-                ServerStaticComponents.properties.getProperty("slipstream.username"), 
-                ServerStaticComponents.properties.getProperty("slipstream.password"), 
-            "https://"+ServerStaticComponents.properties.getProperty("slipstream.server.host"));
-        
+        initializeSSclient();
         try{
             fetchTosca(ServerStaticComponents.toscaFile);
             setResizingActions(ServerStaticComponents.toscaFile);

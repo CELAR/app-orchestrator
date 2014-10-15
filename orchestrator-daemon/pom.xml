@@ -137,6 +137,11 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>celar-beans</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>eu.celar.decision-making</groupId>
             <artifactId>rSYBL-client</artifactId>
             <version>1.0-SNAPSHOT</version>
@@ -145,6 +150,17 @@
             <groupId>eu.celar.decision-making</groupId>
             <artifactId>rSYBL-cloud-application-dependency-graph</artifactId>
             <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sixsq.slipstream</groupId>
+            <artifactId>SlipStreamPersistence</artifactId>
+            <version>2.3.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-jdk14</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>
