@@ -33,7 +33,10 @@ CONF_FILE=$CONF_DIR/orchestrator.properties
 
 DEPLOYMENT_ID=$(grep diid $SLIPSTREAM_CONTEXT | awk '{print $3}')
 SS_SERVER_IP=$(grep serviceurl $SLIPSTREAM_CONTEXT  |  tr '/' '\t' | awk '{print $4}')
+SS_USERNAME=$(grep username $SLIPSTREAM_CONTEXT  |  tr '/' '\t' | awk '{print $3}')
+
 /bin/sed -i "s/.*slipstream.deployment.id.*/slipstream.deployment.id = $DEPLOYMENT_ID/g" $CONF_FILE
+/bin/sed -i "s/.*slipstream.username.*/slipstream.username = $SS_USERNAME/g" $CONF_FILE
 /bin/sed -i "s/.*slipstream.server.host.*/slipstream.server.host = $SS_SERVER_IP/g" $CONF_FILE
 /bin/sed -i "s/.*celar.server.host.*/celar.server.host = $SS_SERVER_IP/" $CONF_FILE
 }
