@@ -35,9 +35,7 @@ configure_server(){
 }
 
 create_service(){
-        /bin/ln -sv $CELAR_ORCHESTRATOR_HOME/bin/celar-orchestrator /etc/init.d/
-        # will be started by SS Orch.
-	#/sbin/chkconfig --add celar-orchestrator
+/bin/ln -sv $CELAR_ORCHESTRATOR_HOME/bin/celar-orchestrator /etc/init.d/
 }
 
 install_pip_dependencies() {
