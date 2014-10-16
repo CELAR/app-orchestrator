@@ -166,9 +166,9 @@
                     <postinstallScriptlet>
                         <scriptFile>scripts/postInstall.sh</scriptFile>
                     </postinstallScriptlet>
-                    <preremoveScriptlet>
+<!--                    <preremoveScriptlet>
                         <scriptFile>scripts/preRemove.sh</scriptFile>
-                    </preremoveScriptlet>
+                    </preremoveScriptlet>-->
                 </configuration>
             </plugin>
 
