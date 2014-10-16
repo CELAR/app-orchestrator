@@ -64,7 +64,7 @@ public class AbstractClient {
      * @throws IOException 
      */
     protected String issueRequest(String requestType, String document, String input) throws MalformedURLException, IOException {
-        String urlString = "http://"+configuration.getHost()+":"+configuration.getPort()+"/celar-orchestrator-war/"+document;
+        String urlString = "http://"+configuration.getHost()+":"+configuration.getPort()+"/"+document;
         URL url = new URL(urlString);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         
