@@ -22,7 +22,6 @@ MAIN_CLASS=gr.ntua.cslab.orchestrator.Main
 CLASSPATH=$CONF_DIR
 CLASSPATH=$CLASSPATH:$(echo $LIB_DIR/*.jar | tr ' ' ':')
 CLASSPATH=$CLASSPATH:$CELAR_ORCHESTRATOR_HOME/celar-orchestrator.jar
-PIDFILE=/tmp/celar-orchestrator.pid
 
 
 SLIPSTREAM_CONTEXT=/tmp/slipstream.context
@@ -43,25 +42,24 @@ SS_USERNAME=$(grep username $SLIPSTREAM_CONTEXT  |  tr '/' '\t' | awk '{print $3
 
 
 start() {
-	[ -f $PIDFILE ] && echo "CELAR Orchestrator already running ($(cat $PIDFILE))" && exit 0
+        PID=$(ps aux | grep celar-orchestrator | grep java| awk '{print $2}')
+	[ "$PID" !=  "" ] && echo "CELAR Orchestrator already running ($PID)" && exit 0
         configure_server
 	java -Dname=celar-orchestrator -cp $CLASSPATH  $MAIN_CLASS &
-	echo $! > $PIDFILE;
 }
 
 stop() {
-	PID=$(cat $PIDFILE 2>/dev/null)
+	PID=$(ps aux | grep celar-orchestrator | grep java| awk '{print $2}')
 	[ "$PID" == "" ] && echo "CELAR Orchestrator not running" && exit 0
 	kill -TERM $PID
-	rm -f $PIDFILE
 }
 
 status() {
-	if [ -f $PIDFILE ]; then
-		PID=$(cat $PIDFILE)
-		echo "CELAR Orchestrator running ($PID)"
+        PID=$(ps aux | grep celar-orchestrator | grep java| awk '{print $2}')
+	if [ "$pid" == "" ]; then
+                echo "CELAR Orchestrator not running"
 	else
-		echo "CELAR Orchestrator not running"
+		echo "CELAR Orchestrator running ($PID)"
 	fi
 }
 
