@@ -40,13 +40,19 @@ create_service(){
 	#/sbin/chkconfig --add celar-orchestrator
 }
 
+install_pip_dependencies() {
+pip install slipstream-client
+pip install httplib2
+}
+
 if [ ! -f $KEYSTORE_PATH ]; then 
 	create_keystore;
 	configure_server;
 	create_service;
 fi
 
-# /bin/rm -f $CELAR_ORCHESTRATOR_HOME/lib/slf4j-jdk14-1.4.2.jar
+
+install_pip_dependencies
 
 service celar-orchestrator start;
 
