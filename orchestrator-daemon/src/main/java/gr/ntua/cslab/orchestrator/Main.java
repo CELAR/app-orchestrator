@@ -20,19 +20,23 @@ import at.ac.tuwien.dsg.csdg.inputProcessing.multiLevelModel.deploymentDescripti
 import at.ac.tuwien.dsg.csdg.inputProcessing.multiLevelModel.deploymentDescription.DeploymentUnit;
 import at.ac.tuwien.dsg.csdg.inputProcessing.multiLevelModel.deploymentDescription.ElasticityCapability;
 import at.ac.tuwien.dsg.rSybl.client.SYBLControlClient;
+
 import com.sixsq.slipstream.exceptions.ValidationException;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
+
 import gr.ntua.cslab.celar.server.beans.SlipStreamCredentials;
 import gr.ntua.cslab.celar.slipstreamClient.SlipStreamSSService;
 import gr.ntua.cslab.orchestrator.beans.ResizingAction;
 import gr.ntua.cslab.orchestrator.beans.ResizingActionType;
 import gr.ntua.cslab.orchestrator.cache.ResizingActionsCache;
 import gr.ntua.cslab.orchestrator.shared.ServerStaticComponents;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -45,7 +49,11 @@ import java.util.Properties;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.xml.bind.JAXB;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+
 import org.apache.log4j.PropertyConfigurator;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.HttpConfiguration;
@@ -58,6 +66,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
+
 import tools.CSARParser;
 
 /**
@@ -261,7 +270,7 @@ public class Main {
         
         DeploymentDescription description = new DeploymentDescription();
         description.setAccessIP("localhost");
-        description.setCloudServiceID(parser.getAppName());
+        description.setCloudServiceID(appName);
         List<DeploymentUnit> deploymentUnits = new LinkedList<>();
         for(String s : parser.getModules()) {       //repeat for each module
             DeploymentUnit unit = new DeploymentUnit();     // new deployment unit
@@ -296,12 +305,22 @@ public class Main {
         }
         description.setDeployments(deploymentUnits);
         
-        String deploymentDescriptionXML = new String();
-        logger.info("Description: "+description);
-        JAXB.marshal(description, deploymentDescriptionXML);
+        StringWriter stringWriter = new StringWriter();
+
+        JAXBContext jaxbContext = JAXBContext.newInstance(DeploymentDescription.class);
+        Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+
+        // output pretty printed
+        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+        jaxbMarshaller.marshal(description, stringWriter);
+
+        String deploymentDescriptionXML = stringWriter.toString();
+        logger.info("XML: "+deploymentDescriptionXML);
+        //JAXB.marshal(description, deploymentDescriptionXML);
         client.setApplicationDeployment(appName, deploymentDescriptionXML);
         client.startApplication(appName);
-        Logger.getLogger(Main.class.getName()).info("Application deployment XML submitted");
+        logger.info("Application deployment XML submitted");
 
     }
     
