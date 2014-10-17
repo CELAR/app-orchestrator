@@ -67,6 +67,7 @@ import tools.CSARParser;
  * @author Giannis Giannakopoulos
  */
 public class Main {
+	static Logger logger = Logger.getLogger(Main.class.getName());
 
     private static void loadProperties() throws IOException {
         InputStream stream = Main.class.getClassLoader().getResourceAsStream("orchestrator.properties");
@@ -255,7 +256,7 @@ public class Main {
 
         // provide IPs of the deployed VMs
         HashMap<String, String> ipAddresses = ServerStaticComponents.service.getDeploymentIPs(deploymentId);
-        Logger.getLogger(Main.class.getName()).info("ipAddresses: "+ipAddresses);
+        logger.info("ipAddresses: "+ipAddresses);
         
         
         DeploymentDescription description = new DeploymentDescription();
@@ -264,6 +265,7 @@ public class Main {
         List<DeploymentUnit> deploymentUnits = new LinkedList<>();
         for(String s : parser.getModules()) {       //repeat for each module
             DeploymentUnit unit = new DeploymentUnit();     // new deployment unit
+            logger.info("module name: "+s);
             unit.setServiceUnitID(s);           
             List<AssociatedVM> vms = new LinkedList<>();
             for(Map.Entry<String, String> kv : ipAddresses.entrySet()) {
