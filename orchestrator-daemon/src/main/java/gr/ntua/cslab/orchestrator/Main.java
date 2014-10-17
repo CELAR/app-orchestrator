@@ -297,6 +297,7 @@ public class Main {
         description.setDeployments(deploymentUnits);
         
         String deploymentDescriptionXML = new String();
+        logger.info("Description: "+description);
         JAXB.marshal(description, deploymentDescriptionXML);
         client.setApplicationDeployment(appName, deploymentDescriptionXML);
         client.startApplication(appName);
