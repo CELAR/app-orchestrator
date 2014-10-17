@@ -337,6 +337,7 @@ public class Main {
             initDecisionModule();
         } catch (Exception e) {
             Logger.getLogger(Main.class.getCanonicalName()).log(Level.SEVERE, e.getMessage());
+            Logger.getLogger(Main.class.getCanonicalName()).log(Level.SEVERE, "", e);
         }
     }
     
