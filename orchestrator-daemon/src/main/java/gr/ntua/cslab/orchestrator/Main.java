@@ -241,12 +241,16 @@ public class Main {
         
         // extract tosca from CSAR and send it to the DM
         CSARParser parser = new CSARParser(ServerStaticComponents.toscaFile);
+        String appName = parser.getAppName();
+        Logger.getLogger(Main.class.getName()).info("appName: "+appName);
+        
         String toscaContent = parser.getToscaContents();
         String rSyblHost = ServerStaticComponents.properties.getProperty("rsybl.host"),
                 rSyblPort = ServerStaticComponents.properties.getProperty("rsybl.port");
         String rSyblURL = "http://"+rSyblHost+":"+rSyblPort+"/rSYBL/restWS";
         SYBLControlClient client = new SYBLControlClient(rSyblURL);
-        client.setApplicationDescription(deploymentId, toscaContent);
+        client.prepareControl(appName);
+        client.setApplicationDescription(appName, toscaContent);
         Logger.getLogger(Main.class.getName()).info("TOSCA file sent to the Decision Module");
 
         // provide IPs of the deployed VMs
@@ -291,7 +295,8 @@ public class Main {
         
         String deploymentDescriptionXML = new String();
         JAXB.marshal(description, deploymentDescriptionXML);
-        client.setApplicationDeployment(deploymentId, deploymentDescriptionXML);
+        client.setApplicationDeployment(appName, deploymentDescriptionXML);
+        client.startApplication(appName);
         Logger.getLogger(Main.class.getName()).info("Application deployment XML submitted");
 
     }
