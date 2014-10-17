@@ -324,6 +324,7 @@ public class Main {
         String content =  strBuilder.toString();
         SlipStreamCredentials credentials = JAXB.unmarshal(new StringReader(content), SlipStreamCredentials.class);
         password = credentials.getPassword();
+        Logger.getLogger(Main.class.getName()).info("Init ssService user: "+username+" password: "+password+" url: "+hostname);
         ServerStaticComponents.service = new SlipStreamSSService(username, password, hostname);
     }
     // orchestrator bootstrapping processes 
