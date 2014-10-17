@@ -255,6 +255,7 @@ public class Main {
 
         // provide IPs of the deployed VMs
         HashMap<String, String> ipAddresses = ServerStaticComponents.service.getDeploymentIPs(deploymentId);
+        Logger.getLogger(Main.class.getName()).info("ipAddresses: "+ipAddresses);
         
         
         DeploymentDescription description = new DeploymentDescription();
