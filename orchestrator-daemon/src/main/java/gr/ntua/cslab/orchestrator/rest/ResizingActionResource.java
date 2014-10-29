@@ -26,6 +26,7 @@ import gr.ntua.cslab.orchestrator.beans.ResizingActionList;
 import gr.ntua.cslab.orchestrator.beans.ResizingActionType;
 import gr.ntua.cslab.orchestrator.cache.ResizingActionsCache;
 import gr.ntua.cslab.orchestrator.shared.ServerStaticComponents;
+import java.util.Map;
 import java.util.UUID;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -91,13 +92,30 @@ public class ResizingActionResource {
     public ExecutedResizingAction getResizingActionStatus(@QueryParam("unique_id") String actionId) throws Exception{
         ExecutedResizingAction a = ResizingActionsCache.getExecutedResizingActionByUniqueId(actionId);
         States currentStatus = ServerStaticComponents.service.getDeploymentState(deploymentId);
-        if(a.getAfterState() == null && currentStatus==States.Ready) {
+        if( a.getAfterState() == null && currentStatus==States.Ready ) {
             a.setAfterState(new DeploymentState(ServerStaticComponents.service.getDeploymentIPs(deploymentId)));
+            if(statesIdentical(a.getBeforeState(), a.getAfterState())) {
+                a.setAfterState(null);
+            }
         }
         a.setExecutionStatus(currentStatus);
         if(a!=null)
             return a;
         else
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
+    }
+    
+    
+        
+    public static boolean statesIdentical(DeploymentState before, DeploymentState after) {
+        if(before.getIpAddress().size()!= before.getIpAddress().size())
+            return false;
+        for(Map.Entry<String, String> befEntry : before.getIpAddress().entrySet()) {
+            if(!after.getIpAddress().containsKey(befEntry.getKey()))
+                return false;
+            if(!befEntry.getValue().equals(after.getIpAddress().get(befEntry.getKey())))
+                return false;
+        }
+        return false;
     }
 }

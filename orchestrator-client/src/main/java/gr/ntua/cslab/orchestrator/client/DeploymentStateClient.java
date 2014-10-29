@@ -19,6 +19,7 @@ import gr.ntua.cslab.orchestrator.beans.DeploymentState;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashMap;
+import java.util.Map;
 import javax.xml.bind.JAXB;
 
 /**
@@ -62,5 +63,5 @@ public class DeploymentStateClient extends AbstractClient {
         }
         return result;
     }
-
+    
 }
