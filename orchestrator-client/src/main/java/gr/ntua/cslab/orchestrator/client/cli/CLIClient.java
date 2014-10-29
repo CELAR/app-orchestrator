@@ -62,6 +62,7 @@ public class CLIClient {
         Option listExecutedResizingActions = new Option("le", "list-executed", false, "Lists all the executed resizing actions");
         Option execute = new Option("e", "execute", true, "Execute a new resizing action");
         Option getStatus = new Option("s", "get-status", true, "Get the status of a resizing action");
+        Option getEffect = new Option("ge", "get-effect", true, "Get the effect of a resizing action");
         Option getDeploymentStatus = new Option("ds", "get-deployment-status", false, "Get the deployment status");
 
         
@@ -70,6 +71,7 @@ public class CLIClient {
         availableActions.addOption(getStatus);
         availableActions.addOption(execute);
         availableActions.addOption(getDeploymentStatus);
+        availableActions.addOption(getEffect);
         
         options.addOptionGroup(availableActions);
         
@@ -121,7 +123,12 @@ public class CLIClient {
         } else if(cmd.hasOption("get-deployment-status")){
             DeploymentStateClient client  = new DeploymentStateClient();
             client.setConfiguration(config);
-            System.out.println(client.getDeploymentState());;
+            System.out.println(client.getDeploymentState());
+        } else if(cmd.hasOption("get-effect")) {
+            ResizingActionsClient client = new ResizingActionsClient();
+            client.setConfiguration(config);
+            String uid = cmd.getOptionValue("get-effect");
+            System.out.println(client.getActionEffect(uid));
         }
     }
     

@@ -18,6 +18,7 @@ package gr.ntua.cslab.orchestrator.client;
 import gr.ntua.cslab.orchestrator.beans.DeploymentState;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.HashMap;
 import javax.xml.bind.JAXB;
 
 /**
@@ -29,11 +30,37 @@ public class DeploymentStateClient extends AbstractClient {
     public DeploymentStateClient() {
         super();
     }
-    
+
+    /**
+     * Returns the deployment state -- a HashMap of <domain, IP> values
+     *
+     * @return
+     * @throws IOException
+     */
     public DeploymentState getDeploymentState() throws IOException {
         String outcome = this.issueRequest("GET", "state/", null);
         DeploymentState state = JAXB.unmarshal(new StringReader(outcome), DeploymentState.class);
         return state;
     }
-    
+
+    public static HashMap<String, String> getDiff(DeploymentState before, DeploymentState after) {
+        HashMap<String, String> result = new HashMap<>();
+        int difference = before.getIpAddress().size() - after.getIpAddress().size();
+        if (difference > 0) {    // the resizing action reduced the cluster size
+            for (String s : before.getIpAddress().keySet()) {
+                if (!after.getIpAddress().containsKey(s)) {
+                    result.put(s, before.getIpAddress().get(s));
+                }
+            }
+        } else {        // the resizing action increased the cluster size
+            for (String s : after.getIpAddress().keySet()) {
+                if (!before.getIpAddress().containsKey(s)) {
+                    result.put(s, after.getIpAddress().get(s));
+                }
+            }
+
+        }
+        return result;
+    }
+
 }
