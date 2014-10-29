@@ -91,6 +91,8 @@ public class ResizingActionResource {
     @Path("status/")
     public ExecutedResizingAction getResizingActionStatus(@QueryParam("unique_id") String actionId) throws Exception{
         ExecutedResizingAction a = ResizingActionsCache.getExecutedResizingActionByUniqueId(actionId);
+        if(a==null)
+            return null;
         States currentStatus = ServerStaticComponents.service.getDeploymentState(deploymentId);
         if( a.getAfterState() == null && currentStatus==States.Ready ) {
             a.setAfterState(new DeploymentState(ServerStaticComponents.service.getDeploymentIPs(deploymentId)));
