@@ -17,6 +17,7 @@ package gr.ntua.cslab.orchestrator.client.cli;
 
 import gr.ntua.cslab.orchestrator.beans.ExecutedResizingAction;
 import gr.ntua.cslab.orchestrator.beans.ExecutedResizingActionList;
+import gr.ntua.cslab.orchestrator.client.DeploymentStateClient;
 import gr.ntua.cslab.orchestrator.client.HistoryClient;
 import gr.ntua.cslab.orchestrator.client.ResizingActionsClient;
 import gr.ntua.cslab.orchestrator.client.cli.formatter.CLIPrettyFormatter;
@@ -61,12 +62,14 @@ public class CLIClient {
         Option listExecutedResizingActions = new Option("le", "list-executed", false, "Lists all the executed resizing actions");
         Option execute = new Option("e", "execute", true, "Execute a new resizing action");
         Option getStatus = new Option("s", "get-status", true, "Get the status of a resizing action");
+        Option getDeploymentStatus = new Option("ds", "get-deployment-status", false, "Get the deployment status");
 
         
         availableActions.addOption(listAvailableResizingActions);
         availableActions.addOption(listExecutedResizingActions);
         availableActions.addOption(getStatus);
         availableActions.addOption(execute);
+        availableActions.addOption(getDeploymentStatus);
         
         options.addOptionGroup(availableActions);
         
@@ -115,7 +118,11 @@ public class CLIClient {
             dummy.setExecutedResizingActions(new LinkedList<ExecutedResizingAction>());
             dummy.getExecutedResizingActions().add(client.getActionStatus(cmd.getOptionValue("get-status")));
             System.out.println(CLIPrettyFormatter.format(dummy));
-        } 
+        } else if(cmd.hasOption("get-deployment-status")){
+            DeploymentStateClient client  = new DeploymentStateClient();
+            client.setConfiguration(config);
+            System.out.println(client.getDeploymentState());;
+        }
     }
     
 }

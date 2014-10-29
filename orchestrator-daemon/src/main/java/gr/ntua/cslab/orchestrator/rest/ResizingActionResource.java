@@ -17,6 +17,7 @@ package gr.ntua.cslab.orchestrator.rest;
 
 import com.sixsq.slipstream.exceptions.ValidationException;
 import com.sixsq.slipstream.statemachine.States;
+import gr.ntua.cslab.orchestrator.beans.DeploymentState;
 import gr.ntua.cslab.orchestrator.beans.ExecutedResizingAction;
 import gr.ntua.cslab.orchestrator.beans.Parameter;
 import gr.ntua.cslab.orchestrator.beans.Parameters;
@@ -59,20 +60,12 @@ public class ResizingActionResource {
     public ExecutedResizingAction executeResizingAction(@QueryParam("action_id") int actionId, Parameters params) throws ValidationException, Exception{
         
         ResizingAction a = ResizingActionsCache.getResizingActionById(actionId);
-        
         int multiplicity = 1;
         
         for(Parameter  p : params.getParameters()) {
             if(p.getKey().equals("multiplicity")) 
                 multiplicity = new Integer(p.getValue());
         }
-        if(a.getType() == ResizingActionType.SCALE_OUT) {
-            ServerStaticComponents.service.addVM(deploymentId, a.getModuleName(),multiplicity);
-        } else if (a.getType() ==  ResizingActionType.SCALE_IN) {
-            ServerStaticComponents.service.removeVM(deploymentId, a.getModuleName(), multiplicity);
-        }
-        
-        
         
         ExecutedResizingAction exec = new ExecutedResizingAction();
         States foo =  ServerStaticComponents.service.getDeploymentState(deploymentId);
@@ -82,6 +75,13 @@ public class ResizingActionResource {
         exec.setParameters(params);
         exec.setTimestamp(System.currentTimeMillis());
         
+        exec.setBeforeState(new DeploymentState(ServerStaticComponents.service.getDeploymentIPs(deploymentId)));
+        if(a.getType() == ResizingActionType.SCALE_OUT) {
+            ServerStaticComponents.service.addVM(deploymentId, a.getModuleName(),multiplicity);
+        } else if (a.getType() ==  ResizingActionType.SCALE_IN) {
+            ServerStaticComponents.service.removeVM(deploymentId, a.getModuleName(), multiplicity);
+        }
+        
         ResizingActionsCache.addExecutedResizingAction(exec);          
         return exec;
     }
@@ -90,7 +90,11 @@ public class ResizingActionResource {
     @Path("status/")
     public ExecutedResizingAction getResizingActionStatus(@QueryParam("unique_id") String actionId) throws Exception{
         ExecutedResizingAction a = ResizingActionsCache.getExecutedResizingActionByUniqueId(actionId);
-        a.setExecutionStatus(ServerStaticComponents.service.getDeploymentState(deploymentId));
+        States currentStatus = ServerStaticComponents.service.getDeploymentState(deploymentId);
+        if(a.getAfterState() == null && currentStatus==States.Ready) {
+            a.setAfterState(new DeploymentState(ServerStaticComponents.service.getDeploymentIPs(deploymentId)));
+        }
+        a.setExecutionStatus(currentStatus);
         if(a!=null)
             return a;
         else

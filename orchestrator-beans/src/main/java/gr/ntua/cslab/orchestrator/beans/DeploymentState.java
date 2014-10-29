@@ -43,5 +43,9 @@ public class DeploymentState {
     public void setIpAddress(HashMap<String, String> ipAddress) {
         this.ipAddress = ipAddress;
     }
-    
+
+    @Override
+    public String toString() {
+        return this.ipAddress.toString(); 
+    }
 }
