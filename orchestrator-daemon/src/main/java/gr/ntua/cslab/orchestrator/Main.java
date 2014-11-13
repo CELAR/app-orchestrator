@@ -388,14 +388,21 @@ public class Main {
         String content =  strBuilder.toString();
         SlipStreamCredentials credentials = JAXB.unmarshal(new StringReader(content), SlipStreamCredentials.class);
         password = credentials.getPassword();
-        Logger.getLogger(Main.class.getName()).info("Init ssService user: "+username+" password: "+password+" url: "+hostname);
+        Logger.getLogger(Main.class.getName()).log(Level.INFO, "Init ssService user: {0} password: {1} url: {2}", new Object[]{username, password, hostname});
         ServerStaticComponents.service = new SlipStreamSSService(username, password, hostname);
     }
     // orchestrator bootstrapping processes 
     private static void configureOrchestrator() throws MalformedURLException, IOException, Exception {
         initializeSSclient();
         try{
-            fetchTosca(ServerStaticComponents.toscaFile);
+            if(ServerStaticComponents.properties.containsKey("csar.path")) {    //if csar is defined then do not contact CELAR Server
+                String csarPath = ServerStaticComponents.properties.getProperty("csar.path");
+                Logger.getLogger(Main.class.getCanonicalName()).log(Level.INFO, "Parsing file from {0}", csarPath);
+                ServerStaticComponents.toscaFile = csarPath;
+            } else {    // contact CELAR Server
+                Logger.getLogger(Main.class.getCanonicalName()).log(Level.INFO, "Parsing file from CELAR Server");
+                fetchTosca(ServerStaticComponents.toscaFile);  
+            }
             setResizingActions(ServerStaticComponents.toscaFile);
             initDecisionModule();
         } catch (Exception e) {
