@@ -218,28 +218,69 @@ public class Main {
         int i=1;
         List<String> params = new ArrayList<>();
         params.add("multiplicity");
-        for (String s : modules) {
-            ResizingAction action = new ResizingAction();
-            action.setId(i++);
-            action.setModuleId(-1);
-            action.setModuleName(s);
-            action.setName("Add vm on "+s);
-            action.setType(ResizingActionType.SCALE_OUT);
-            action.setApplicablePatameters(params);
-            
-            ResizingActionsCache.addAvailableResizingAction(action);
-            
-            action = new ResizingAction();
-            action.setId(i++);
-            action.setModuleId(-1);
-            action.setModuleName(s);
-            action.setName("Remove vm from "+s);
-            action.setType(ResizingActionType.SCALE_IN);
-            action.setApplicablePatameters(params);
-            
-            ResizingActionsCache.addAvailableResizingAction(action);
+        for (String module : modules) {
+        	for (String component : parser.getModuleComponents(module)) {
+        		logger.info("Setting actions for component: "+component);
+        		//if(parser.getComponentProperties(component)
+        		for (Map.Entry a : parser.getComponentProperties(component).entrySet()) {
+        			if(a.getKey().toString().startsWith("STRATEGY")){
+        				String name = a.getKey().toString();
+        				name = name.substring(9, name.indexOf("Script"));
+        		        logger.info("Action name: "+name);
+	    	            ResizingAction action = new ResizingAction();
+	    	            action.setId(i++);
+	    	            action.setModuleId(-1);
+	    	            action.setModuleName(component);
+	    	            action.setName(name);
+	    	            if (name.contains("Add")) {
+	        		        logger.info("Action type: SCALE_OUT");
+	    	            	action.setType(ResizingActionType.SCALE_OUT);
+	    	            }
+	    	            else if (name.contains("Remove")) {
+	        		        logger.info("Action type: SCALE_IN");
+	    	            	action.setType(ResizingActionType.SCALE_IN);
+	    	            	action.setExecutesScript(true);
+	    	            	action.setScript(a.getValue().toString());
+	    	            }
+	    	            else if (name.contains("balance")) {
+	        		        logger.info("Action type: BALANCE");
+	    	            	action.setType(ResizingActionType.BALANCE);
+	    	            	action.setExecutesScript(true);
+	    	            	action.setScript(a.getValue().toString());
+	    	            }
+	    	            else{
+	        		        logger.info("Action type: GENERIC_ACTION");
+	    	            	action.setType(ResizingActionType.GENERIC_ACTION);
+	    	            	action.setExecutesScript(true);
+	    	            	action.setScript(a.getValue().toString());
+	    	            }
+	    	            action.setApplicablePatameters(params);
+	    	            ResizingActionsCache.addAvailableResizingAction(action);
+        			}
+        		}
+	            /*ResizingAction action = new ResizingAction();
+	            action.setId(i++);
+	            action.setModuleId(-1);
+	            action.setModuleName(component);
+	            action.setName("Add vm on "+component);
+	            action.setType(ResizingActionType.SCALE_OUT);
+	            action.setApplicablePatameters(params);
+	            
+	            ResizingActionsCache.addAvailableResizingAction(action);
+	            
+	            action = new ResizingAction();
+	            action.setId(i++);
+	            action.setModuleId(-1);
+	            action.setModuleName(component);
+	            action.setName("Remove vm from "+component);
+	            action.setType(ResizingActionType.SCALE_IN);
+	            action.setApplicablePatameters(params);
+	            
+	            ResizingActionsCache.addAvailableResizingAction(action);*/
+        	
+        	}
         }
-        Logger.getLogger(Main.class.getName()).info("Resizing actions configured");
+        logger.info("Resizing actions configured");
     }
     
     // initialize the Decision Module providing the TOSCA file

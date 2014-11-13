@@ -17,6 +17,9 @@ package gr.ntua.cslab.orchestrator.rest;
 
 import com.sixsq.slipstream.exceptions.ValidationException;
 import com.sixsq.slipstream.statemachine.States;
+
+import gr.ntua.cslab.celar.slipstreamClient.SlipStreamSSService;
+import gr.ntua.cslab.orchestrator.Main;
 import gr.ntua.cslab.orchestrator.beans.ExecutedResizingAction;
 import gr.ntua.cslab.orchestrator.beans.Parameter;
 import gr.ntua.cslab.orchestrator.beans.Parameters;
@@ -25,7 +28,14 @@ import gr.ntua.cslab.orchestrator.beans.ResizingActionList;
 import gr.ntua.cslab.orchestrator.beans.ResizingActionType;
 import gr.ntua.cslab.orchestrator.cache.ResizingActionsCache;
 import gr.ntua.cslab.orchestrator.shared.ServerStaticComponents;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.logging.Logger;
 import java.util.UUID;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -41,6 +51,8 @@ import javax.ws.rs.core.Response;
  */
 @Path("/resizing/")
 public class ResizingActionResource {
+	static Logger logger = Logger.getLogger(ResizingActionResource.class.getName());
+	static SlipStreamSSService ssService = ServerStaticComponents.service;
     private final static String
             deploymentId = ServerStaticComponents.properties.getProperty("slipstream.deployment.id");
 
@@ -66,10 +78,31 @@ public class ResizingActionResource {
             if(p.getKey().equals("multiplicity")) 
                 multiplicity = new Integer(p.getValue());
         }
+        
+        
         if(a.getType() == ResizingActionType.SCALE_OUT) {
-            ServerStaticComponents.service.addVM(deploymentId, a.getModuleName(),multiplicity);
+        	ssService.addVM(deploymentId, a.getModuleName(),multiplicity);
         } else if (a.getType() ==  ResizingActionType.SCALE_IN) {
-            ServerStaticComponents.service.removeVM(deploymentId, a.getModuleName(), multiplicity);
+            //ServerStaticComponents.service.removeVM(deploymentId, a.getModuleName(), multiplicity);
+            List<String> ids = ssService.removeVMIDs(deploymentId, a.getModuleName(), multiplicity);
+            List<String> ips = ssService.translateIPs(deploymentId, ids);
+            for(String ip : ips){
+    			logger.info("Executing script on "+ip);
+    			String scriptFile = ssService.writeToFile(a.getScript());
+    			String[] command = new String[] {"ssh", "-o", "StrictHostKeyChecking=no", "root@"+ip, "bash -s >> /tmp/resizingActions.log", "<", scriptFile};
+    			ssService.executeCommand(command);
+            }
+            ssService.removeVMswithIDs(deploymentId, ids, a.getModuleName());
+        } else if(a.isExecutesScript()){
+        	HashMap<String, String> ips = ssService.getDeploymentIPs(deploymentId);
+        	for(Entry<String, String> ip : ips.entrySet()){
+        		if(ip.getKey().contains(a.getModuleName())){
+        			logger.info("Executing script on "+ip.getValue());
+        			String scriptFile = ssService.writeToFile(a.getScript());
+        			String[] command = new String[] {"ssh", "-o", "StrictHostKeyChecking=no", "root@"+ip.getValue(), "bash -s >> /tmp/resizingActions.log", "<", scriptFile};    			
+        			ssService.executeCommand(command);
+        		}
+        	}
         }
         
         

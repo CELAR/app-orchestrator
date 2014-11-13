@@ -20,5 +20,5 @@ package gr.ntua.cslab.orchestrator.beans;
  * @author Giannis Giannakopoulos
  */
 public enum ResizingActionType { 
-    SCALE_IN, SCALE_OUT, SCALE_UP, SCALE_DOWN 
+    SCALE_IN, SCALE_OUT, SCALE_UP, SCALE_DOWN, BALANCE, GENERIC_ACTION 
 }

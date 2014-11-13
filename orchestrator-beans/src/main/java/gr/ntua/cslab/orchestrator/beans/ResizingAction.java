@@ -37,8 +37,26 @@ public class ResizingAction {
     private int moduleId;
     private String moduleName;
     private List<String> applicablePatameters;
+    private String script;
+    private boolean executesScript;
 
-    public ResizingAction() {
+    public String getScript() {
+		return script;
+	}
+
+	public void setScript(String script) {
+		this.script = script;
+	}
+
+	public boolean isExecutesScript() {
+		return executesScript;
+	}
+
+	public void setExecutesScript(boolean executesScript) {
+		this.executesScript = executesScript;
+	}
+
+	public ResizingAction() {
         this.applicablePatameters = new LinkedList<>();
     }
 
