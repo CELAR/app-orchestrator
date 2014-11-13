@@ -56,7 +56,7 @@ stop() {
 
 status() {
         PID=$(ps aux | grep celar-orchestrator | grep java| awk '{print $2}')
-	if [ "$pid" == "" ]; then
+	if [ "$PID" == "" ]; then
                 echo "CELAR Orchestrator not running"
 	else
 		echo "CELAR Orchestrator running ($PID)"

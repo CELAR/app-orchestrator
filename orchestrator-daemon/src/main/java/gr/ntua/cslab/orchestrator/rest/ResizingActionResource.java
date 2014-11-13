@@ -19,7 +19,7 @@ import com.sixsq.slipstream.exceptions.ValidationException;
 import com.sixsq.slipstream.statemachine.States;
 
 import gr.ntua.cslab.celar.slipstreamClient.SlipStreamSSService;
-import gr.ntua.cslab.orchestrator.Main;
+import gr.ntua.cslab.orchestrator.beans.DeploymentState;
 import gr.ntua.cslab.orchestrator.beans.ExecutedResizingAction;
 import gr.ntua.cslab.orchestrator.beans.Parameter;
 import gr.ntua.cslab.orchestrator.beans.Parameters;
@@ -70,14 +70,25 @@ public class ResizingActionResource {
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public ExecutedResizingAction executeResizingAction(@QueryParam("action_id") int actionId, Parameters params) throws ValidationException, Exception{
         
-        ResizingAction a = ResizingActionsCache.getResizingActionById(actionId);
+
         
+        ResizingAction a = ResizingActionsCache.getResizingActionById(actionId);
         int multiplicity = 1;
         
         for(Parameter  p : params.getParameters()) {
             if(p.getKey().equals("multiplicity")) 
                 multiplicity = new Integer(p.getValue());
         }
+
+        ExecutedResizingAction exec = new ExecutedResizingAction();
+        States foo =  ServerStaticComponents.service.getDeploymentState(deploymentId);
+        exec.setExecutionStatus(foo);
+        exec.setResizingAction(ResizingActionsCache.getResizingActionById(actionId));
+        exec.setUniqueId(UUID.randomUUID().toString());
+        exec.setParameters(params);
+        exec.setTimestamp(System.currentTimeMillis());
+        exec.setBeforeState(new DeploymentState(ServerStaticComponents.service.getDeploymentIPs(deploymentId)));
+        
         
         
         if(a.getType() == ResizingActionType.SCALE_OUT) {
@@ -105,17 +116,7 @@ public class ResizingActionResource {
         	}
         }
         
-        
-        
-        ExecutedResizingAction exec = new ExecutedResizingAction();
-        States foo =  ServerStaticComponents.service.getDeploymentState(deploymentId);
-        exec.setExecutionStatus(foo);
-        exec.setResizingAction(ResizingActionsCache.getResizingActionById(actionId));
-        exec.setUniqueId(UUID.randomUUID().toString());
-        exec.setParameters(params);
-        exec.setTimestamp(System.currentTimeMillis());
-        
-        ResizingActionsCache.addExecutedResizingAction(exec);          
+		ResizingActionsCache.addExecutedResizingAction(exec); 
         return exec;
     }
     
@@ -123,10 +124,33 @@ public class ResizingActionResource {
     @Path("status/")
     public ExecutedResizingAction getResizingActionStatus(@QueryParam("unique_id") String actionId) throws Exception{
         ExecutedResizingAction a = ResizingActionsCache.getExecutedResizingActionByUniqueId(actionId);
-        a.setExecutionStatus(ServerStaticComponents.service.getDeploymentState(deploymentId));
+        if(a==null)
+            return null;
+        States currentStatus = ServerStaticComponents.service.getDeploymentState(deploymentId);
+        if( a.getAfterState() == null && currentStatus==States.Ready ) {
+            a.setAfterState(new DeploymentState(ServerStaticComponents.service.getDeploymentIPs(deploymentId)));
+            if(statesIdentical(a.getBeforeState(), a.getAfterState())) {
+                a.setAfterState(null);
+            }
+        }
+        a.setExecutionStatus(currentStatus);
         if(a!=null)
             return a;
         else
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
+    }
+    
+    
+        
+    public static boolean statesIdentical(DeploymentState before, DeploymentState after) {
+        if(before.getIpAddress().size()!= before.getIpAddress().size())
+            return false;
+        for(Map.Entry<String, String> befEntry : before.getIpAddress().entrySet()) {
+            if(!after.getIpAddress().containsKey(befEntry.getKey()))
+                return false;
+            if(!befEntry.getValue().equals(after.getIpAddress().get(befEntry.getKey())))
+                return false;
+        }
+        return false;
     }
 }

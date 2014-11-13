@@ -21,6 +21,7 @@ import gr.ntua.cslab.orchestrator.beans.ResizingActionList;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.HashMap;
 import javax.xml.bind.JAXB;
 
 /**
@@ -73,5 +74,20 @@ public class ResizingActionsClient extends AbstractClient {
         String output=this.issueRequest("GET", "resizing/status/?unique_id="+uniqueId, null);
         ExecutedResizingAction ret = JAXB.unmarshal(new StringReader(output), ExecutedResizingAction.class);
         return ret;
+    }
+   
+    /**
+     * Returns the difference in IP/hostnames as inserted by a resizing action.
+     * 
+     * @param uniqueId
+     * @return  
+     * @throws java.io.IOException  
+     */
+    public HashMap<String,String> getActionEffect(String uniqueId) throws IOException {
+        ExecutedResizingAction action = this.getActionStatus(uniqueId);
+        if(action.getAfterState()==null) {
+            return null;
+        }
+        return DeploymentStateClient.getDiff(action.getBeforeState(), action.getAfterState());
     }
 }

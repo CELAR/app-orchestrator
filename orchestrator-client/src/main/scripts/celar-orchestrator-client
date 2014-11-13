@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CLIENT_HOME="/Users/nikospapailiou/Documents/workspace/app-orchestrator/orchestrator-client/"
+[ "$CLIENT_HOME" == "" ] && CLIENT_HOME="/home/giannis/Projects/celar/app-orchestrator/orchestrator-client/"
 JAR_FILE_LOCATION="${CLIENT_HOME}target/orchestrator-client-0.1-SNAPSHOT.jar"
 CLASSPATH="${CLIENT_HOME}target/lib/*"
 MAIN_CLASS="gr.ntua.cslab.orchestrator.client.cli.CLIClient"

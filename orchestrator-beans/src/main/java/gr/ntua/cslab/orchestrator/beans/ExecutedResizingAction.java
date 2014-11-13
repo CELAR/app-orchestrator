@@ -33,6 +33,8 @@ public class ExecutedResizingAction {
     private Long timestamp;
     private States executionStatus;
     private Parameters parameters;
+    private DeploymentState beforeState;
+    private DeploymentState afterState = null;
 
     public ExecutedResizingAction() {
     }
@@ -84,4 +86,22 @@ public class ExecutedResizingAction {
     public void setParameters(Parameters parameters) {
         this.parameters = parameters;
     }
+
+    public DeploymentState getBeforeState() {
+        return beforeState;
+    }
+
+    public void setBeforeState(DeploymentState beforeState) {
+        this.beforeState = beforeState;
+    }
+
+    public DeploymentState getAfterState() {
+        return afterState;
+    }
+
+    public void setAfterState(DeploymentState afterState) {
+        this.afterState = afterState;
+    }
+    
+    
 }
