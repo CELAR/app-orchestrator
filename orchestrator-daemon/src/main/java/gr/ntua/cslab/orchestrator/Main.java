@@ -389,13 +389,8 @@ public class Main {
         String content =  strBuilder.toString();
         SlipStreamCredentials credentials = JAXB.unmarshal(new StringReader(content), SlipStreamCredentials.class);
         password = credentials.getPassword();
-<<<<<<< HEAD
         Logger.getLogger(Main.class.getName()).info("Init ssService user: "+username+" password: "+password+" url: "+hostname+" connector: "+connectorName);
         ServerStaticComponents.service = new SlipStreamSSService(username, password, hostname, connectorName);
-=======
-        Logger.getLogger(Main.class.getName()).log(Level.INFO, "Init ssService user: {0} password: {1} url: {2}", new Object[]{username, password, hostname});
-        ServerStaticComponents.service = new SlipStreamSSService(username, password, hostname);
->>>>>>> 9bd43f7eae1d4018493249ae63b43844f644898f
     }
     // orchestrator bootstrapping processes 
     private static void configureOrchestrator() throws MalformedURLException, IOException, Exception {
