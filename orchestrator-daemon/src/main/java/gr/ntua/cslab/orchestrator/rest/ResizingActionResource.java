@@ -101,10 +101,10 @@ public class ResizingActionResource {
             logger.info("Remove IPs: "+ips);
             for(String ip : ips){
     			logger.info("Executing script on "+ip);
-    			String scriptFile = ssService.writeToFile("sudo su -\n"+a.getScript());
+    			String scriptFile = ssService.writeToFile("sudo su -\n cat /tmp/script.sh\n"+a.getScript());
     			String[] command = new String[] {"scp", "-o", "StrictHostKeyChecking=no", scriptFile, "ubuntu@"+ip+":/tmp/"}; 
     			ssService.executeCommand(command);
-    			command = new String[] {"ssh", "-o", "StrictHostKeyChecking=no", "ubuntu@"+ip, "/bin/bash -s < /tmp/script.sh >> /tmp/actions.log"};    			
+    			command = new String[] {"ssh", "-o", "StrictHostKeyChecking=no", "ubuntu@"+ip, "/bin/bash -s < /tmp/script.sh &> /tmp/resize_actions.log"};    			
     			ssService.executeCommand(command);
             }
             ssService.removeVMswithIDs(deploymentId, ids, a.getModuleName());
@@ -113,10 +113,10 @@ public class ResizingActionResource {
         	for(Entry<String, String> ip : ips.entrySet()){
         		if(ip.getKey().contains(a.getModuleName())){
         			logger.info("Executing script on "+ip.getValue());
-        			String scriptFile = ssService.writeToFile("sudo su -\n"+a.getScript());
+        			String scriptFile = ssService.writeToFile("sudo su -\n cat /tmp/script.sh\n"+a.getScript());
         			String[] command = new String[] {"scp", "-o", "StrictHostKeyChecking=no", scriptFile, "ubuntu@"+ip.getValue()+":/tmp/"}; 
         			ssService.executeCommand(command);
-        			command = new String[] {"ssh", "-o", "StrictHostKeyChecking=no", "ubuntu@"+ip.getValue(), "/bin/bash -s < /tmp/script.sh >> /tmp/actions.log"};    			
+        			command = new String[] {"ssh", "-o", "StrictHostKeyChecking=no", "ubuntu@"+ip.getValue(), "/bin/bash -s < /tmp/script.sh &> /tmp/resize_actions.log"};    			
         			ssService.executeCommand(command);
         		}
         	}
