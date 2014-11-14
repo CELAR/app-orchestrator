@@ -104,7 +104,7 @@ public class ResizingActionResource {
     			String scriptFile = ssService.writeToFile("sudo su -\n"+a.getScript());
     			String[] command = new String[] {"scp", "-o", "StrictHostKeyChecking=no", scriptFile, "ubuntu@"+ip+":/tmp/"}; 
     			ssService.executeCommand(command);
-    			command = new String[] {"ssh", "-o", "StrictHostKeyChecking=no", "ubuntu@"+ip, "\'bash -s < /tmp/script.sh >> /tmp/actions.log\'"};    			
+    			command = new String[] {"ssh", "-o", "StrictHostKeyChecking=no", "ubuntu@"+ip, "/bin/bash -s < /tmp/script.sh >> /tmp/actions.log"};    			
     			ssService.executeCommand(command);
             }
             ssService.removeVMswithIDs(deploymentId, ids, a.getModuleName());
