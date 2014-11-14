@@ -114,7 +114,7 @@ public class ResizingActionResource {
         			String scriptFile = ssService.writeToFile("sudo su -\n"+a.getScript());
         			String[] command = new String[] {"scp", "-o", "StrictHostKeyChecking=no", scriptFile, "ubuntu@"+ip.getValue()+":/tmp/"}; 
         			ssService.executeCommand(command);
-        			command = new String[] {"ssh", "-o", "StrictHostKeyChecking=no", "ubuntu@"+ip.getValue(), "\'bash -s < /tmp/script.sh >> /tmp/actions.log\'"};    			
+        			command = new String[] {"ssh", "-o", "StrictHostKeyChecking=no", "ubuntu@"+ip.getValue(), "/bin/bash -s < /tmp/script.sh >> /tmp/actions.log"};    			
         			ssService.executeCommand(command);
         		}
         	}
