@@ -96,7 +96,9 @@ public class ResizingActionResource {
         } else if (a.getType() ==  ResizingActionType.SCALE_IN) {
             //ServerStaticComponents.service.removeVM(deploymentId, a.getModuleName(), multiplicity);
             List<String> ids = ssService.removeVMIDs(deploymentId, a.getModuleName(), multiplicity);
+            logger.info("Remove IDs: "+ids);
             List<String> ips = ssService.translateIPs(deploymentId, ids);
+            logger.info("Remove IPs: "+ips);
             for(String ip : ips){
     			logger.info("Executing script on "+ip);
     			String scriptFile = ssService.writeToFile("sudo su -\n"+a.getScript());
