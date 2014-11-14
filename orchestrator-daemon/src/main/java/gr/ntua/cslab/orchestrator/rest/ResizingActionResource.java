@@ -110,7 +110,7 @@ public class ResizingActionResource {
         		if(ip.getKey().contains(a.getModuleName())){
         			logger.info("Executing script on "+ip.getValue());
         			String scriptFile = ssService.writeToFile("sudo su -\n"+a.getScript());
-        			String[] command = new String[] {"ssh", "-o", "StrictHostKeyChecking=no", "ubuntu@"+ip.getValue(), "\'bash -s\'", "<", scriptFile};    			
+        			String[] command = new String[] {"ssh", "-o", "StrictHostKeyChecking=no", "ubuntu@"+ip.getValue(), "\'bash -s\' < "+scriptFile};    			
         			ssService.executeCommand(command);
         		}
         	}
