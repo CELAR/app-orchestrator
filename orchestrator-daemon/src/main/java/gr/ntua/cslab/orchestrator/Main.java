@@ -372,6 +372,7 @@ public class Main {
                 hostname = "https://"+ServerStaticComponents.properties.getProperty("slipstream.server.host"),
                 celarServerHost = ServerStaticComponents.properties.getProperty("celar.server.host"),
                 celarServerPort = ServerStaticComponents.properties.getProperty("celar.server.port");
+		String connectorName = ServerStaticComponents.properties.getProperty("slipstream.connector.name");
         // fetch password from CELAR Server
         URL url = new URL("http://"+celarServerHost+":"+celarServerPort+"/user/credentials/?user="+username);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -388,8 +389,8 @@ public class Main {
         String content =  strBuilder.toString();
         SlipStreamCredentials credentials = JAXB.unmarshal(new StringReader(content), SlipStreamCredentials.class);
         password = credentials.getPassword();
-        Logger.getLogger(Main.class.getName()).info("Init ssService user: "+username+" password: "+password+" url: "+hostname);
-        ServerStaticComponents.service = new SlipStreamSSService(username, password, hostname);
+        Logger.getLogger(Main.class.getName()).info("Init ssService user: "+username+" password: "+password+" url: "+hostname+" connector: "+connectorName);
+        ServerStaticComponents.service = new SlipStreamSSService(username, password, hostname, connectorName);
     }
     // orchestrator bootstrapping processes 
     private static void configureOrchestrator() throws MalformedURLException, IOException, Exception {
