@@ -1,0 +1,20 @@
+<assembly>
+	<id>bin</id>
+	<formats>
+		<format>tar.gz</format>
+	</formats>
+	<fileSets>
+		<fileSet>
+			<directory>src/main/scripts</directory>
+			<includes>
+				<include>install.sh</include>
+			</includes>
+			<outputDirectory>/</outputDirectory>
+		</fileSet>	  
+
+		<fileSet>
+			<directory>target/daemon</directory>
+			<outputDirectory>celar-orchestrator</outputDirectory>
+		</fileSet>
+	</fileSets>
+</assembly>
