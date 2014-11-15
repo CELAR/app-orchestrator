@@ -135,7 +135,7 @@ public class ResizingActionResource {
         if(a==null)
             return null;
         States currentStatus;
-        if(a.getResizingAction().isExecutesScript()){
+        if(a.getResizingAction().getType()== ResizingActionType.GENERIC_ACTION || a.getResizingAction().getType()== ResizingActionType.BALANCE){
         	logger.info("Getting status for script action");
         	boolean ready = true;
         	for(String ip : a.getIPs()){
