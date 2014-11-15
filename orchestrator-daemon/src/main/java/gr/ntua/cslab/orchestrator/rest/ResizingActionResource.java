@@ -81,8 +81,8 @@ public class ResizingActionResource {
         }
 
         ExecutedResizingAction exec = new ExecutedResizingAction();
-        States foo =  ServerStaticComponents.service.getDeploymentState(deploymentId);
-        exec.setExecutionStatus(foo);
+        //States foo =  ServerStaticComponents.service.getDeploymentState(deploymentId);
+        exec.setExecutionStatus(States.Executing);
         exec.setResizingAction(ResizingActionsCache.getResizingActionById(actionId));
         String uid = UUID.randomUUID().toString();
         exec.setUniqueId(uid);
