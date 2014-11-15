@@ -84,7 +84,8 @@ public class ResizingActionResource {
         States foo =  ServerStaticComponents.service.getDeploymentState(deploymentId);
         exec.setExecutionStatus(foo);
         exec.setResizingAction(ResizingActionsCache.getResizingActionById(actionId));
-        exec.setUniqueId(UUID.randomUUID().toString());
+        String uid = UUID.randomUUID().toString();
+        exec.setUniqueId(uid);
         exec.setParameters(params);
         exec.setTimestamp(System.currentTimeMillis());
         exec.setBeforeState(new DeploymentState(ServerStaticComponents.service.getDeploymentIPs(deploymentId)));
@@ -112,8 +113,9 @@ public class ResizingActionResource {
         	HashMap<String, String> ips = ssService.getDeploymentIPs(deploymentId);
         	for(Entry<String, String> ip : ips.entrySet()){
         		if(ip.getKey().contains(a.getModuleName())){
+        			exec.addIP(ip.getValue());
         			logger.info("Executing script on "+ip.getValue());
-        			String scriptFile = ssService.writeToFile("sudo su -\n cat /tmp/script.sh\n"+a.getScript());
+        			String scriptFile = ssService.writeToFile("sudo su -\n cat /tmp/script.sh\n echo Executing > /tmp/"+uid+"_state\n "+a.getScript()+"echo Ready > /tmp/"+uid+"_state\n");
         			String[] command = new String[] {"scp", "-o", "StrictHostKeyChecking=no", scriptFile, "ubuntu@"+ip.getValue()+":/tmp/"}; 
         			ssService.executeCommand(command);
         			command = new String[] {"ssh", "-o", "StrictHostKeyChecking=no", "ubuntu@"+ip.getValue(), "/bin/bash -s < /tmp/script.sh &> /tmp/resize_actions.log"};    			
@@ -132,7 +134,24 @@ public class ResizingActionResource {
         ExecutedResizingAction a = ResizingActionsCache.getExecutedResizingActionByUniqueId(actionId);
         if(a==null)
             return null;
-        States currentStatus = ServerStaticComponents.service.getDeploymentState(deploymentId);
+        States currentStatus;
+        if(a.getResizingAction().isExecutesScript()){
+        	logger.info("Getting status for script action");
+        	boolean ready = true;
+        	for(String ip : a.getIPs()){
+        		String[] command = new String[] {"ssh", "-o", "StrictHostKeyChecking=no", "ubuntu@"+ip, "sudo su -\ncat /tmp/"+a.getUniqueId()+"_state"};    			
+        		String out = ssService.executeCommand(command).get("output");
+        		if(!out.contains("Ready"))
+        			ready=false;
+        	}
+        	if(ready)
+        		currentStatus = States.Ready;
+        	else
+        		currentStatus = States.Executing;
+        }
+        else{
+        	currentStatus = ServerStaticComponents.service.getDeploymentState(deploymentId);
+        }
         if( a.getAfterState() == null && currentStatus==States.Ready ) {
             a.setAfterState(new DeploymentState(ServerStaticComponents.service.getDeploymentIPs(deploymentId)));
             if(statesIdentical(a.getBeforeState(), a.getAfterState())) {
@@ -140,6 +159,7 @@ public class ResizingActionResource {
             }
         }
         a.setExecutionStatus(currentStatus);
+        
         if(a!=null)
             return a;
         else

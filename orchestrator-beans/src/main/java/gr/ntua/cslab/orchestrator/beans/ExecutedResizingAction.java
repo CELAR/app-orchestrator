@@ -15,7 +15,11 @@
  */
 package gr.ntua.cslab.orchestrator.beans;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.sixsq.slipstream.statemachine.States;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -35,6 +39,7 @@ public class ExecutedResizingAction {
     private Parameters parameters;
     private DeploymentState beforeState;
     private DeploymentState afterState = null;
+    private List<String> ips;
 
     public ExecutedResizingAction() {
     }
@@ -45,6 +50,7 @@ public class ExecutedResizingAction {
         this.timestamp = timestamp;
         this.executionStatus = status;
         this.parameters = parameters;
+        this.ips = new ArrayList<String>();
     }
 
     public String getUniqueId() {
@@ -102,6 +108,13 @@ public class ExecutedResizingAction {
     public void setAfterState(DeploymentState afterState) {
         this.afterState = afterState;
     }
+
+	public void addIP(String ip) {
+		ips.add(ip);
+	}
     
+	public List<String> getIPs(){
+		return ips;
+	}
     
 }
