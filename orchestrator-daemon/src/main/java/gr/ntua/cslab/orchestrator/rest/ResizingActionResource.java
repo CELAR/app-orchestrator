@@ -139,7 +139,7 @@ public class ResizingActionResource {
         	logger.info("Getting status for script action");
         	boolean ready = true;
         	for(String ip : a.getIPs()){
-        		String[] command = new String[] {"ssh", "-o", "StrictHostKeyChecking=no", "ubuntu@"+ip, "sudo su -\ncat /tmp/"+a.getUniqueId()+"_state"};    			
+        		String[] command = new String[] {"ssh", "-o", "StrictHostKeyChecking=no", "ubuntu@"+ip, "cat /tmp/"+a.getUniqueId()+"_state"};    			
         		String out = ssService.executeCommand(command).get("output");
         		if(!out.contains("Ready"))
         			ready=false;
