@@ -115,7 +115,7 @@ public class ResizingActionResource {
         		if(ip.getKey().contains(a.getModuleName())){
         			exec.addIP(ip.getValue());
         			logger.info("Executing script on "+ip.getValue());
-        			String scriptFile = ssService.writeToFile("sudo su -\n cat /tmp/script.sh\n echo Executing > /tmp/"+uid+"_state\n "+a.getScript()+"echo Ready > /tmp/"+uid+"_state\n");
+        			String scriptFile = ssService.writeToFile("sudo su -\ncat /tmp/script.sh\necho Executing > /tmp/"+uid+"_state\n"+a.getScript()+"\necho Ready > /tmp/"+uid+"_state\n");
         			String[] command = new String[] {"scp", "-o", "StrictHostKeyChecking=no", scriptFile, "ubuntu@"+ip.getValue()+":/tmp/"}; 
         			ssService.executeCommand(command);
         			command = new String[] {"ssh", "-o", "StrictHostKeyChecking=no", "ubuntu@"+ip.getValue(), "/bin/bash -s < /tmp/script.sh &> /tmp/resize_actions.log &"};    			
