@@ -110,6 +110,8 @@ public class ExecutedResizingAction {
     }
 
 	public void addIP(String ip) {
+		if(ips==null)
+			ips = new ArrayList<String>();
 		ips.add(ip);
 	}
     
