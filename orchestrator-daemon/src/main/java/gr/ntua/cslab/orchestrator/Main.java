@@ -232,11 +232,11 @@ public class Main {
 	    	            action.setModuleId(-1);
 	    	            action.setModuleName(component);
 	    	            action.setName(name);
-	    	            if (name.contains("Add")) {
+	    	            if (name.contains("scaleOut")) {
 	        		        logger.info("Action type: SCALE_OUT");
 	    	            	action.setType(ResizingActionType.SCALE_OUT);
 	    	            }
-	    	            else if (name.contains("Remove")) {
+	    	            else if (name.contains("scaleIn")) {
 	        		        logger.info("Action type: SCALE_IN");
 	    	            	action.setType(ResizingActionType.SCALE_IN);
 	    	            	action.setExecutesScript(true);
