@@ -90,7 +90,7 @@ public class ResizingActionResource {
         exec.setTimestamp(System.currentTimeMillis());
         exec.setBeforeState(new DeploymentState(ServerStaticComponents.service.getDeploymentIPs(deploymentId)));
         
-        
+        String connectorName = ServerStaticComponents.properties.getProperty("slipstream.connector.name");
         
         if(a.getType() == ResizingActionType.SCALE_OUT) {
         	ssService.addVM(deploymentId, a.getModuleName(),multiplicity);
@@ -102,11 +102,20 @@ public class ResizingActionResource {
             logger.info("Remove IPs: "+ips);
             for(String ip : ips){
     			logger.info("Executing script on "+ip);
-    			String scriptFile = ssService.writeToFile("sudo su -\n cat /tmp/script.sh\n"+a.getScript());
-    			String[] command = new String[] {"scp", "-o", "StrictHostKeyChecking=no", scriptFile, "ubuntu@"+ip+":/tmp/"}; 
-    			ssService.executeCommand(command);
-    			command = new String[] {"ssh", "-o", "StrictHostKeyChecking=no", "ubuntu@"+ip, "/bin/bash -s < /tmp/script.sh &> /tmp/resize_actions.log"};    			
-    			ssService.executeCommand(command);
+    			if(connectorName.contains("okeanos")){
+    				String scriptFile = ssService.writeToFile("cat /tmp/script.sh\n"+a.getScript());
+	    			String[] command = new String[] {"scp", "-o", "StrictHostKeyChecking=no", scriptFile, "root@"+ip+":/tmp/"}; 
+	    			ssService.executeCommand(command);
+	    			command = new String[] {"ssh", "-o", "StrictHostKeyChecking=no", "root@"+ip, "/bin/bash -s < /tmp/script.sh &> /tmp/resize_actions.log"};    			
+	    			ssService.executeCommand(command);
+    			}
+    			else{
+	    			String scriptFile = ssService.writeToFile("sudo su -\n cat /tmp/script.sh\n"+a.getScript());
+	    			String[] command = new String[] {"scp", "-o", "StrictHostKeyChecking=no", scriptFile, "ubuntu@"+ip+":/tmp/"}; 
+	    			ssService.executeCommand(command);
+	    			command = new String[] {"ssh", "-o", "StrictHostKeyChecking=no", "ubuntu@"+ip, "/bin/bash -s < /tmp/script.sh &> /tmp/resize_actions.log"};    			
+	    			ssService.executeCommand(command);
+    			}
             }
             ssService.removeVMswithIDs(deploymentId, ids, a.getModuleName());
         } else if(a.isExecutesScript()){
@@ -115,11 +124,20 @@ public class ResizingActionResource {
         		if(ip.getKey().contains(a.getModuleName())){
         			exec.addIP(ip.getValue());
         			logger.info("Executing script on "+ip.getValue());
-        			String scriptFile = ssService.writeToFile("sudo su -\ncat /tmp/script.sh\necho Executing > /tmp/"+uid+"_state\n"+a.getScript()+"\necho Ready > /tmp/"+uid+"_state\n");
-        			String[] command = new String[] {"scp", "-o", "StrictHostKeyChecking=no", scriptFile, "ubuntu@"+ip.getValue()+":/tmp/"}; 
-        			ssService.executeCommand(command);
-        			command = new String[] {"ssh", "-o", "StrictHostKeyChecking=no", "ubuntu@"+ip.getValue(), "/bin/bash -s < /tmp/script.sh &> /tmp/resize_actions.log &"};    			
-        			ssService.executeCommand(command);
+        			if(connectorName.contains("okeanos")){
+        				String scriptFile = ssService.writeToFile("cat /tmp/script.sh\necho Executing > /tmp/"+uid+"_state\n"+a.getScript()+"\necho Ready > /tmp/"+uid+"_state\n");
+	        			String[] command = new String[] {"scp", "-o", "StrictHostKeyChecking=no", scriptFile, "root@"+ip.getValue()+":/tmp/"}; 
+	        			ssService.executeCommand(command);
+	        			command = new String[] {"ssh", "-o", "StrictHostKeyChecking=no", "root@"+ip.getValue(), "/bin/bash -s < /tmp/script.sh &> /tmp/resize_actions.log &"};    			
+	        			ssService.executeCommand(command);
+        			}
+        			else{
+	        			String scriptFile = ssService.writeToFile("sudo su -\ncat /tmp/script.sh\necho Executing > /tmp/"+uid+"_state\n"+a.getScript()+"\necho Ready > /tmp/"+uid+"_state\n");
+	        			String[] command = new String[] {"scp", "-o", "StrictHostKeyChecking=no", scriptFile, "ubuntu@"+ip.getValue()+":/tmp/"}; 
+	        			ssService.executeCommand(command);
+	        			command = new String[] {"ssh", "-o", "StrictHostKeyChecking=no", "ubuntu@"+ip.getValue(), "/bin/bash -s < /tmp/script.sh &> /tmp/resize_actions.log &"};    			
+	        			ssService.executeCommand(command);
+        			}
         		}
         	}
         }
@@ -135,14 +153,23 @@ public class ResizingActionResource {
         if(a==null)
             return null;
         States currentStatus;
+        String connectorName = ServerStaticComponents.properties.getProperty("slipstream.connector.name");
         if(a.getResizingAction().getType()== ResizingActionType.GENERIC_ACTION || a.getResizingAction().getType()== ResizingActionType.BALANCE){
         	logger.info("Getting status for script action");
         	boolean ready = true;
         	for(String ip : a.getIPs()){
-        		String[] command = new String[] {"ssh", "-o", "StrictHostKeyChecking=no", "ubuntu@"+ip, "cat /tmp/"+a.getUniqueId()+"_state"};    			
-        		String out = ssService.executeCommand(command).get("output");
-        		if(!out.contains("Ready"))
-        			ready=false;
+    			if(connectorName.contains("okeanos")){
+    				String[] command = new String[] {"ssh", "-o", "StrictHostKeyChecking=no", "root@"+ip, "cat /tmp/"+a.getUniqueId()+"_state"};    			
+	        		String out = ssService.executeCommand(command).get("output");
+	        		if(!out.contains("Ready"))
+	        			ready=false;
+    			}
+    			else{
+	        		String[] command = new String[] {"ssh", "-o", "StrictHostKeyChecking=no", "ubuntu@"+ip, "cat /tmp/"+a.getUniqueId()+"_state"};    			
+	        		String out = ssService.executeCommand(command).get("output");
+	        		if(!out.contains("Ready"))
+	        			ready=false;
+    			}
         	}
         	if(ready)
         		currentStatus = States.Ready;
