@@ -44,11 +44,13 @@ configure_server(){
 }
 
 create_service(){
-	/bin/ln -sv $CELAR_ORCHESTRATOR_HOME/bin/celar-orchestrator /etc/init.d/
+	/bin/ln -sv $CELAR_ORCHESTRATOR_HOME/scripts/celar-orchestrator /etc/init.d/
+	/bin/chmod +x $CELAR_ORCHESTRATOR_HOME/scripts/celar-orchestrator
 }
 
 install_pip_dependencies() {
-	pip install slipstream-client
+	# this installs the SS client -- please use the pip repo when stable
+	pip install https://pypi.python.org/packages/source/s/slipstream-client/slipstream-client-2.3.6.tar.gz
 	pip install httplib2
 }
 
