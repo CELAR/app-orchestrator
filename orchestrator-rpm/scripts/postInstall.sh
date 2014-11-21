@@ -39,7 +39,10 @@ create_service(){
 }
 
 install_pip_dependencies() {
-pip install slipstream-client
+# install from specific directory -- FIXME: remove this when pip repo is stable again
+pip install https://pypi.python.org/packages/source/s/slipstream-client/slipstream-client-2.3.6.tar.gz
+#pip install slipstream-client
+
 pip install httplib2
 }
 
