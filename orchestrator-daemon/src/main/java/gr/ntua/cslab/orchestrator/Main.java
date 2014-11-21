@@ -418,9 +418,9 @@ public class Main {
         creatDirs();
         addShutdownHook();
         configureServer();
-        configureOrchestrator();
-
         ServerStaticComponents.server.start();
+        
+        configureOrchestrator();
         Logger.getLogger(Main.class.getName()).info("Server is started");
 
     }
