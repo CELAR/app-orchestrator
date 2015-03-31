@@ -13,4 +13,11 @@
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
+    <dependencies>
+      <dependency>
+        <groupId>com.sixsq.slipstream</groupId>
+        <artifactId>SlipStreamPersistence</artifactId>
+        <version>${slipstream.version}</version>
+      </dependency>
+    </dependencies>
 </project>
