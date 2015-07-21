@@ -19,6 +19,13 @@ package gr.ntua.cslab.orchestrator.beans;
  * Enum holding the resizing action types
  * @author Giannis Giannakopoulos
  */
-public enum ResizingActionType { 
-    SCALE_IN, SCALE_OUT, SCALE_UP, SCALE_DOWN, BALANCE, GENERIC_ACTION 
+public enum ResizingActionType {
+    SCALE_IN,       // remove nodes from cluster
+    SCALE_OUT,      // add nodes to cluster
+    SCALE_UP,       // increase number of cores/RAM
+    SCALE_DOWN,     // decrease cores/RAM 
+    ATTACH_DISK,    // create and attach disk
+    DETTACH_DISK,   // detach disk from VM
+    BALANCE,        // execut balance action
+    GENERIC_ACTION  // just run a script
 }
