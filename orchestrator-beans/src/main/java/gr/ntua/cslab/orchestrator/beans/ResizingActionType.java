@@ -26,6 +26,7 @@ public enum ResizingActionType {
     SCALE_DOWN,     // decrease cores/RAM 
     ATTACH_DISK,    // create and attach disk
     DETTACH_DISK,   // detach disk from VM
+    VM_RESIZE,   // detach disk from VM
     BALANCE,        // execut balance action
     GENERIC_ACTION  // just run a script
 }

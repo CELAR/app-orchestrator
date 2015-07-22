@@ -271,6 +271,15 @@ public class Main {
                             action.setExecutesScript(true);
                             action.setScript(a.getValue().toString());
                             action.setApplicablePatameters(params);
+                        } else if (name.contains("vmResize")) {
+                            logger.info("Action type: VM_RESIZE");
+                            List<String> params = new ArrayList<>();
+                            params.add("vm_id");
+                            params.add("flavor_id");
+                            action.setType(ResizingActionType.VM_RESIZE);
+                            action.setExecutesScript(true);
+                            action.setScript(a.getValue().toString());
+                            action.setApplicablePatameters(params);
                         } else {
                             logger.info("Action type: GENERIC_ACTION");
                             action.setType(ResizingActionType.GENERIC_ACTION);
