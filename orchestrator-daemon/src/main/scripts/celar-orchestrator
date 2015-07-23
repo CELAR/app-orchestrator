@@ -24,7 +24,7 @@ CLASSPATH=$CLASSPATH:$(echo $LIB_DIR/*.jar | tr ' ' ':')
 CLASSPATH=$CLASSPATH:$CELAR_ORCHESTRATOR_HOME/celar-orchestrator.jar
 
 
-SLIPSTREAM_CONTEXT=/tmp/slipstream.context
+SLIPSTREAM_CONTEXT="/opt/slipstream/client/bin/slipstream.context"
 
 
 configure_server(){

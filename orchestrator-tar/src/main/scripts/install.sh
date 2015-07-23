@@ -52,8 +52,8 @@ create_service(){
 
 install_pip_dependencies() {
 	# this installs the SS client -- please use the pip repo when stable
-	pip install https://pypi.python.org/packages/source/s/slipstream-client/slipstream-client-2.3.6.tar.gz
-	pip install httplib2
+	#pip install https://pypi.python.org/packages/source/s/slipstream-client/slipstream-client-2.3.6.tar.gz
+	pip install slipstream-client httplib2
 }
 
 install_service
