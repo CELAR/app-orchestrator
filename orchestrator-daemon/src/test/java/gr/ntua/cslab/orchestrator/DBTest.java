@@ -49,9 +49,7 @@ public class DBTest {
         loadProperties();
         initSSClient();
         
-        // Celar-DB host has the same value as celar.server.host
-        ServerStaticComponents.properties.setProperty("postgresql.host", "localhost");
-        
+        //open db connection
         openConnection(ServerStaticComponents.properties);
         
         User user = new User("takis", "dummy_cred");
@@ -64,7 +62,7 @@ public class DBTest {
         
         DeploymentState depState = new DeploymentState(test, deploymentId);
         
-//        store(depState); //this will fail with 
+        store(depState); //this will fail with 
                             //Key (deployment_id)=(e7054d0e-cfc0-4372-b9d6-076f56f62501) is not present in table "deployment
     }
     
