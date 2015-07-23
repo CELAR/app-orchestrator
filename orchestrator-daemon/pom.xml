@@ -142,6 +142,11 @@
             <artifactId>celar-beans</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>celar-db</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>eu.celar.decision-making</groupId>
             <artifactId>rSYBL-client</artifactId>
