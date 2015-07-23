@@ -2,7 +2,7 @@
 
 CELAR_HOME=/opt/celar
 CELAR_ORCHESTRATOR_HOME=$CELAR_HOME/celar-orchestrator
-
+UPDATE_SCRIPT="update-orchestrator"
 
 RANDOM_PASSWORD=$(/bin/cat /dev/urandom | tr -dc 0-9a-zA-Z | head -c 16)
 KEYSTORE_PATH=$CELAR_ORCHESTRATOR_HOME/keystore.jks
@@ -15,6 +15,8 @@ SLIPSTREAM_CONTEXT=/tmp/slipstream.context
 install_service(){
 	mkdir $CELAR_ORCHESTRATOR_HOME
 	mv celar-orchestrator $CELAR_HOME
+	mv $UPDATE_SCRIPT /usr/local/bin/
+
 }
 
 create_keystore(){
@@ -44,7 +46,7 @@ configure_server(){
 }
 
 create_service(){
-	/bin/ln -sv $CELAR_ORCHESTRATOR_HOME/scripts/celar-orchestrator /etc/init.d/
+	/bin/ln -svf $CELAR_ORCHESTRATOR_HOME/scripts/celar-orchestrator /etc/init.d/
 	/bin/chmod +x $CELAR_ORCHESTRATOR_HOME/scripts/celar-orchestrator
 }
 
