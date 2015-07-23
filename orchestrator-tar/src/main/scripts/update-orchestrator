@@ -1,14 +1,14 @@
 #!/bin/bash
 
 # Script used to manually update orchestrator by downloading the latest tar from the Nexus server
+NEXUS_REPOSITORY="http://snf-175960.vm.okeanos.grnet.gr/nexus/content/repositories/snapshots/gr/ntua/cslab/orchestrator-tar/0.1-SNAPSHOT/"
 
 
-
-LATEST_TAR=$(curl --silent  http://snf-175960.vm.okeanos.grnet.gr/nexus/content/repositories/snapshots/gr/ntua/cslab/orchestrator-tar/0.1-SNAPSHOT/ | grep 'tar.gz\"' | tail -n 1 | cut -d '"'  -f2)
+LATEST_TAR=$(curl --silent  $NEXUS_REPOSITORY | grep 'tar.gz\"' | tail -n 1 | cut -d '"'  -f2)
 BASENAME=$(echo $LATEST_TAR | cut -d '/' -f13)
 EXTRACTED_DIR="orchestrator-tar-0.1-SNAPSHOT/"
 ORCHESTRATOR_INSTALLATION_PATH="/opt/celar/celar-orchestrator"
-TEMPORARY_CONF="/tmp/conf_old"
+TEMPORARY_CONF="/tmp/conf-backup-$(date "+%s")"
 
 
 # keep backup of old conf dir
@@ -28,6 +28,7 @@ cd -;
 
 
 # move old conf to newly deployed orch
-mv $TEMPORARY_CONF/* $ORCHESTRATOR_INSTALLATION_PATH/conf -vf
+mv $TEMPORARY_CONF/* $ORCHESTRATOR_INSTALLATION_PATH/conf/ -vf
+rm $TEMPORARY_CONF
 
 exit 0
