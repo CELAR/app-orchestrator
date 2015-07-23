@@ -6,7 +6,7 @@ KEYSTORE_PATH=$CELAR_ORCHESTRATOR_HOME/keystore.jks
 CONF_FILE=$CELAR_ORCHESTRATOR_HOME/conf/orchestrator.properties
 
 
-SLIPSTREAM_CONTEXT=/tmp/slipstream.context
+SLIPSTREAM_CONTEXT="/opt/slipstream/client/bin/slipstream.context"
 
 create_keystore(){
 /usr/bin/keytool -genkey \

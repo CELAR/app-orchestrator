@@ -24,7 +24,7 @@ CLASSPATH=$CLASSPATH:$(echo $LIB_DIR/*.jar | tr ' ' ':')
 CLASSPATH=$CLASSPATH:$CELAR_ORCHESTRATOR_HOME/celar-orchestrator.jar
 
 
-SLIPSTREAM_CONTEXT=/tmp/slipstream.context
+SLIPSTREAM_CONTEXT="/opt/slipstream/client/bin/slipstream.context"
 
 
 configure_server(){
@@ -38,6 +38,7 @@ SS_USERNAME=$(grep username $SLIPSTREAM_CONTEXT  |  tr '/' '\t' | awk '{print $3
 /bin/sed -i "s/.*slipstream.username.*/slipstream.username = $SS_USERNAME/g" $CONF_FILE
 /bin/sed -i "s/.*slipstream.server.host.*/slipstream.server.host = $SS_SERVER_IP/g" $CONF_FILE
 /bin/sed -i "s/.*celar.server.host.*/celar.server.host = $SS_SERVER_IP/" $CONF_FILE
+/bin/sed -i "s/.*postgresql.host.*/postgresql.host = $SS_SERVER_IP/" $CONF_FILE
 }
 
 

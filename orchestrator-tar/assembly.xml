@@ -8,6 +8,7 @@
 			<directory>src/main/scripts</directory>
 			<includes>
 				<include>install.sh</include>
+				<include>update-orchestrator</include>
 			</includes>
 			<outputDirectory>/</outputDirectory>
 		</fileSet>	  

@@ -2,12 +2,12 @@
 
 CELAR_HOME=/opt/celar
 CELAR_ORCHESTRATOR_HOME=$CELAR_HOME/celar-orchestrator
-
+UPDATE_SCRIPT="update-orchestrator"
 
 RANDOM_PASSWORD=$(/bin/cat /dev/urandom | tr -dc 0-9a-zA-Z | head -c 16)
 KEYSTORE_PATH=$CELAR_ORCHESTRATOR_HOME/keystore.jks
 CONF_FILE=$CELAR_ORCHESTRATOR_HOME/conf/orchestrator.properties
-SLIPSTREAM_CONTEXT=/tmp/slipstream.context
+SLIPSTREAM_CONTEXT="/opt/slipstream/client/bin/slipstream.context"
 
 
 
@@ -15,6 +15,8 @@ SLIPSTREAM_CONTEXT=/tmp/slipstream.context
 install_service(){
 	mkdir $CELAR_ORCHESTRATOR_HOME
 	mv celar-orchestrator $CELAR_HOME
+	mv $UPDATE_SCRIPT /usr/local/bin/
+
 }
 
 create_keystore(){
@@ -44,14 +46,14 @@ configure_server(){
 }
 
 create_service(){
-	/bin/ln -sv $CELAR_ORCHESTRATOR_HOME/scripts/celar-orchestrator /etc/init.d/
+	/bin/ln -svf $CELAR_ORCHESTRATOR_HOME/scripts/celar-orchestrator /etc/init.d/
 	/bin/chmod +x $CELAR_ORCHESTRATOR_HOME/scripts/celar-orchestrator
 }
 
 install_pip_dependencies() {
 	# this installs the SS client -- please use the pip repo when stable
-	pip install https://pypi.python.org/packages/source/s/slipstream-client/slipstream-client-2.3.6.tar.gz
-	pip install httplib2
+	#pip install https://pypi.python.org/packages/source/s/slipstream-client/slipstream-client-2.3.6.tar.gz
+	pip install slipstream-client httplib2
 }
 
 install_service
