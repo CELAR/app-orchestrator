@@ -49,17 +49,17 @@ public class DeploymentStateResource {
 //    }
     
     @GET
-    public void writeDeploymentState() {
+    public DeploymentState writeDeploymentState() {
         HashMap<String,String> ipAddresses = null;
         try {
 //            openConnection(ServerStaticComponents.properties);
             Map<String,String> test  = ServerStaticComponents.service.getAllRuntimeParams(deploymentId);        
             DeploymentState depState = new DeploymentState(test, deploymentId);
             store(depState);
-//            closeConnection();
+            return depState;
         } catch (Exception ex) {
             Logger.getLogger(DeploymentStateResource.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+           return null;
     }
 }
