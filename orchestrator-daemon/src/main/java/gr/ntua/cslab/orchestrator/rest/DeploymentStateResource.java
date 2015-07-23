@@ -52,11 +52,11 @@ public class DeploymentStateResource {
     public void writeDeploymentState() {
         HashMap<String,String> ipAddresses = null;
         try {
-            openConnection(ServerStaticComponents.properties);
+//            openConnection(ServerStaticComponents.properties);
             Map<String,String> test  = ServerStaticComponents.service.getAllRuntimeParams(deploymentId);        
             DeploymentState depState = new DeploymentState(test, deploymentId);
             store(depState);
-            closeConnection();
+//            closeConnection();
         } catch (Exception ex) {
             Logger.getLogger(DeploymentStateResource.class.getName()).log(Level.SEVERE, null, ex);
         }

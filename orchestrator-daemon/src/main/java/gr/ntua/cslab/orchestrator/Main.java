@@ -26,6 +26,7 @@ import com.sun.jersey.spi.container.servlet.ServletContainer;
 
 import gr.ntua.cslab.celar.server.beans.SlipStreamCredentials;
 import gr.ntua.cslab.celar.slipstreamClient.SlipStreamSSService;
+import static gr.ntua.cslab.database.DBConnectable.openConnection;
 import gr.ntua.cslab.orchestrator.beans.ResizingAction;
 import gr.ntua.cslab.orchestrator.beans.ResizingActionType;
 import gr.ntua.cslab.orchestrator.cache.ResizingActionsCache;
@@ -454,6 +455,7 @@ public class Main {
         creatDirs();
         addShutdownHook();
         configureServer();
+        openConnection(ServerStaticComponents.properties);
         ServerStaticComponents.server.start();
 
         configureOrchestrator();
