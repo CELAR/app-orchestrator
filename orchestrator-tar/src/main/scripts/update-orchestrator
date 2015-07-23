@@ -29,6 +29,6 @@ cd -;
 
 # move old conf to newly deployed orch
 mv $TEMPORARY_CONF/* $ORCHESTRATOR_INSTALLATION_PATH/conf/ -vf
-rm $TEMPORARY_CONF
+rm -rf $TEMPORARY_CONF
 
 exit 0

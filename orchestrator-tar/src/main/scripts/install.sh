@@ -7,7 +7,7 @@ UPDATE_SCRIPT="update-orchestrator"
 RANDOM_PASSWORD=$(/bin/cat /dev/urandom | tr -dc 0-9a-zA-Z | head -c 16)
 KEYSTORE_PATH=$CELAR_ORCHESTRATOR_HOME/keystore.jks
 CONF_FILE=$CELAR_ORCHESTRATOR_HOME/conf/orchestrator.properties
-SLIPSTREAM_CONTEXT=/tmp/slipstream.context
+SLIPSTREAM_CONTEXT="/opt/slipstream/client/bin/slipstream.context"
 
 
 
