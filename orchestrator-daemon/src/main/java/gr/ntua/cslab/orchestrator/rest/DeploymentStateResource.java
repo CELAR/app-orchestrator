@@ -27,6 +27,7 @@ import javax.ws.rs.Path;
 import gr.ntua.cslab.celar.server.beans.DeploymentState;
 import static gr.ntua.cslab.database.DBConnectable.closeConnection;
 import static gr.ntua.cslab.database.DBConnectable.openConnection;
+import static java.util.logging.Level.*;
 
 /**
  * Service used to return the IP addresses of the VMs for the deployment.
@@ -35,7 +36,8 @@ import static gr.ntua.cslab.database.DBConnectable.openConnection;
  */
 @Path("state/")
 public class DeploymentStateResource {
-
+    static Logger logger = Logger.getLogger(DeploymentStateResource.class.getName());
+    
     private final static String deploymentId = ServerStaticComponents.properties.getProperty("slipstream.deployment.id");
 //    @GET
 //    public DeploymentState getDeploymentState() {
@@ -50,12 +52,13 @@ public class DeploymentStateResource {
     
     @GET
     public DeploymentState writeDeploymentState() {
-        HashMap<String,String> ipAddresses = null;
         try {
 //            openConnection(ServerStaticComponents.properties);
-            Map<String,String> test  = ServerStaticComponents.service.getAllRuntimeParams(deploymentId);        
+            Map<String,String> test  = ServerStaticComponents.service.getAllRuntimeParams(deploymentId);
+            logger.log(INFO, "Got state map ({0} entries)", test.size());
             DeploymentState depState = new DeploymentState(test, deploymentId);
             store(depState);
+            logger.log(INFO, "stored Deployment State");
             return depState;
         } catch (Exception ex) {
             Logger.getLogger(DeploymentStateResource.class.getName()).log(Level.SEVERE, null, ex);
