@@ -27,6 +27,7 @@ import javax.ws.rs.Path;
 import gr.ntua.cslab.celar.server.beans.DeploymentState;
 import static gr.ntua.cslab.database.DBConnectable.closeConnection;
 import static gr.ntua.cslab.database.DBConnectable.openConnection;
+import java.io.ByteArrayOutputStream;
 import static java.util.logging.Level.*;
 
 /**
@@ -81,10 +82,15 @@ public class DeploymentStateResource {
             DeploymentState depState = new DeploymentState(test, deploymentId);
             store(depState);
             logger.log(INFO, "stored Deployment State");
-            String rv = "Got deployment state and updated CelarDB\n";
-            rv += "State: " + test.get("state") + "\n";
-            rv += test;
-            return rv;
+//            String rv = "Got deployment state and updated CelarDB\n";
+//            rv += "State: " + test.get("state") + "\n";
+//            rv += test;
+//            return rv;
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            depState.marshal(baos);
+            String s  = new String( baos.toByteArray(), java.nio.charset.StandardCharsets.UTF_8 );
+            return s;
+
         } catch (Exception ex) {
             Logger.getLogger(DeploymentStateResource.class.getName()).log(Level.SEVERE, null, ex);
         }
