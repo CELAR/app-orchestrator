@@ -27,6 +27,8 @@ import javax.ws.rs.Path;
 import gr.ntua.cslab.celar.server.beans.DeploymentState;
 import static gr.ntua.cslab.database.DBConnectable.closeConnection;
 import static gr.ntua.cslab.database.DBConnectable.openConnection;
+import java.io.ByteArrayOutputStream;
+import static java.util.logging.Level.*;
 
 /**
  * Service used to return the IP addresses of the VMs for the deployment.
@@ -35,7 +37,8 @@ import static gr.ntua.cslab.database.DBConnectable.openConnection;
  */
 @Path("state/")
 public class DeploymentStateResource {
-
+    static Logger logger = Logger.getLogger(DeploymentStateResource.class.getName());
+    
     private final static String deploymentId = ServerStaticComponents.properties.getProperty("slipstream.deployment.id");
 //    @GET
 //    public DeploymentState getDeploymentState() {
@@ -49,17 +52,50 @@ public class DeploymentStateResource {
 //    }
     
     @GET
-    public void writeDeploymentState() {
-        HashMap<String,String> ipAddresses = null;
+    public static DeploymentState writeDeploymentState() {
         try {
-            openConnection(ServerStaticComponents.properties);
-            Map<String,String> test  = ServerStaticComponents.service.getAllRuntimeParams(deploymentId);        
+//            openConnection(ServerStaticComponents.properties);
+            Map<String,String> test  = ServerStaticComponents.service.getAllRuntimeParams(deploymentId);
+            logger.log(INFO, "Got state map ({0} entries)", test.size());
             DeploymentState depState = new DeploymentState(test, deploymentId);
             store(depState);
-            closeConnection();
+            logger.log(INFO, "stored Deployment State");
+            
+            //dirty hack
+            depState.deployment_state.put("timestamp", depState.timestamp);
+            depState.timestamp=null;
+            
+            return depState;
         } catch (Exception ex) {
             Logger.getLogger(DeploymentStateResource.class.getName()).log(Level.SEVERE, null, ex);
         }
+           return null;
+    }
+    
+    @Path("string/")
+    @GET
+    public static Map<String, String> writeDeploymentState2() {
+        try {
+//            openConnection(ServerStaticComponents.properties);
+            Map<String, String> test = ServerStaticComponents.service.getAllRuntimeParams(deploymentId);
+            logger.log(INFO, "Got state map ({0} entries)", test.size());
+            DeploymentState depState = new DeploymentState(test, deploymentId);
+            store(depState);
+            logger.log(INFO, "stored Deployment State");
+//            String rv = "Got deployment state and updated CelarDB\n";
+//            rv += "State: " + test.get("state") + "\n";
+//            rv += test;
+//            return rv;
+//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//            depState.marshal(baos);
+//            String s  = new String( baos.toByteArray(), java.nio.charset.StandardCharsets.UTF_8 );
+//            return s;
+            depState.deployment_state.put("timestamp", depState.timestamp);
+            return depState.deployment_state;
 
+        } catch (Exception ex) {
+            Logger.getLogger(DeploymentStateResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 }

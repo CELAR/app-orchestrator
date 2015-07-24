@@ -26,6 +26,7 @@ import com.sun.jersey.spi.container.servlet.ServletContainer;
 
 import gr.ntua.cslab.celar.server.beans.SlipStreamCredentials;
 import gr.ntua.cslab.celar.slipstreamClient.SlipStreamSSService;
+import static gr.ntua.cslab.database.DBConnectable.openConnection;
 import gr.ntua.cslab.orchestrator.beans.ResizingAction;
 import gr.ntua.cslab.orchestrator.beans.ResizingActionType;
 import gr.ntua.cslab.orchestrator.cache.ResizingActionsCache;
@@ -259,7 +260,7 @@ public class Main {
                             params.add("vm_id");
                             params.add("disk_size");
                             action.setType(ResizingActionType.ATTACH_DISK);
-                            action.setExecutesScript(true);
+                            action.setExecutesScript(false);
                             action.setScript(a.getValue().toString());
                             action.setApplicablePatameters(params);
                         } else if (name.contains("detachDisk")) {
@@ -268,7 +269,7 @@ public class Main {
                             params.add("vm_id");
                             params.add("disk_id");
                             action.setType(ResizingActionType.DETTACH_DISK);
-                            action.setExecutesScript(true);
+                            action.setExecutesScript(false);
                             action.setScript(a.getValue().toString());
                             action.setApplicablePatameters(params);
                         } else if (name.contains("vmResize")) {
@@ -277,7 +278,7 @@ public class Main {
                             params.add("vm_id");
                             params.add("flavor_id");
                             action.setType(ResizingActionType.VM_RESIZE);
-                            action.setExecutesScript(true);
+                            action.setExecutesScript(false);
                             action.setScript(a.getValue().toString());
                             action.setApplicablePatameters(params);
                         } else {
@@ -454,6 +455,7 @@ public class Main {
         creatDirs();
         addShutdownHook();
         configureServer();
+        openConnection(ServerStaticComponents.properties);
         ServerStaticComponents.server.start();
 
         configureOrchestrator();

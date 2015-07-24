@@ -140,6 +140,47 @@ public class ResizingActionResource {
         			}
         		}
         	}
+        } 
+        else if (a.getType() ==  ResizingActionType.ATTACH_DISK) {
+        	int diskSize=0;
+        	String vmId="1";
+        	for(Parameter  p : params.getParameters()) {
+                if(p.getKey().equals("disk_size")) 
+                	diskSize = new Integer(p.getValue());
+                if(p.getKey().equals("vm_id")) 
+                	vmId = p.getValue();
+            }
+        	ssService.attachDisk(deploymentId, a.getModuleName(), vmId+"", diskSize);
+        } 
+        else if (a.getType() ==  ResizingActionType.DETTACH_DISK) {
+        	String vmId="", diskID="";
+        	for(Parameter  p : params.getParameters()) {
+                if(p.getKey().equals("vm_id")) 
+                	vmId = p.getValue();
+                if(p.getKey().equals("disk_id")) 
+                	diskID = p.getValue();
+            }
+        	ssService.detachDisk(deploymentId, a.getModuleName(), vmId, diskID);
+        }
+        else if (a.getType() ==  ResizingActionType.VM_RESIZE) {
+        	String vmId="", flavor="", cpu="", ram ="";
+        	for(Parameter  p : params.getParameters()) {
+                if(p.getKey().equals("vm_id")) 
+                	vmId = p.getValue();
+                if(p.getKey().equals("flavor_id")) 
+                	flavor = p.getValue();
+                if(p.getKey().equals("CPU")) 
+                	cpu = p.getValue();
+                if(p.getKey().equals("RAM")) 
+                	ram = p.getValue();
+            }
+//        	if(ssService.getConnectorName().equals("okeanos")){
+        		ssService.scaleVM(deploymentId, a.getModuleName(), vmId, flavor);
+//        	}
+//        	else{
+//
+//        		ssService.scaleVM(deploymentId, a.getModuleName(), vmId, Integer.parseInt(cpu), Integer.parseInt(ram));
+//        	}
         }
         
 		ResizingActionsCache.addExecutedResizingAction(exec); 
