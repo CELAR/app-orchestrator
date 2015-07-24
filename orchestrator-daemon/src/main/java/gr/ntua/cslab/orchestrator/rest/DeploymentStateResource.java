@@ -74,7 +74,7 @@ public class DeploymentStateResource {
     
     @Path("string/")
     @GET
-    public static String writeDeploymentState2() {
+    public static Map<String, String> writeDeploymentState2() {
         try {
 //            openConnection(ServerStaticComponents.properties);
             Map<String, String> test = ServerStaticComponents.service.getAllRuntimeParams(deploymentId);
@@ -86,10 +86,12 @@ public class DeploymentStateResource {
 //            rv += "State: " + test.get("state") + "\n";
 //            rv += test;
 //            return rv;
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            depState.marshal(baos);
-            String s  = new String( baos.toByteArray(), java.nio.charset.StandardCharsets.UTF_8 );
-            return s;
+//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//            depState.marshal(baos);
+//            String s  = new String( baos.toByteArray(), java.nio.charset.StandardCharsets.UTF_8 );
+//            return s;
+            depState.deployment_state.put("timestamp", depState.timestamp);
+            return depState.deployment_state;
 
         } catch (Exception ex) {
             Logger.getLogger(DeploymentStateResource.class.getName()).log(Level.SEVERE, null, ex);
