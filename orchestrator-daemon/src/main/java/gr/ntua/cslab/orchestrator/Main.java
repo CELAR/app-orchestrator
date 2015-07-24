@@ -260,7 +260,7 @@ public class Main {
                             params.add("vm_id");
                             params.add("disk_size");
                             action.setType(ResizingActionType.ATTACH_DISK);
-                            action.setExecutesScript(true);
+                            action.setExecutesScript(false);
                             action.setScript(a.getValue().toString());
                             action.setApplicablePatameters(params);
                         } else if (name.contains("detachDisk")) {
@@ -269,7 +269,7 @@ public class Main {
                             params.add("vm_id");
                             params.add("disk_id");
                             action.setType(ResizingActionType.DETTACH_DISK);
-                            action.setExecutesScript(true);
+                            action.setExecutesScript(false);
                             action.setScript(a.getValue().toString());
                             action.setApplicablePatameters(params);
                         } else if (name.contains("vmResize")) {
@@ -278,7 +278,7 @@ public class Main {
                             params.add("vm_id");
                             params.add("flavor_id");
                             action.setType(ResizingActionType.VM_RESIZE);
-                            action.setExecutesScript(true);
+                            action.setExecutesScript(false);
                             action.setScript(a.getValue().toString());
                             action.setApplicablePatameters(params);
                         } else {
