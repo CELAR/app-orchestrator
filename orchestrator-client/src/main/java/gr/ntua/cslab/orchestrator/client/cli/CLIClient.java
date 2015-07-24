@@ -17,6 +17,8 @@ package gr.ntua.cslab.orchestrator.client.cli;
 
 import gr.ntua.cslab.orchestrator.beans.ExecutedResizingAction;
 import gr.ntua.cslab.orchestrator.beans.ExecutedResizingActionList;
+import gr.ntua.cslab.orchestrator.beans.Parameter;
+import gr.ntua.cslab.orchestrator.beans.Parameters;
 import gr.ntua.cslab.orchestrator.client.DeploymentStateClient;
 import gr.ntua.cslab.orchestrator.client.HistoryClient;
 import gr.ntua.cslab.orchestrator.client.ResizingActionsClient;
@@ -48,12 +50,13 @@ public class CLIClient {
         Option version = new Option("v", "version", false, "Version of the specified client");
         Option host = new Option("H", "host", true, "The host where CELAR Orchestrator runs");
         Option port = new Option("P", "port", true, "Port where the CELAR Orchestrator listens to");        
-        
+        Option parameters = new Option("p", "parameters", true, "Comma separated key:value of parameters for the resizing action");
         
         options.addOption(help);
         options.addOption(version);
         options.addOption(host);
         options.addOption(port);
+        options.addOption(parameters);
         
         
         OptionGroup availableActions = new OptionGroup();
@@ -109,9 +112,17 @@ public class CLIClient {
             }
             
         } else if(cmd.hasOption("execute")) {
+            Parameters params = new Parameters();
+            if(cmd.hasOption("p")) {
+                String parametersString  =cmd.getOptionValue("p");
+                for(String kvs:parametersString.split(",")) {
+                    String[] kv = kvs.split(":");
+                    params.addParameter(new Parameter(kv[0], kv[1]));
+                }
+            }
             ResizingActionsClient client  = new ResizingActionsClient();
             client.setConfiguration(config);
-            client.executeResizingAction(new Integer(cmd.getOptionValue("e")), null);
+            client.executeResizingAction(new Integer(cmd.getOptionValue("e")), params);
             
         } else if(cmd.hasOption("get-status")) {
             ResizingActionsClient client = new ResizingActionsClient();
