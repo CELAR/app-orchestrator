@@ -51,7 +51,7 @@ public class DeploymentStateResource {
 //    }
     
     @GET
-    public DeploymentState writeDeploymentState() {
+    public static DeploymentState writeDeploymentState() {
         try {
 //            openConnection(ServerStaticComponents.properties);
             Map<String,String> test  = ServerStaticComponents.service.getAllRuntimeParams(deploymentId);
@@ -59,6 +59,11 @@ public class DeploymentStateResource {
             DeploymentState depState = new DeploymentState(test, deploymentId);
             store(depState);
             logger.log(INFO, "stored Deployment State");
+            
+            //dirty hack
+            depState.deployment_state.put("timestamp", depState.timestamp);
+            depState.timestamp=null;
+            
             return depState;
         } catch (Exception ex) {
             Logger.getLogger(DeploymentStateResource.class.getName()).log(Level.SEVERE, null, ex);
@@ -68,7 +73,7 @@ public class DeploymentStateResource {
     
     @Path("string/")
     @GET
-    public String writeDeploymentState2() {
+    public static String writeDeploymentState2() {
         try {
 //            openConnection(ServerStaticComponents.properties);
             Map<String, String> test = ServerStaticComponents.service.getAllRuntimeParams(deploymentId);
