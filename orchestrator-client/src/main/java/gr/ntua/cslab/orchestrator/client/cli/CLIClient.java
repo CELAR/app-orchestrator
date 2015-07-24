@@ -17,13 +17,17 @@ package gr.ntua.cslab.orchestrator.client.cli;
 
 import gr.ntua.cslab.orchestrator.beans.ExecutedResizingAction;
 import gr.ntua.cslab.orchestrator.beans.ExecutedResizingActionList;
+import gr.ntua.cslab.orchestrator.beans.Parameter;
+import gr.ntua.cslab.orchestrator.beans.Parameters;
 import gr.ntua.cslab.orchestrator.client.DeploymentStateClient;
 import gr.ntua.cslab.orchestrator.client.HistoryClient;
 import gr.ntua.cslab.orchestrator.client.ResizingActionsClient;
 import gr.ntua.cslab.orchestrator.client.cli.formatter.CLIPrettyFormatter;
 import gr.ntua.cslab.orchestrator.client.conf.ClientConfiguration;
+
 import java.io.IOException;
 import java.util.LinkedList;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
@@ -42,6 +46,17 @@ import org.apache.commons.cli.ParseException;
 public class CLIClient {
     
     public static void main(String[] args) throws ParseException, IOException {
+    	
+    	ClientConfiguration config1 = new ClientConfiguration("83.212.118.42", 80);
+
+        ResizingActionsClient client1  = new ResizingActionsClient();
+        client1.setConfiguration(config1);
+        Parameters params1 = new Parameters();
+        params1.addParameter(new Parameter("vm_id", "1"));
+        params1.addParameter(new Parameter("disk_size", "30"));
+		client1.executeResizingAction(2, params1 );
+    	
+		System.exit(0);
         Options options = new Options();
         
         Option help = new Option("h", "help", false, "Help message");

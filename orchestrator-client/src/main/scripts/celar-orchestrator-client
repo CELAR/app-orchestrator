@@ -1,6 +1,6 @@
 #!/bin/bash
 
-[ "$CLIENT_HOME" == "" ] && CLIENT_HOME="/Users/nikospapailiou/Documents/workspace/app-orchestrator/orchestrator-client/"
+[ "$CLIENT_HOME" == "" ] && CLIENT_HOME="/Users/npapa/Documents/workspaceCELAR/app-orchestrator/orchestrator-client/target/"
 
 LIB_DIR=$CLIENT_HOME/lib
 CONF_DIR=$CLIENT_HOME/conf
