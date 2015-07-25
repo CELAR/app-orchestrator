@@ -27,6 +27,7 @@ import javax.ws.rs.Path;
 import gr.ntua.cslab.celar.server.beans.DeploymentState;
 import static gr.ntua.cslab.database.DBConnectable.closeConnection;
 import static gr.ntua.cslab.database.DBConnectable.openConnection;
+import gr.ntua.cslab.orchestrator.beans.DeploymentState2;
 import java.io.ByteArrayOutputStream;
 import static java.util.logging.Level.*;
 
@@ -52,16 +53,17 @@ public class DeploymentStateResource {
 //    }
     
     @GET
-    public static DeploymentState writeDeploymentState() {
+    public static DeploymentState2 writeDeploymentState() {
         try {
 //            openConnection(ServerStaticComponents.properties);
-            Map<String,String> test  = ServerStaticComponents.service.getAllRuntimeParams(deploymentId);
-            logger.log(INFO, "Got state map ({0} entries)", test.size());
-            DeploymentState depState = new DeploymentState(test, deploymentId);
+            Map<String,String> propsMap  = ServerStaticComponents.service.getAllRuntimeParams(deploymentId);
+            logger.log(INFO, "Got state map ({0} entries)", propsMap.size());
+            DeploymentState depState = new DeploymentState(propsMap, deploymentId);
             store(depState);
             logger.log(INFO, "stored Deployment State");
+            propsMap.put("timestamp", ""+depState.timestamp);
             
-            return depState;
+            return new DeploymentState2(depState.deployment_id, propsMap);
         } catch (Exception ex) {
             Logger.getLogger(DeploymentStateResource.class.getName()).log(Level.SEVERE, null, ex);
         }
