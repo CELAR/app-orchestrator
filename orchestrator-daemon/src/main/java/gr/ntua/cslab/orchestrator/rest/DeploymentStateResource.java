@@ -61,10 +61,6 @@ public class DeploymentStateResource {
             store(depState);
             logger.log(INFO, "stored Deployment State");
             
-            //dirty hack
-            depState.deployment_state.put("timestamp", depState.timestamp);
-            depState.timestamp=null;
-            
             return depState;
         } catch (Exception ex) {
             Logger.getLogger(DeploymentStateResource.class.getName()).log(Level.SEVERE, null, ex);
