@@ -19,13 +19,7 @@ import com.sixsq.slipstream.exceptions.ValidationException;
 import com.sixsq.slipstream.statemachine.States;
 
 import gr.ntua.cslab.celar.slipstreamClient.SlipStreamSSService;
-import gr.ntua.cslab.orchestrator.beans.DeploymentState;
-import gr.ntua.cslab.orchestrator.beans.ExecutedResizingAction;
-import gr.ntua.cslab.orchestrator.beans.Parameter;
-import gr.ntua.cslab.orchestrator.beans.Parameters;
-import gr.ntua.cslab.orchestrator.beans.ResizingAction;
-import gr.ntua.cslab.orchestrator.beans.ResizingActionList;
-import gr.ntua.cslab.orchestrator.beans.ResizingActionType;
+import gr.ntua.cslab.orchestrator.beans.*;
 import gr.ntua.cslab.orchestrator.cache.ResizingActionsCache;
 import gr.ntua.cslab.orchestrator.shared.ServerStaticComponents;
 
@@ -88,7 +82,7 @@ public class ResizingActionResource {
         exec.setUniqueId(uid);
         exec.setParameters(params);
         exec.setTimestamp(System.currentTimeMillis());
-        exec.setBeforeState(new DeploymentState(ServerStaticComponents.service.getDeploymentIPs(deploymentId)));
+        exec.setBeforeState(new DeploymentStateOrch(deploymentId, ServerStaticComponents.service.getAllRuntimeParams(deploymentId)));
         
         String connectorName = ServerStaticComponents.properties.getProperty("slipstream.connector.name");
         
@@ -221,7 +215,7 @@ public class ResizingActionResource {
         	currentStatus = ServerStaticComponents.service.getDeploymentState(deploymentId);
         }
         if( a.getAfterState() == null && currentStatus==States.Ready ) {
-            a.setAfterState(new DeploymentState(ServerStaticComponents.service.getDeploymentIPs(deploymentId)));
+            a.setAfterState(new DeploymentStateOrch(deploymentId, ServerStaticComponents.service.getAllRuntimeParams(deploymentId)));
             if(statesIdentical(a.getBeforeState(), a.getAfterState())) {
                 a.setAfterState(null);
             }
@@ -236,13 +230,13 @@ public class ResizingActionResource {
     
     
         
-    public static boolean statesIdentical(DeploymentState before, DeploymentState after) {
-        if(before.getIpAddress().size()!= before.getIpAddress().size())
+    public static boolean statesIdentical(DeploymentStateOrch before, DeploymentStateOrch after) {
+        if(before.getIPs().size()!= before.getIPs().size())
             return false;
-        for(Map.Entry<String, String> befEntry : before.getIpAddress().entrySet()) {
-            if(!after.getIpAddress().containsKey(befEntry.getKey()))
+        for(Map.Entry<String, String> befEntry : before.getIPs().entrySet()) {
+            if(!after.getIPs().containsKey(befEntry.getKey()))
                 return false;
-            if(!befEntry.getValue().equals(after.getIpAddress().get(befEntry.getKey())))
+            if(!befEntry.getValue().equals(after.getIPs().get(befEntry.getKey())))
                 return false;
         }
         return false;

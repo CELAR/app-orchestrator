@@ -15,11 +15,10 @@
  */
 package gr.ntua.cslab.orchestrator.client;
 
-import gr.ntua.cslab.orchestrator.beans.DeploymentState;
+import gr.ntua.cslab.orchestrator.beans.DeploymentStateOrch;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashMap;
-import java.util.Map;
 import javax.xml.bind.JAXB;
 
 /**
@@ -38,25 +37,25 @@ public class DeploymentStateClient extends AbstractClient {
      * @return
      * @throws IOException
      */
-    public DeploymentState getDeploymentState() throws IOException {
+    public DeploymentStateOrch getDeploymentState() throws IOException {
         String outcome = this.issueRequest("GET", "state/", null);
-        DeploymentState state = JAXB.unmarshal(new StringReader(outcome), DeploymentState.class);
+        DeploymentStateOrch state = JAXB.unmarshal(new StringReader(outcome), DeploymentStateOrch.class);
         return state;
     }
 
-    public static HashMap<String, String> getDiff(DeploymentState before, DeploymentState after) {
+    public static HashMap<String, String> getDiff(DeploymentStateOrch before, DeploymentStateOrch after) {
         HashMap<String, String> result = new HashMap<>();
-        int difference = before.getIpAddress().size() - after.getIpAddress().size();
+        int difference = before.props.size() - after.props.size();
         if (difference > 0) {    // the resizing action reduced the cluster size
-            for (String s : before.getIpAddress().keySet()) {
-                if (!after.getIpAddress().containsKey(s)) {
-                    result.put(s, before.getIpAddress().get(s));
+            for (String s : before.props.keySet()) {
+                if (!after.props.containsKey(s)) {
+                    result.put(s, before.props.get(s));
                 }
             }
         } else {        // the resizing action increased the cluster size
-            for (String s : after.getIpAddress().keySet()) {
-                if (!before.getIpAddress().containsKey(s)) {
-                    result.put(s, after.getIpAddress().get(s));
+            for (String s : after.props.keySet()) {
+                if (!before.props.containsKey(s)) {
+                    result.put(s, after.props.get(s));
                 }
             }
 

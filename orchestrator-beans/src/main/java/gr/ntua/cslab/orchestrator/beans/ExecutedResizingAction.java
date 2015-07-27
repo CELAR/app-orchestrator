@@ -37,8 +37,8 @@ public class ExecutedResizingAction {
     private Long timestamp;
     private States executionStatus;
     private Parameters parameters;
-    private DeploymentState beforeState;
-    private DeploymentState afterState = null;
+    private DeploymentStateOrch beforeState;
+    private DeploymentStateOrch afterState = null;
     private List<String> ips;
 
     public ExecutedResizingAction() {
@@ -93,19 +93,19 @@ public class ExecutedResizingAction {
         this.parameters = parameters;
     }
 
-    public DeploymentState getBeforeState() {
+    public DeploymentStateOrch getBeforeState() {
         return beforeState;
     }
 
-    public void setBeforeState(DeploymentState beforeState) {
+    public void setBeforeState(DeploymentStateOrch beforeState) {
         this.beforeState = beforeState;
     }
 
-    public DeploymentState getAfterState() {
+    public DeploymentStateOrch getAfterState() {
         return afterState;
     }
 
-    public void setAfterState(DeploymentState afterState) {
+    public void setAfterState(DeploymentStateOrch afterState) {
         this.afterState = afterState;
     }
 
