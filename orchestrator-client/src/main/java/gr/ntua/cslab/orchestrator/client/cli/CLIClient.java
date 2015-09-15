@@ -52,16 +52,16 @@ public class CLIClient {
     
     public static void main(String[] args) throws ParseException, IOException, JAXBException {
     	
-    	ClientConfiguration config1 = new ClientConfiguration("83.212.118.42", 80);
-
-        ResizingActionsClient client1  = new ResizingActionsClient();
-        client1.setConfiguration(config1);
-        Parameters params1 = new Parameters();
-        params1.addParameter(new Parameter("vm_id", "1"));
-        params1.addParameter(new Parameter("disk_size", "30"));
-		client1.executeResizingAction(2, params1 );
+//    	ClientConfiguration config1 = new ClientConfiguration("83.212.118.42", 80);
+//
+//       ResizingActionsClient client1  = new ResizingActionsClient();
+//        client1.setConfiguration(config1);
+//        Parameters params1 = new Parameters();
+//        params1.addParameter(new Parameter("vm_id", "1"));
+//        params1.addParameter(new Parameter("disk_size", "30"));
+//		client1.executeResizingAction(2, params1 );
     	
-		System.exit(0);
+//		System.exit(0);
         Options options = new Options();
         
         Option help = new Option("h", "help", false, "Help message");
@@ -97,6 +97,8 @@ public class CLIClient {
         availableActions.addOption(execute);
         availableActions.addOption(getDeploymentStatus);
         availableActions.addOption(getEffect);
+        availableActions.addOption(getFlavors);
+        availableActions.addOption(getImages);
         
         options.addOptionGroup(availableActions);
         
