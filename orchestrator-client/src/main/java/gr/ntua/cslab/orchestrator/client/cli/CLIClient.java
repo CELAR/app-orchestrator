@@ -15,18 +15,23 @@
  */
 package gr.ntua.cslab.orchestrator.client.cli;
 
+import gr.ntua.cslab.celar.server.beans.ProvidedResource;
+import gr.ntua.cslab.celar.server.beans.structured.ProvidedResourceInfo;
 import gr.ntua.cslab.orchestrator.beans.ExecutedResizingAction;
 import gr.ntua.cslab.orchestrator.beans.ExecutedResizingActionList;
 import gr.ntua.cslab.orchestrator.beans.Parameter;
 import gr.ntua.cslab.orchestrator.beans.Parameters;
 import gr.ntua.cslab.orchestrator.client.DeploymentStateClient;
 import gr.ntua.cslab.orchestrator.client.HistoryClient;
+import gr.ntua.cslab.orchestrator.client.ProvidedResourcesClient;
 import gr.ntua.cslab.orchestrator.client.ResizingActionsClient;
 import gr.ntua.cslab.orchestrator.client.cli.formatter.CLIPrettyFormatter;
 import gr.ntua.cslab.orchestrator.client.conf.ClientConfiguration;
 
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.List;
+import javax.xml.bind.JAXBException;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -45,7 +50,7 @@ import org.apache.commons.cli.ParseException;
  */
 public class CLIClient {
     
-    public static void main(String[] args) throws ParseException, IOException {
+    public static void main(String[] args) throws ParseException, IOException, JAXBException {
     	
     	ClientConfiguration config1 = new ClientConfiguration("83.212.118.42", 80);
 
@@ -80,6 +85,10 @@ public class CLIClient {
         Option getStatus = new Option("s", "get-status", true, "Get the status of a resizing action");
         Option getEffect = new Option("ge", "get-effect", true, "Get the effect of a resizing action");
         Option getDeploymentStatus = new Option("ds", "get-deployment-status", false, "Get the deployment status");
+        //begin cmantas
+        Option getFlavors = new Option("gf", "get-flavors", false, "Get the available flavors");
+        Option getImages= new Option("gi", "get-images", false, "Get the available images");
+        //end cmantas
 
         
         availableActions.addOption(listAvailableResizingActions);
@@ -154,6 +163,22 @@ public class CLIClient {
             String uid = cmd.getOptionValue("get-effect");
             System.out.println(client.getActionEffect(uid));
         }
+        //begin cmantas
+        else if(cmd.hasOption("get-flavors")) {
+            ProvidedResourcesClient client = new ProvidedResourcesClient();
+            List<ProvidedResourceInfo> flavors = client.getFlavors();
+            for(ProvidedResourceInfo flavor: flavors){
+                System.out.println(flavor);
+            }
+        }
+        else if(cmd.hasOption("get-images")) {
+            ProvidedResourcesClient client = new ProvidedResourcesClient();
+            List<ProvidedResourceInfo>  images = client.getImages();
+            for(ProvidedResourceInfo image: images){
+                System.out.println(image);
+            }
+        }//end cmantas
+            
     }
     
 }
