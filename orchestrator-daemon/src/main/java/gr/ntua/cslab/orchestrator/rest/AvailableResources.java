@@ -12,18 +12,19 @@ import javax.ws.rs.core.MediaType;
  *
  * @author cmantas
  */
-@Path("/resources/")
+//@Path("/resources/")
 public class AvailableResources {
     
-    @GET
+    
     @Path("flavors/")
+    @GET
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public static REList<ProvidedResourceInfo> getFlavors() throws Exception {
           return new REList(searchProvidedResourceSpecs("VM_FLAVOR"));
     }
     
-    @GET
     @Path("images/")
+    @GET
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public static REList<ProvidedResourceInfo>  getImages() throws  Exception {
         return new REList(searchProvidedResourceSpecs("VM_IMAGE"));
