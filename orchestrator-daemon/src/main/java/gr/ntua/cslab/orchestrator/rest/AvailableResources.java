@@ -34,14 +34,14 @@ public class AvailableResources {
     
     @Path("flavors/")
     @GET
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces(MediaType.APPLICATION_XML)
     public static REList<ProvidedResourceInfo> getFlavors() throws Exception {
         return new REList(searchProvidedResourceSpecs("VM_FLAVOR"));
     }
     
     @Path("images/")
     @GET
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces(MediaType.APPLICATION_XML)
     public static REList<ProvidedResourceInfo>  getImages() throws  Exception {
         return new REList(searchProvidedResourceSpecs("VM_IMAGE"));
     }
