@@ -168,15 +168,15 @@ public class CLIClient {
         }
         //begin cmantas
         else if(cmd.hasOption("get-flavors")) {
-            ProvidedResourcesClient client = new ProvidedResourcesClient();
+            ProvidedResourcesClient client = new ProvidedResourcesClient(config);
             List<ResourceInfo> flavors = client.getFlavors();
             for(ResourceInfo flavor: flavors){
               System.out.println(flavor);
             }
         }
         else if(cmd.hasOption("get-images")) {
-            ProvidedResourcesClient client = new ProvidedResourcesClient();
-            List<ResourceInfo> images = client.getFlavors();
+            ProvidedResourcesClient client = new ProvidedResourcesClient(config);
+            List<ResourceInfo> images = client.getImages();
             for(ResourceInfo image: images){
               System.out.println(image);
             }
