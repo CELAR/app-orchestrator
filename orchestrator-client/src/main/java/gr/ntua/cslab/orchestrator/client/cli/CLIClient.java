@@ -21,6 +21,7 @@ import gr.ntua.cslab.orchestrator.beans.ExecutedResizingAction;
 import gr.ntua.cslab.orchestrator.beans.ExecutedResizingActionList;
 import gr.ntua.cslab.orchestrator.beans.Parameter;
 import gr.ntua.cslab.orchestrator.beans.Parameters;
+import gr.ntua.cslab.orchestrator.beans.ResourceInfo;
 import gr.ntua.cslab.orchestrator.client.DeploymentStateClient;
 import gr.ntua.cslab.orchestrator.client.HistoryClient;
 import gr.ntua.cslab.orchestrator.client.ProvidedResourcesClient;
@@ -168,16 +169,16 @@ public class CLIClient {
         //begin cmantas
         else if(cmd.hasOption("get-flavors")) {
             ProvidedResourcesClient client = new ProvidedResourcesClient();
-            List<ProvidedResourceInfo> flavors = client.getFlavors();
-            for(ProvidedResourceInfo flavor: flavors){
-                System.out.println(flavor);
+            List<ResourceInfo> flavors = client.getFlavors();
+            for(ResourceInfo flavor: flavors){
+              System.out.println(flavor);
             }
         }
         else if(cmd.hasOption("get-images")) {
             ProvidedResourcesClient client = new ProvidedResourcesClient();
-            List<ProvidedResourceInfo>  images = client.getImages();
-            for(ProvidedResourceInfo image: images){
-                System.out.println(image);
+            List<ResourceInfo> images = client.getFlavors();
+            for(ResourceInfo image: images){
+              System.out.println(image);
             }
         }//end cmantas
             

@@ -1,11 +1,9 @@
 package gr.ntua.cslab.orchestrator.client;
-import gr.ntua.cslab.celar.server.beans.structured.ProvidedResourceInfo;
-import gr.ntua.cslab.celar.server.beans.structured.REList;
-import java.io.ByteArrayInputStream;
+import gr.ntua.cslab.orchestrator.beans.ProvidedResourcesList;
+import gr.ntua.cslab.orchestrator.beans.ResourceInfo;
+import static gr.ntua.cslab.celar.server.beans.SimpleReflectiveEntity.unmarshalGeneric;
 
 import java.io.IOException;
-import java.io.StringReader;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import javax.xml.bind.JAXBException;
 
@@ -23,10 +21,10 @@ public class ProvidedResourcesClient extends AbstractClient{
      * @throws IOException
      * @throws JAXBException 
      */
-    public List<ProvidedResourceInfo> getFlavors() throws IOException, JAXBException {
+    public List<ResourceInfo> getFlavors() throws IOException, JAXBException {
         String outcome = this.issueRequest("GET", "resources/flavors/", null);
-        REList rv = new REList();
-        rv.unmarshal(new ByteArrayInputStream(outcome.getBytes(StandardCharsets.UTF_8)));
+        ProvidedResourcesList rv;
+        rv = (ProvidedResourcesList) unmarshalGeneric(ProvidedResourcesList.class, outcome); 
         return rv;
     }
     
@@ -36,10 +34,10 @@ public class ProvidedResourcesClient extends AbstractClient{
      * @throws IOException
      * @throws JAXBException 
      */
-    public REList<ProvidedResourceInfo> getImages() throws IOException, JAXBException {
+    public List<ResourceInfo>getImages() throws IOException, JAXBException {
         String outcome = this.issueRequest("GET", "resources/images/", null);
-        REList rv = new REList();
-        rv.unmarshal(new ByteArrayInputStream(outcome.getBytes(StandardCharsets.UTF_8)));
+        ProvidedResourcesList rv;
+        rv = (ProvidedResourcesList) unmarshalGeneric(ProvidedResourcesList.class, outcome); 
         return rv;
     }
     
