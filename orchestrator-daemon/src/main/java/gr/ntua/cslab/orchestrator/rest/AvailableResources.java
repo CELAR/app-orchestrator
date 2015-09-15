@@ -12,7 +12,7 @@ import javax.ws.rs.core.MediaType;
  *
  * @author cmantas
  */
-//@Path("/resources/")
+@Path("resources/")
 public class AvailableResources {
     
     
