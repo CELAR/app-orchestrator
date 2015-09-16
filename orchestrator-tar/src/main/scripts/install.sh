@@ -13,7 +13,7 @@ SLIPSTREAM_CONTEXT="/opt/slipstream/client/bin/slipstream.context"
 
 
 install_service(){
-	mkdir $CELAR_ORCHESTRATOR_HOME
+	mkdir -p $CELAR_ORCHESTRATOR_HOME
 	mv celar-orchestrator $CELAR_HOME
 	mv $UPDATE_SCRIPT /usr/local/bin/
 
