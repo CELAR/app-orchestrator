@@ -4,12 +4,10 @@ import gr.ntua.cslab.celar.server.beans.SimpleReflectiveEntity;
 import gr.ntua.cslab.celar.server.beans.structured.ProvidedResourceInfo;
 import gr.ntua.cslab.celar.server.beans.Spec;
 import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ * This Class holds information about a resource provided by the IaaS
  * @author cmantas
  */
 @XmlRootElement 
@@ -33,17 +31,18 @@ public class ResourceInfo extends SimpleReflectiveEntity {
             }
         }
          
+    /**
+     * This class shows the key-value properties characterizing a resource 
+     */    
     public static class ResourceSpec  extends SimpleReflectiveEntity{
         int id;
         public int provided_Resource_Id;
-        public String property, value;
+        public String property, value; 
 
         /**
          * Default Constructor
          */
-        public ResourceSpec() {
-            super();
-        }
+        public ResourceSpec() {super();}
         
         public ResourceSpec(Spec s){
             this.id=s.id;

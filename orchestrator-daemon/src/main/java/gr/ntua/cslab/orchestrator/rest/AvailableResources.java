@@ -19,7 +19,7 @@ package gr.ntua.cslab.orchestrator.rest;
 import gr.ntua.cslab.celar.server.beans.ProvidedResource;
 import gr.ntua.cslab.celar.server.beans.structured.ProvidedResourceInfo;
 import static gr.ntua.cslab.database.EntitySearchers.searchProvidedResourceSpecs;
-import gr.ntua.cslab.orchestrator.beans.ProvidedResourcesList;
+import gr.ntua.cslab.orchestrator.beans.BeanList;
 import gr.ntua.cslab.orchestrator.beans.ResourceInfo;
 import java.util.List;
 import javax.ws.rs.GET;
@@ -38,10 +38,10 @@ public class AvailableResources {
     @Path("flavors/")
     @GET
     @Produces(MediaType.APPLICATION_XML)
-    public static ProvidedResourcesList<ResourceInfo> getFlavors() throws Exception {
+    public static BeanList<ResourceInfo> getFlavors() throws Exception {
         List<ProvidedResourceInfo> inList = searchProvidedResourceSpecs("VM_FLAVOR");
         
-        ProvidedResourcesList<ResourceInfo> outList = new ProvidedResourcesList();
+        BeanList<ResourceInfo> outList = new BeanList();
         
         for(ProvidedResourceInfo pri: inList){
             outList.add(new ResourceInfo(pri));
@@ -54,9 +54,9 @@ public class AvailableResources {
     @Path("images/")
     @GET
     @Produces(MediaType.APPLICATION_XML)
-    public static ProvidedResourcesList<ResourceInfo> getImages() throws Exception {
+    public static BeanList<ResourceInfo> getImages() throws Exception {
         List<ProvidedResourceInfo> inList = searchProvidedResourceSpecs("VM_IMAGE");
-        ProvidedResourcesList<ResourceInfo> outList = new ProvidedResourcesList();
+        BeanList<ResourceInfo> outList = new BeanList();
         for(ProvidedResourceInfo pri: inList){
             outList.add(new ResourceInfo(pri));
         }

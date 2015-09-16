@@ -16,15 +16,17 @@ import gr.ntua.cslab.celar.server.beans.SimpleReflectiveEntity;
 @XmlSeeAlso({ResourceInfo.class})
 @XmlAccessorType(XmlAccessType.PROPERTY)
 
-
-public class  ProvidedResourcesList <E extends SimpleReflectiveEntity> extends SimpleReflectiveEntity  implements List   {
+/**
+ * This is a list used to handle Orchestrator Beans
+ */
+public class  BeanList <E extends SimpleReflectiveEntity> extends SimpleReflectiveEntity  implements List   {
      public List<E> values;
 
-    public ProvidedResourcesList() {
+    public BeanList() {
         values = new java.util.LinkedList();
     }
 
-    public ProvidedResourcesList(List<E> values) {
+    public BeanList(List<E> values) {
         this.values = values;
     }
 
