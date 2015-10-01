@@ -214,6 +214,8 @@ public class ResizingActionResource {
         else{
         	currentStatus = ServerStaticComponents.service.getDeploymentState(deploymentId);
         }
+        
+        
         if( a.getAfterState() == null && currentStatus==States.Ready ) {
             a.setAfterState(new DeploymentStateOrch(deploymentId, ServerStaticComponents.service.getAllRuntimeParams(deploymentId)));
             if(statesIdentical(a.getBeforeState(), a.getAfterState())) {
@@ -222,10 +224,17 @@ public class ResizingActionResource {
         }
         a.setExecutionStatus(currentStatus);
         
-        if(a!=null)
-            return a;
-        else
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+        return a;
+    }
+    
+    @GET
+    @Path("effect/")
+    public void getResizingActionEffect() throws Exception {
+        //ggian's hack
+        String connectorName = ServerStaticComponents.properties.getProperty("slipstream.connector.name");
+        Map<String, String> map = ServerStaticComponents.service.getAllRuntimeParams(connectorName);
+        Logger.getLogger(ResizingActionResource.class.getName()).info(map.toString());
+
     }
     
     
