@@ -20,7 +20,7 @@ public class DeploymentStateOrch {
     public DeploymentStateOrch() {
     }
 
-    public DeploymentStateOrch(String deoploymentId, Map props) {
+    public DeploymentStateOrch(String deoploymentId, Map<String, String> props) {
         this.deploymentId = deoploymentId;
         this.props = props;
     }
@@ -37,6 +37,8 @@ public class DeploymentStateOrch {
         return rv;
     }
     
-    
+    public Map<String, String> getProperties() {
+    	return this.props;
+    }
     
 }

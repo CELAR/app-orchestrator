@@ -24,6 +24,7 @@ import gr.ntua.cslab.orchestrator.cache.ResizingActionsCache;
 import gr.ntua.cslab.orchestrator.shared.ServerStaticComponents;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -35,9 +36,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 /**
  * Resizing action API.
@@ -215,9 +214,9 @@ public class ResizingActionResource {
         	currentStatus = ServerStaticComponents.service.getDeploymentState(deploymentId);
         }
         
-        
         if( a.getAfterState() == null && currentStatus==States.Ready ) {
             a.setAfterState(new DeploymentStateOrch(deploymentId, ServerStaticComponents.service.getAllRuntimeParams(deploymentId)));
+            logger.info(diffTwoStates(a.getBeforeState(), a.getAfterState()).toString());
             if(statesIdentical(a.getBeforeState(), a.getAfterState())) {
                 a.setAfterState(null);
             }
@@ -226,18 +225,6 @@ public class ResizingActionResource {
         
         return a;
     }
-    
-    @GET
-    @Path("effect/")
-    public void getResizingActionEffect() throws Exception {
-        //ggian's hack
-//        String connectorName = ServerStaticComponents.properties.getProperty("slipstream.connector.name");
-        Map<String, String> map = ServerStaticComponents.service.getAllRuntimeParams(deploymentId);
-        logger.info("Map returned: "+map.toString());
-        System.err.println("hello worlds :) :) :)");
-    }
-    
-    
         
     public static boolean statesIdentical(DeploymentStateOrch before, DeploymentStateOrch after) {
         if(before.getIPs().size()!= before.getIPs().size())
@@ -249,5 +236,23 @@ public class ResizingActionResource {
                 return false;
         }
         return false;
+    }
+    
+    
+    public static DeploymentStateDiff diffTwoStates(DeploymentStateOrch before, DeploymentStateOrch after) {
+    	List<String> keysWithDifferentValues = new LinkedList<>();
+    	for(Entry<String, String> kv : before.getProperties().entrySet()) {
+    		String key = kv.getKey();
+    		if(!before.getProperties().get(key).equals(after.getProperties().get(key))) {
+    			keysWithDifferentValues.add(key);
+    		}
+    	}
+    	DeploymentStateDiff diffList = new DeploymentStateDiff();
+    	for(String key : keysWithDifferentValues)
+    		diffList.getEntries().add(new DeploymentStateDiffEntry(
+    				key, 
+    				before.getProperties().get(key),
+    				after.getProperties().get(key)));
+    	return diffList;
     }
 }
