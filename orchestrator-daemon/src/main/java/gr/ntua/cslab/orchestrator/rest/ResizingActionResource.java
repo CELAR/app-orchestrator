@@ -186,6 +186,9 @@ public class ResizingActionResource {
         ExecutedResizingAction a = ResizingActionsCache.getExecutedResizingActionByUniqueId(actionId);
         if(a==null)
             return null;
+        // if it's already Ready, no need to search other stuff
+        if(a.getExecutionStatus() ==  States.Ready)
+        	return a;
         States currentStatus;
         String connectorName = ServerStaticComponents.properties.getProperty("slipstream.connector.name");
         if(a.getResizingAction().getType()== ResizingActionType.GENERIC_ACTION || a.getResizingAction().getType()== ResizingActionType.BALANCE){
@@ -239,7 +242,17 @@ public class ResizingActionResource {
     }
     
     
-    public static DeploymentStateDiff diffTwoStates(DeploymentStateOrch before, DeploymentStateOrch after) {
+    public static DeploymentStateDiff diffTwoStates(DeploymentStateOrch before, DeploymentStateOrch after) {    	
+    	DeploymentStateDiff diffList = new DeploymentStateDiff();
+    	for(String s: before.getProperties().keySet()) {
+    		if(!after.getProperties().containsKey(s))
+    			diffList.getEntries().add(new DeploymentStateDiffEntry(s, before.getProperties().get(s), ""));
+    	}
+    	for(String s: after.getProperties().keySet()) {
+    		if(!before.getProperties().containsKey(s))
+    			diffList.getEntries().add(new DeploymentStateDiffEntry(s, "", after.getProperties().get(s)));
+    	}
+    	
     	List<String> keysWithDifferentValues = new LinkedList<>();
     	for(Entry<String, String> kv : before.getProperties().entrySet()) {
     		String key = kv.getKey();
@@ -247,7 +260,6 @@ public class ResizingActionResource {
     			keysWithDifferentValues.add(key);
     		}
     	}
-    	DeploymentStateDiff diffList = new DeploymentStateDiff();
     	for(String key : keysWithDifferentValues)
     		diffList.getEntries().add(new DeploymentStateDiffEntry(
     				key, 
