@@ -1,5 +1,6 @@
 package gr.ntua.cslab.orchestrator.beans;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -9,7 +10,7 @@ public class DeploymentStateDiff {
 	private List<DeploymentStateDiffEntry> entries;
 	
 	public DeploymentStateDiff() {
-		
+		this.entries = new LinkedList<DeploymentStateDiffEntry>();
 	}
 
 	public List<DeploymentStateDiffEntry> getEntries() {
