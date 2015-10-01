@@ -242,7 +242,7 @@ public class ResizingActionResource {
     }
     
     
-    public static DeploymentStateDiff diffTwoStates(DeploymentStateOrch before, DeploymentStateOrch after) {    	
+    public static DeploymentStateDiff diffTwoStates(DeploymentStateOrch before, DeploymentStateOrch after) {     	
     	DeploymentStateDiff diffList = new DeploymentStateDiff();
     	for(String s: before.getProperties().keySet()) {
     		if(!after.getProperties().containsKey(s))
