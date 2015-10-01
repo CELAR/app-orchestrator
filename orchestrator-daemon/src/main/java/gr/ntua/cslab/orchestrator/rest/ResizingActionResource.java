@@ -231,9 +231,9 @@ public class ResizingActionResource {
     @Path("effect/")
     public void getResizingActionEffect() throws Exception {
         //ggian's hack
-        String connectorName = ServerStaticComponents.properties.getProperty("slipstream.connector.name");
-        Map<String, String> map = ServerStaticComponents.service.getAllRuntimeParams(connectorName);
-        Logger.getLogger(ResizingActionResource.class.getName()).info(map.toString());
+//        String connectorName = ServerStaticComponents.properties.getProperty("slipstream.connector.name");
+        Map<String, String> map = ServerStaticComponents.service.getAllRuntimeParams(deploymentId);
+        logger.info("Map returned: "+map.toString());
         System.err.println("hello worlds :) :) :)");
     }
     
