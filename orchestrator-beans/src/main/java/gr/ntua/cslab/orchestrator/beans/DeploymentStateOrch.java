@@ -30,8 +30,11 @@ public class DeploymentStateOrch {
         //hostname
         for (Entry<String, String> e : props.entrySet()) {
             String key = e.getKey(), value=e.getValue();
-            if(key.contains("hostname"))
-                rv.put(key, value);
+            if(key.contains("hostname")) {
+            	String vmId=key.split(":")[0];
+            	if(props.get(vmId+":vmstatus").equals("Running"))
+            		rv.put(key, value);
+            }
         }
         
         return rv;
