@@ -40,6 +40,20 @@ public class DeploymentStateOrch {
         return rv;
     }
     
+    public Map<String,String> getIPs(boolean includeDeadVMs){
+        Map<String,String> rv = new java.util.TreeMap<>();
+        //hostname
+        for (Entry<String, String> e : props.entrySet()) {
+            String key = e.getKey(), value=e.getValue();
+            if(key.contains("hostname")) {
+            	String vmId=key.split(":")[0];
+            	if(includeDeadVMs ||  props.get(vmId+":vmstate").equals("Running"))
+            		rv.put(key, value);
+            }
+        }
+        return rv;
+    }
+    
     public Map<String, String> getProperties() {
     	return this.props;
     }
