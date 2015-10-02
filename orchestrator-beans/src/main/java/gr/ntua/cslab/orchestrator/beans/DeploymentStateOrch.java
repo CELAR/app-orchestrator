@@ -32,8 +32,6 @@ public class DeploymentStateOrch {
             String key = e.getKey(), value=e.getValue();
             if(key.contains("hostname")) {
             	String vmId=key.split(":")[0];
-            	System.err.println("VM id:"+vmId);
-            	System.err.println(props.get(vmId+":vmstatus"));
             	if(props.get(vmId+":vmstate").equals("Running"))
             		rv.put(key, value);
             }

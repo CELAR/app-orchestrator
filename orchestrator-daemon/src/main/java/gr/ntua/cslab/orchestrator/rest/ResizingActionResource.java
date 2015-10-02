@@ -166,6 +166,7 @@ public class ResizingActionResource {
 					ident = kv.getKey();
 				}
 			}
+			System.err.println("VM id to be attached: "+ident);
 			vmId=ident.split(":")[0].split(".")[0];
 			// ====================================================
 			
