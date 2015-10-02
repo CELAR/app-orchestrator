@@ -217,7 +217,6 @@ public class Main {
     // sets the resizing actions, according to the userProvided tosca
     private static void setResizingActions(String toscaFilePath) throws Exception {
 
-        //FIXME: we need to add the parameters for the new actions here
         CSARParser parser = new CSARParser(toscaFilePath);
         List<String> modules = parser.getModules();
         int i = 1;
@@ -238,6 +237,9 @@ public class Main {
                         if (name.contains("scaleOut")) {
                             List<String> params = new ArrayList<>();
                             params.add("multiplicity");
+                            params.add("cores");
+                            params.add("ram");
+                            params.add("disk");
                             logger.info("Action type: SCALE_OUT");
                             action.setType(ResizingActionType.SCALE_OUT);
                             action.setApplicablePatameters(params);

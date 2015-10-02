@@ -46,7 +46,6 @@ import org.apache.commons.cli.ParseException;
 /**
  * CLI client 
  * 
- * TODO
  * @author Giannis Giannakopoulos
  */
 public class CLIClient {

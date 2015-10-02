@@ -89,7 +89,20 @@ public class ResizingActionResource {
 		String connectorName = ServerStaticComponents.properties.getProperty("slipstream.connector.name");
 
 		if (a.getType() == ResizingActionType.SCALE_OUT) {
-			ssService.addVM(deploymentId, a.getModuleName(), multiplicity);
+			Integer cores=-1, ram=-1, disk=-1;
+			for(Parameter p : params.getParameters()) {
+				if(p.getKey().equals("cores"))
+					cores = new Integer(p.getValue());
+				else if(p.getKey().equals("ram"))
+					ram = new Integer(p.getValue());
+				else if(p.getKey().equals("disk"))
+					disk = new Integer(p.getValue());
+			}
+			if(cores!=-1 && ram != -1 && disk!=-1) {
+				ssService.addVM(deploymentId, a.getModuleName(), multiplicity, cores, ram, disk);
+			} else {
+				ssService.addVM(deploymentId, a.getModuleName(), multiplicity);
+			}
 		} else if (a.getType() == ResizingActionType.SCALE_IN) {
 			// ServerStaticComponents.service.removeVM(deploymentId,
 			// a.getModuleName(), multiplicity);
