@@ -149,12 +149,26 @@ public class ResizingActionResource {
 		} else if (a.getType() == ResizingActionType.ATTACH_DISK) {
 			int diskSize = 0;
 			String vmId = "1";
+//			exec.getBeforeState().getIPs().get("")
 			for (Parameter p : params.getParameters()) {
 				if (p.getKey().equals("disk_size"))
 					diskSize = new Integer(p.getValue());
-				if (p.getKey().equals("vm_id"))
+				if (p.getKey().equals("vm_id")) {
 					vmId = p.getValue();
+				}
 			}
+			
+			// ggian's hack - overwrite it if not working
+			logger.info(exec.getBeforeState().getIPs().toString());
+			String ident = "";
+			for(Entry<String, String> kv : exec.getBeforeState().getIPs().entrySet()) {
+				if(kv.getValue().equals(vmId)) {
+					ident = kv.getKey();
+				}
+			}
+			vmId=ident.split(":")[0].split(".")[0];
+			// ====================================================
+			
 			ssService.attachDisk(deploymentId, a.getModuleName(), vmId + "", diskSize);
 		} else if (a.getType() == ResizingActionType.DETTACH_DISK) {
 			String vmId = "", diskID = "";
