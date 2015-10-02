@@ -167,7 +167,7 @@ public class ResizingActionResource {
 				}
 			}
 			System.err.println("VM id to be attached: "+ident);
-			vmId=ident.split(":")[0].split(".")[0];
+			vmId=ident.split(":")[0].split("\\.")[1];
 			// ====================================================
 			
 			ssService.attachDisk(deploymentId, a.getModuleName(), vmId + "", diskSize);
