@@ -16,6 +16,7 @@
 package gr.ntua.cslab.orchestrator.beans;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.sixsq.slipstream.statemachine.States;
@@ -40,6 +41,12 @@ public class ExecutedResizingAction {
     private DeploymentStateOrch beforeState;
     private DeploymentStateOrch afterState = null;
     private List<String> ips;
+    
+    // ggian
+    private String diskIdAttached;
+    private String diskIdDetached;
+    private List<String> ipAddressedAdded;
+    private List<String> ipAddressedRemoved;
 
     public ExecutedResizingAction() {
     }
@@ -51,6 +58,9 @@ public class ExecutedResizingAction {
         this.executionStatus = status;
         this.parameters = parameters;
         this.ips = new ArrayList<String>();
+        
+        this.ipAddressedAdded = new LinkedList<>();
+        this.ipAddressedRemoved = new LinkedList<>();
     }
 
     public String getUniqueId() {
@@ -118,5 +128,36 @@ public class ExecutedResizingAction {
 	public List<String> getIPs(){
 		return ips;
 	}
-    
+
+	public String getDiskIdAttached() {
+		return diskIdAttached;
+	}
+
+	public void setDiskIdAttached(String diskIdAttached) {
+		this.diskIdAttached = diskIdAttached;
+	}
+
+	public String getDiskIdDetached() {
+		return diskIdDetached;
+	}
+
+	public void setDiskIdDetached(String diskIdDetached) {
+		this.diskIdDetached = diskIdDetached;
+	}
+
+	public List<String> getIpAddressedAdded() {
+		return ipAddressedAdded;
+	}
+
+	public void setIpAddressedAdded(List<String> ipAddressedAdded) {
+		this.ipAddressedAdded = ipAddressedAdded;
+	}
+
+	public List<String> getIpAddressedRemoved() {
+		return ipAddressedRemoved;
+	}
+
+	public void setIpAddressedRemoved(List<String> ipAddressedRemoved) {
+		this.ipAddressedRemoved = ipAddressedRemoved;
+	}
 }
