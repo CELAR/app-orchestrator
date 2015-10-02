@@ -148,43 +148,30 @@ public class ResizingActionResource {
 			}
 		} else if (a.getType() == ResizingActionType.ATTACH_DISK) {
 			int diskSize = 0;
-			String vmId = "1";
-//			exec.getBeforeState().getIPs().get("")
+			String vmIP = "1";
 			for (Parameter p : params.getParameters()) {
 				if (p.getKey().equals("disk_size"))
 					diskSize = new Integer(p.getValue());
-				if (p.getKey().equals("vm_id")) {
-					vmId = p.getValue();
+				if (p.getKey().equals("vm_ip")) {
+					vmIP = p.getValue();
 				}
-			}
+			}			
+			ssService.attachDisk(deploymentId, a.getModuleName(), translateIPtoVMid(vmIP, exec) + "", diskSize);
 			
-			// ggian's hack - overwrite it if not working
-			logger.info(exec.getBeforeState().getIPs().toString());
-			String ident = "";
-			for(Entry<String, String> kv : exec.getBeforeState().getIPs().entrySet()) {
-				if(kv.getValue().equals(vmId)) {
-					ident = kv.getKey();
-				}
-			}
-			System.err.println("VM id to be attached: "+ident);
-			vmId=ident.split(":")[0].split("\\.")[1];
-			// ====================================================
-			
-			ssService.attachDisk(deploymentId, a.getModuleName(), vmId + "", diskSize);
 		} else if (a.getType() == ResizingActionType.DETTACH_DISK) {
-			String vmId = "", diskID = "";
+			String vmIP = "", diskID = "";
 			for (Parameter p : params.getParameters()) {
-				if (p.getKey().equals("vm_id"))
-					vmId = p.getValue();
+				if (p.getKey().equals("vm_ip"))
+					vmIP = p.getValue();
 				if (p.getKey().equals("disk_id"))
 					diskID = p.getValue();
 			}
-			ssService.detachDisk(deploymentId, a.getModuleName(), vmId, diskID);
+			ssService.detachDisk(deploymentId, a.getModuleName(), translateIPtoVMid(vmIP, exec), diskID);
 		} else if (a.getType() == ResizingActionType.VM_RESIZE) {
-			String vmId = "", flavor = "", cpu = "", ram = "";
+			String vmIP = "", flavor = "", cpu = "", ram = "";
 			for (Parameter p : params.getParameters()) {
-				if (p.getKey().equals("vm_id"))
-					vmId = p.getValue();
+				if (p.getKey().equals("vm_ip"))
+					vmIP = p.getValue();
 				if (p.getKey().equals("flavor_id"))
 					flavor = p.getValue();
 				if (p.getKey().equals("CPU"))
@@ -192,14 +179,7 @@ public class ResizingActionResource {
 				if (p.getKey().equals("RAM"))
 					ram = p.getValue();
 			}
-			// if(ssService.getConnectorName().equals("okeanos")){
-			ssService.scaleVM(deploymentId, a.getModuleName(), vmId, flavor);
-			// }
-			// else{
-			//
-			// ssService.scaleVM(deploymentId, a.getModuleName(), vmId,
-			// Integer.parseInt(cpu), Integer.parseInt(ram));
-			// }
+			ssService.scaleVM(deploymentId, a.getModuleName(), translateIPtoVMid(vmIP, exec), flavor);
 		}
 
 		ResizingActionsCache.addExecutedResizingAction(exec);
@@ -319,4 +299,18 @@ public class ResizingActionResource {
 		logger.info("Disk id:" + diffList.getDiskID() + ", VM added/removed" + diffList.getVMIDs());
 		return diffList;
 	}
+	
+	private String translateIPtoVMid(String ip, ExecutedResizingAction exec) {
+//		logger.info(exec.getBeforeState().getIPs().toString());
+		String ident = "";
+		for(Entry<String, String> kv : exec.getBeforeState().getIPs().entrySet()) {
+			if(kv.getValue().equals(ip)) {
+				ident = kv.getKey();
+			}
+		}
+		String vmId=ident.split(":")[0].split("\\.")[1];
+		return vmId;
+
+	}
+	
 }

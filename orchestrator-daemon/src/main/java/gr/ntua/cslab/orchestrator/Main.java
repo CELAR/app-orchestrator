@@ -257,7 +257,7 @@ public class Main {
                         } else if (name.contains("attachDisk")) {
                             logger.info("Action type: ATTACH_DISK");
                             List<String> params = new ArrayList<>();
-                            params.add("vm_id");
+                            params.add("vm_ip");
                             params.add("disk_size");
                             action.setType(ResizingActionType.ATTACH_DISK);
                             action.setExecutesScript(false);
@@ -266,7 +266,7 @@ public class Main {
                         } else if (name.contains("detachDisk")) {
                             logger.info("Action type: DETACH_DISK");
                             List<String> params = new ArrayList<>();
-                            params.add("vm_id");
+                            params.add("vm_ip");
                             params.add("disk_id");
                             action.setType(ResizingActionType.DETTACH_DISK);
                             action.setExecutesScript(false);
@@ -275,7 +275,7 @@ public class Main {
                         } else if (name.contains("vmResize")) {
                             logger.info("Action type: VM_RESIZE");
                             List<String> params = new ArrayList<>();
-                            params.add("vm_id");
+                            params.add("vm_ip");
                             params.add("flavor_id");
                             action.setType(ResizingActionType.VM_RESIZE);
                             action.setExecutesScript(false);
