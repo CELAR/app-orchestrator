@@ -219,7 +219,8 @@ public class ResizingActionResource {
         
         if( a.getAfterState() == null && currentStatus==States.Ready ) {
             a.setAfterState(new DeploymentStateOrch(deploymentId, ServerStaticComponents.service.getAllRuntimeParams(deploymentId)));
-            logger.info(diffTwoStates(a.getBeforeState(), a.getAfterState()).toString());
+//            logger.info(diffTwoStates(a.getBeforeState(), a.getAfterState()).toString());
+            diffTwoStates(a.getBeforeState(), a.getAfterState());
             if(statesIdentical(a.getBeforeState(), a.getAfterState())) {
                 a.setAfterState(null);
             }
@@ -265,6 +266,7 @@ public class ResizingActionResource {
     				key, 
     				before.getProperties().get(key),
     				after.getProperties().get(key)));
+    	logger.info("Disk id:"+diffList.getDiskID()+", VM added/removed"+diffList.getVMIDs());
     	return diffList;
     }
 }
