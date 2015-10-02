@@ -242,13 +242,13 @@ public class ResizingActionResource {
 				vmIPs = new LinkedList<>();
 				for(String s: diff.getVMIDs()) 
 					vmIPs.add(a.getAfterState().getIPs().get(s+":hostname"));
-				a.setIpAddressedAdded(vmIPs);
+				a.setIpAddressesAdded(vmIPs);
 				break;
 			case SCALE_IN:
 				vmIPs = new LinkedList<>();
 				for(String s: diff.getVMIDs()) 
 					vmIPs.add(a.getBeforeState().getIPs(true).get(s+":hostname"));
-				a.setIpAddressedRemoved(vmIPs);
+				a.setIpAddressesRemoved(vmIPs);
 				break;
 			default:
 				break;

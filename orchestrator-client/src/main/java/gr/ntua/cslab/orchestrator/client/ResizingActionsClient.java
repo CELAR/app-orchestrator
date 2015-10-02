@@ -16,13 +16,18 @@
 package gr.ntua.cslab.orchestrator.client;
 
 import gr.ntua.cslab.orchestrator.beans.ExecutedResizingAction;
+import gr.ntua.cslab.orchestrator.beans.Parameter;
 import gr.ntua.cslab.orchestrator.beans.Parameters;
 import gr.ntua.cslab.orchestrator.beans.ResizingActionList;
+import gr.ntua.cslab.orchestrator.client.conf.ClientConfiguration;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.HashMap;
 import javax.xml.bind.JAXB;
+
+import com.sixsq.slipstream.statemachine.States;
 
 /**
  * Resizing Actions client. Use this client to interact with the Resizing API
@@ -90,4 +95,23 @@ public class ResizingActionsClient extends AbstractClient {
         }
         return DeploymentStateClient.getDiff(action.getBeforeState(), action.getAfterState());
     }
+    
+    public static void main(String[] args) throws IOException, InterruptedException {
+		ResizingActionsClient client = new ResizingActionsClient();
+		client.setConfiguration(new ClientConfiguration("83.212.118.41", 80));
+		Parameters params = new Parameters();
+		params.addParameter(new Parameter("multiplicity", "1"));
+		ExecutedResizingAction a = client.executeResizingAction(3, params);
+		
+		ExecutedResizingAction n;
+		while(true) {
+			n = client.getActionStatus(a.getUniqueId());
+			System.err.println(n.getExecutionStatus());
+			if(n.getExecutionStatus()==States.Ready)
+				break;
+			Thread.sleep(10000);
+		}
+		System.err.println(n.getIpAddressesRemoved());
+		
+	}
 }

@@ -45,8 +45,8 @@ public class ExecutedResizingAction {
     // ggian
     private String diskIdAttached;
     private String diskIdDetached;
-    private List<String> ipAddressedAdded;
-    private List<String> ipAddressedRemoved;
+    private List<String> ipAddressesAdded;
+    private List<String> ipAddressesRemoved;
 
     public ExecutedResizingAction() {
     }
@@ -59,8 +59,8 @@ public class ExecutedResizingAction {
         this.parameters = parameters;
         this.ips = new ArrayList<String>();
         
-        this.ipAddressedAdded = new LinkedList<>();
-        this.ipAddressedRemoved = new LinkedList<>();
+        this.ipAddressesAdded = new LinkedList<>();
+        this.ipAddressesRemoved = new LinkedList<>();
     }
 
     public String getUniqueId() {
@@ -145,19 +145,19 @@ public class ExecutedResizingAction {
 		this.diskIdDetached = diskIdDetached;
 	}
 
-	public List<String> getIpAddressedAdded() {
-		return ipAddressedAdded;
+	public List<String> getIpAddressesAdded() {
+		return ipAddressesAdded;
 	}
 
-	public void setIpAddressedAdded(List<String> ipAddressedAdded) {
-		this.ipAddressedAdded = ipAddressedAdded;
+	public void setIpAddressesAdded(List<String> ipAddressedAdded) {
+		this.ipAddressesAdded = ipAddressedAdded;
 	}
 
-	public List<String> getIpAddressedRemoved() {
-		return ipAddressedRemoved;
+	public List<String> getIpAddressesRemoved() {
+		return ipAddressesRemoved;
 	}
 
-	public void setIpAddressedRemoved(List<String> ipAddressedRemoved) {
-		this.ipAddressedRemoved = ipAddressedRemoved;
+	public void setIpAddressesRemoved(List<String> ipAddressedRemoved) {
+		this.ipAddressesRemoved = ipAddressedRemoved;
 	}
 }
