@@ -34,7 +34,7 @@ public class DeploymentStateOrch {
             	String vmId=key.split(":")[0];
             	System.err.println("VM id:"+vmId);
             	System.err.println(props.get(vmId+":vmstatus"));
-            	if(props.get(vmId+":vmstatus").equals("Running"))
+            	if(props.get(vmId+":vmstate").equals("Running"))
             		rv.put(key, value);
             }
         }
