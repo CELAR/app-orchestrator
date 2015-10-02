@@ -235,7 +235,7 @@ public class ResizingActionResource {
 			// logger.info(diffTwoStates(a.getBeforeState(),
 			// a.getAfterState()).toString());
 			DeploymentStateDiff diff = diffTwoStates(a.getBeforeState(), a.getAfterState());
-
+			List<String> vmIPs;
 			switch (a.getResizingAction().getType()) {
 			case ATTACH_DISK:
 				a.setDiskIdAttached(diff.getDiskID());
@@ -244,11 +244,16 @@ public class ResizingActionResource {
 				a.setDiskIdDetached(diff.getDiskID());
 				break;
 			case SCALE_OUT:
-//				a.getAfterState().getIPs().get()
-				logger.info(a.getAfterState().getIPs().toString());
+				vmIPs = new LinkedList<>();
+				for(String s: diff.getVMIDs()) 
+					vmIPs.add(a.getAfterState().getIPs().get(s+":hostname"));
+				a.setIpAddressedAdded(vmIPs);
 				break;
 			case SCALE_IN:
-				logger.info(a.getBeforeState().getIPs().toString());
+				vmIPs = new LinkedList<>();
+				for(String s: diff.getVMIDs()) 
+					vmIPs.add(a.getBeforeState().getIPs().get(s+":hostname"));
+				a.setIpAddressedRemoved(vmIPs);
 				break;
 			default:
 				break;
