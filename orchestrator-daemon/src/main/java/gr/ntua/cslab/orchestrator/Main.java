@@ -278,7 +278,9 @@ public class Main {
                             logger.info("Action type: SCALE_VERTICALLY_UP");
                             List<String> params = new ArrayList<>();
                             params.add("vm_ip");
-                            params.add("flavor_id");
+//                            params.add("flavor_id");
+                            params.add("cores");
+                            params.add("ram");
                             action.setType(ResizingActionType.SCALE_VERTICALLY_UP);
                             action.setExecutesScript(false);
                             action.setScript(a.getValue().toString());
