@@ -26,7 +26,10 @@ public enum ResizingActionType {
     SCALE_DOWN,     // decrease cores/RAM 
     ATTACH_DISK,    // create and attach disk
     DETTACH_DISK,   // detach disk from VM
-    VM_RESIZE,   // detach disk from VM
+    SCALE_VERTICALLY_UP,	// VM resize upwards
+    SCALE_VERTICALLY_DOWN,	// VM resize downwards
+    SCALE_DIAGONALLY_UP,	// diagonally scale upwards
+    SCALE_DIAGONALLY_DOWN,	//diagonally scale downwards
     BALANCE,        // execut balance action
     GENERIC_ACTION  // just run a script
 }

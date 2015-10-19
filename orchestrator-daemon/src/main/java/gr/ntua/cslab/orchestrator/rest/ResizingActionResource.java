@@ -88,7 +88,7 @@ public class ResizingActionResource {
 
 		String connectorName = ServerStaticComponents.properties.getProperty("slipstream.connector.name");
 
-		if (a.getType() == ResizingActionType.SCALE_OUT) {
+		if (a.getType() == ResizingActionType.SCALE_OUT || a.getType() == ResizingActionType.SCALE_DIAGONALLY_UP) {
 			Integer cores=-1, ram=-1, disk=-1;
 			for(Parameter p : params.getParameters()) {
 				if(p.getKey().equals("cores"))
@@ -103,7 +103,7 @@ public class ResizingActionResource {
 			} else {
 				ssService.addVM(deploymentId, a.getModuleName(), multiplicity);
 			}
-		} else if (a.getType() == ResizingActionType.SCALE_IN) {
+		} else if (a.getType() == ResizingActionType.SCALE_IN || a.getType() == ResizingActionType.SCALE_DIAGONALLY_DOWN) {
 			// ServerStaticComponents.service.removeVM(deploymentId,
 			// a.getModuleName(), multiplicity);
 			List<String> ids = ssService.removeVMIDs(deploymentId, a.getModuleName(), multiplicity);
@@ -180,19 +180,21 @@ public class ResizingActionResource {
 					diskID = p.getValue();
 			}
 			ssService.detachDisk(deploymentId, a.getModuleName(), translateIPtoVMid(vmIP, exec), diskID);
-		} else if (a.getType() == ResizingActionType.VM_RESIZE) {
-			String vmIP = "", flavor = "", cpu = "", ram = "";
+		} else if (a.getType() == ResizingActionType.SCALE_VERTICALLY_DOWN || a.getType()==ResizingActionType.SCALE_VERTICALLY_UP) {
+			String vmIP = "";
+			Integer cpu = null, ram = null;
 			for (Parameter p : params.getParameters()) {
 				if (p.getKey().equals("vm_ip"))
 					vmIP = p.getValue();
-				if (p.getKey().equals("flavor_id"))
-					flavor = p.getValue();
-				if (p.getKey().equals("CPU"))
-					cpu = p.getValue();
-				if (p.getKey().equals("RAM"))
-					ram = p.getValue();
+//				if (p.getKey().equals("flavor_id"))
+//					flavor = p.getValue();
+				if (p.getKey().equals("cores"))
+					cpu = new Integer(p.getValue());
+				if (p.getKey().equals("ram"))
+					ram = new Integer(p.getValue());
 			}
-			ssService.scaleVM(deploymentId, a.getModuleName(), translateIPtoVMid(vmIP, exec), flavor);
+//			ssService.scaleVM(deploymentId, a.getModuleName(), translateIPtoVMid(vmIP, exec), flavor);
+			ssService.scaleVM(deploymentId, a.getModuleName(), translateIPtoVMid(vmIP, exec), cpu, ram);
 		}
 
 		ResizingActionsCache.addExecutedResizingAction(exec);

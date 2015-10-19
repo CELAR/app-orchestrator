@@ -274,13 +274,46 @@ public class Main {
                             action.setExecutesScript(false);
                             action.setScript(a.getValue().toString());
                             action.setApplicablePatameters(params);
-                        } else if (name.contains("vmResize")) {
-                            logger.info("Action type: VM_RESIZE");
+                        } else if (name.contains("scaleVerticallyUp")) {
+                            logger.info("Action type: SCALE_VERTICALLY_UP");
                             List<String> params = new ArrayList<>();
                             params.add("vm_ip");
                             params.add("flavor_id");
-                            action.setType(ResizingActionType.VM_RESIZE);
+                            action.setType(ResizingActionType.SCALE_VERTICALLY_UP);
                             action.setExecutesScript(false);
+                            action.setScript(a.getValue().toString());
+                            action.setApplicablePatameters(params);
+                        } else if (name.contains("scaleVerticallyDown")) {
+                            logger.info("Action type: SCALE_VERTICALLY_DOWN");
+                            List<String> params = new ArrayList<>();
+                            params.add("vm_ip");
+//                            params.add("flavor_id");
+                            params.add("cores");
+                            params.add("ram");
+                            action.setType(ResizingActionType.SCALE_VERTICALLY_DOWN);
+                            action.setExecutesScript(false);
+                            action.setScript(a.getValue().toString());
+                            action.setApplicablePatameters(params);
+                        } else if (name.contains("scaleDiagonallyUp")) {
+                            logger.info("Action type: SCALE_DIAGONALLY_UP");
+                            List<String> params = new ArrayList<>();
+                            params.add("vm_ip");
+//                            params.add("flavor_id");
+                            params.add("cores");
+                            params.add("ram");
+                            action.setType(ResizingActionType.SCALE_DIAGONALLY_UP);
+                            action.setExecutesScript(false);
+                            action.setScript(a.getValue().toString());
+                            action.setApplicablePatameters(params);
+                        } else if (name.contains("scaleDiagonallyDown")) {
+                            logger.info("Action type: SCALE_DIAGONALLY_DOWN");
+                            List<String> params = new ArrayList<>();
+                            params.add("multiplicity");
+                            params.add("cores");
+                            params.add("ram");
+                            params.add("disk");
+                            action.setType(ResizingActionType.SCALE_DIAGONALLY_DOWN);
+//                            action.setExecutesScript(false);
                             action.setScript(a.getValue().toString());
                             action.setApplicablePatameters(params);
                         } else {
