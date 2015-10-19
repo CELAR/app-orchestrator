@@ -88,7 +88,7 @@ public class ResizingActionResource {
 
 		String connectorName = ServerStaticComponents.properties.getProperty("slipstream.connector.name");
 
-		if (a.getType() == ResizingActionType.SCALE_OUT || a.getType() == ResizingActionType.SCALE_DIAGONALLY_UP) {
+		if (a.getType() == ResizingActionType.SCALE_OUT || a.getType() == ResizingActionType.SCALE_DIAGONALLY_UP || a.getType() == ResizingActionType.SCALE_DIAGONALLY_DOWN) {
 			Integer cores=-1, ram=-1, disk=-1;
 			for(Parameter p : params.getParameters()) {
 				if(p.getKey().equals("cores"))
@@ -103,7 +103,7 @@ public class ResizingActionResource {
 			} else {
 				ssService.addVM(deploymentId, a.getModuleName(), multiplicity);
 			}
-		} else if (a.getType() == ResizingActionType.SCALE_IN || a.getType() == ResizingActionType.SCALE_DIAGONALLY_DOWN) {
+		} else if (a.getType() == ResizingActionType.SCALE_IN) {
 			// ServerStaticComponents.service.removeVM(deploymentId,
 			// a.getModuleName(), multiplicity);
 			List<String> ids = ssService.removeVMIDs(deploymentId, a.getModuleName(), multiplicity);

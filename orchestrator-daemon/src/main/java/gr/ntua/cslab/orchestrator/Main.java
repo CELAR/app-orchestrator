@@ -303,6 +303,7 @@ public class Main {
 //                            params.add("flavor_id");
                             params.add("cores");
                             params.add("ram");
+                            params.add("disk");
                             action.setType(ResizingActionType.SCALE_DIAGONALLY_UP);
                             action.setExecutesScript(false);
                             action.setScript(a.getValue().toString());
