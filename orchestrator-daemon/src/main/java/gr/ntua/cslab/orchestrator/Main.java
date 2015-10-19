@@ -299,8 +299,7 @@ public class Main {
                         } else if (name.contains("scaleDiagonallyUp")) {
                             logger.info("Action type: SCALE_DIAGONALLY_UP");
                             List<String> params = new ArrayList<>();
-                            params.add("vm_ip");
-//                            params.add("flavor_id");
+                            params.add("multiplicity");
                             params.add("cores");
                             params.add("ram");
                             params.add("disk");
