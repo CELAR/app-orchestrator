@@ -375,22 +375,31 @@ public class Main {
 
         // provide IPs of the deployed VMs
         HashMap<String, String> ipAddresses = ServerStaticComponents.service.getDeploymentIPs(deploymentId);
+//        ServerStaticComponents.service.get
         logger.info("ipAddresses: " + ipAddresses);
 
         DeploymentDescription description = new DeploymentDescription();
         description.setAccessIP("localhost");
         description.setCloudServiceID(appName);
         List<DeploymentUnit> deploymentUnits = new LinkedList<>();
-        for (String s : parser.getModules()) {       //repeat for each module
+        for (String module : parser.getModules()) {       //repeat for each module
             DeploymentUnit unit = new DeploymentUnit();     // new deployment unit
-            logger.info("module name: " + s);
-            unit.setServiceUnitID(s);
+            logger.info("module name: " + module);
+            unit.setServiceUnitID(module);
+            String flavor="";
+            for(String moduleComponent:parser.getModuleComponents(module)){
+            	for(Map.Entry<String, String> componentProperty:parser.getComponentProperties(moduleComponent).entrySet()) {
+            		if(componentProperty.getKey().toString().equals("flavor"))
+            			flavor = componentProperty.getValue().toString();
+            	}
+            }
             List<AssociatedVM> vms = new LinkedList<>();
             for (Map.Entry<String, String> kv : ipAddresses.entrySet()) {
-                if (kv.getKey().startsWith(s)) { //this VM belongs to the 
+                if (kv.getKey().startsWith(module)) { //this VM belongs to the 
                     AssociatedVM vm = new AssociatedVM();
                     vm.setIp(kv.getValue());
                     vm.setUuid(UUID.randomUUID().toString());
+                    vm.setFlavor(flavor);
                     vms.add(vm);
                 }
             }
