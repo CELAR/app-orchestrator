@@ -388,9 +388,11 @@ public class Main {
             unit.setServiceUnitID(module);
             String flavor="";
             for(String moduleComponent:parser.getModuleComponents(module)){
+            	logger.info("\t\t\tWorking for "+moduleComponent);
             	for(Map.Entry<String, String> componentProperty:parser.getComponentProperties(moduleComponent).entrySet()) {
             		if(componentProperty.getKey().toString().equals("flavor"))
             			flavor = componentProperty.getValue().toString();
+            		logger.info("\t\t\tFlavor:"+flavor);
             	}
             }
             List<AssociatedVM> vms = new LinkedList<>();
