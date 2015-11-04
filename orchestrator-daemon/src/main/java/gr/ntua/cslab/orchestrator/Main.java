@@ -246,6 +246,7 @@ public class Main {
                         } else if (name.contains("scaleIn")) {
                             List<String> params = new ArrayList<>();
                             params.add("multiplicity");
+                            params.add("vm_ip");
                             logger.info("Action type: SCALE_IN");
                             action.setType(ResizingActionType.SCALE_IN);
                             action.setExecutesScript(true);
@@ -388,11 +389,11 @@ public class Main {
             unit.setServiceUnitID(module);
             String flavor="";
             for(String moduleComponent:parser.getModuleComponents(module)){
-            	logger.info("\t\t\tWorking for "+moduleComponent);
             	for(Map.Entry<String, String> componentProperty:parser.getComponentProperties(moduleComponent).entrySet()) {
-            		if(componentProperty.getKey().toString().equals("flavor"))
+            		if(componentProperty.getKey().toString().equals("flavor")) {
             			flavor = componentProperty.getValue().toString();
-            		logger.info("\t\t\tFlavor:"+flavor);
+            			break;
+            		}
             	}
             }
             List<AssociatedVM> vms = new LinkedList<>();

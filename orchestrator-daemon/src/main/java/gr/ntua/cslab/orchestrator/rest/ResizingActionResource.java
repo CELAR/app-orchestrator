@@ -106,10 +106,27 @@ public class ResizingActionResource {
 		} else if (a.getType() == ResizingActionType.SCALE_IN) {
 			// ServerStaticComponents.service.removeVM(deploymentId,
 			// a.getModuleName(), multiplicity);
-			List<String> ids = ssService.removeVMIDs(deploymentId, a.getModuleName(), multiplicity);
-			logger.info("Remove IDs: " + ids);
-			List<String> ips = ssService.translateIPs(deploymentId, ids);
-			logger.info("Remove IPs: " + ips);
+			
+			
+			// ggian FIX
+			List<String> ips = new LinkedList<>();
+			List<String> ids = new LinkedList<>();
+			for(Parameter p:params.getParameters()) {
+				if(p.getKey().equals("vm_ip")){
+					for(String ip:p.getValue().split(",")) {
+						ips.add(ip);
+						ids.add(this.translateIPtoVMid(ip, exec));
+					}
+				}
+				if(p.getKey().equals("multiplicity") && ips.isEmpty()){
+					ids = ssService.removeVMIDs(deploymentId, a.getModuleName(), multiplicity);
+					ips = ssService.translateIPs(deploymentId, ids);
+				}
+				logger.info("Remove IDs: " + ids);
+				logger.info("Remove IPs: " + ips);
+			}
+			
+			// ================
 			for (String ip : ips) {
 				logger.info("Executing script on " + ip);
 				if (connectorName.contains("okeanos")) {
