@@ -43,8 +43,8 @@ public class DeploymentStateDiff {
 		// scale in
 		for(DeploymentStateDiffEntry e : this.entries) {
 			if(e.getKey().endsWith("vmstate") && 
-					e.getBeforeValue().equals("Running") && 
-					e.getAfterValue().equals("Unknown")) {
+					e.getBeforeValue().toLowerCase().equals("running") && 
+					e.getAfterValue().toLowerCase().equals("unknown")) {
 				vmIDs.add(e.getKey().split(":")[0]);
 			}
 		}
