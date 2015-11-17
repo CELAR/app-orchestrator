@@ -32,7 +32,7 @@ public class DeploymentStateOrch {
             String key = e.getKey(), value=e.getValue();
             if(key.contains("hostname")) {
             	String vmId=key.split(":")[0];
-            	if(props.get(vmId+":vmstate").equals("Running"))
+            	if(props.get(vmId+":vmstate").toLowerCase().equals("running"))
             		rv.put(key, value);
             }
         }
