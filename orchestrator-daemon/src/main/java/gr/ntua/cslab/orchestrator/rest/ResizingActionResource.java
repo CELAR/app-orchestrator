@@ -333,13 +333,14 @@ public class ResizingActionResource {
 	}
 	
 	private String translateIPtoVMid(String ip, ExecutedResizingAction exec) {
-//		logger.info(exec.getBeforeState().getIPs().toString());
+		logger.info(exec.getBeforeState().getIPs().toString());
 		String ident = "";
 		for(Entry<String, String> kv : exec.getBeforeState().getIPs().entrySet()) {
 			if(kv.getValue().equals(ip)) {
 				ident = kv.getKey();
 			}
 		}
+		logger.info(ident);
 		String vmId=ident.split(":")[0].split("\\.")[1];
 		return vmId;
 
