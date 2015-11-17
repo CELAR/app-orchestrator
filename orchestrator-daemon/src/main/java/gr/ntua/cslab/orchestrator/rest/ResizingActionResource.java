@@ -113,6 +113,8 @@ public class ResizingActionResource {
 			List<String> ids = new LinkedList<>();
 			for(Parameter p:params.getParameters()) {
 				if(p.getKey().equals("vm_ip")){
+					String value = p.getValue();
+					logger.info("ggian debug ==> value: "+value);
 					for(String ip:p.getValue().split(",")) {
 						ips.add(ip);
 						ids.add(this.translateIPtoVMid(ip, exec));
